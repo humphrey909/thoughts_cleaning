@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
     private var screenWidth = 0
     private var screenHeight = 0
 
-    private var MOVE_FACTOR = 0
+    private var MOVE_FACTOR = 5f
 
     private var prevAngle = 0
     private lateinit var prevImageResource:LiveData<Int>
@@ -220,15 +220,29 @@ class MainActivity : ComponentActivity() {
         charImageView.x = clampedX
         charImageView.y = clampedY
 
-        Log.d("moveCharacter", radian.toString())
-        Log.d("moveCharacter", moveX.toString())
-        Log.d("moveCharacter", moveY.toString())
-        Log.d("moveCharacter", currentX.toString())
-        Log.d("moveCharacter", currentY.toString())
-        Log.d("moveCharacter", newX.toString())
-        Log.d("moveCharacter", newY.toString())
-        Log.d("moveCharacter", clampedX.toString())
-        Log.d("moveCharacter", clampedY.toString())
+//        Log.d("moveCharacter", radian.toString())
+//        Log.d("moveCharacter", moveX.toString())
+//        Log.d("moveCharacter", moveY.toString())
+//        Log.d("moveCharacter", currentX.toString())
+//        Log.d("moveCharacter", currentY.toString())
+//        Log.d("moveCharacter", newX.toString())
+//        Log.d("moveCharacter", newY.toString())
+//        Log.d("moveCharacter", clampedX.toString())
+//        Log.d("moveCharacter", clampedY.toString())
+
+
+//        Log.d("moveCharacter1", moveX.toString())
+//        Log.d("moveCharacter1", moveY.toString())
+//
+//
+//        Log.d("moveCharacter2", currentX.toString())
+//        Log.d("moveCharacter2", currentY.toString())
+//
+//        Log.d("moveCharacter3", newX.toString())
+//        Log.d("moveCharacter3", newY.toString())
+
+
+
 
     }
 
