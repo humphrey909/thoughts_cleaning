@@ -48,6 +48,12 @@ class MainActivity : ComponentActivity() {
         screenHeight = metrics.bounds.height()
         screenWidth = metrics.bounds.width()
 
+//        binding.gameSurface.post {
+//            screenWidth = binding.gameSurface.width
+//            screenHeight = binding.gameSurface.height
+//
+//        }
+
         Log.d("ScreenSize", "화면 높이: $screenHeight px")
         Log.d("ScreenSize", "화면 너비: $screenWidth px")
 
@@ -211,6 +217,11 @@ class MainActivity : ComponentActivity() {
         // 이동 후 위치 계산
         val newX = currentX + moveX
         val newY = currentY + moveY
+
+
+        Log.d("ScreenSize", "화면 높이 2: $screenHeight px")
+        Log.d("ScreenSize", "화면 너비 2: $screenWidth px")
+
 
         // 화면 경계 내에 위치하도록 제한
         val clampedX = newX.coerceIn(0f, (screenWidth - charImageView.width).toFloat())
