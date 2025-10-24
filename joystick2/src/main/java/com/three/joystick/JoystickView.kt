@@ -132,8 +132,8 @@ class JoystickView(context: Context?, attrs: AttributeSet?): View(context, attrs
 
     // View 그리는 함수
     override fun onDraw(canvas: Canvas) {
-        canvas?.drawCircle((width / 2).toFloat(), (width / 2).toFloat(), outerRadius, outerPaint)
-        canvas?.drawCircle(mPosX, mPosY, innerRadius, innerPaint)
+        canvas.drawCircle((width / 2).toFloat(), (width / 2).toFloat(), outerRadius, outerPaint)
+        canvas.drawCircle(mPosX, mPosY, innerRadius, innerPaint)
     }
 
     // View 크기 측정 함수
@@ -155,18 +155,49 @@ class JoystickView(context: Context?, attrs: AttributeSet?): View(context, attrs
     }
 
     // 조이스틱 각도 계산 함수
-    private fun getAngle(): Int {
+//    private fun getAngle(): Int {
+//        val xx = mPosX - mCenterX
+//        val yy = mCenterY - mPosY
+//        val angle = Math.toDegrees(atan2(yy, xx).toDouble()).toInt()
+//        // 수평선 아래는 음수 값 계산
+//        return if (angle < 0) angle + 360 else angle
+//    }
+    private fun getAngle(): Float {
         val xx = mPosX - mCenterX
-        val yy = mCenterY - mPosY
-        val angle = Math.toDegrees(atan2(yy, xx).toDouble()).toInt()
-        // 수평선 아래는 음수 값 계산
-        return if (angle < 0) angle + 360 else angle
+        val yy = mPosY - mCenterY
+
+        // atan2의 결과(라디안)를 실수형(Double)으로 계산하고, toDegrees로 각도(Double)로 변환합니다.
+        val angleInDegrees = Math.toDegrees(kotlin.math.atan2(yy.toDouble(), xx.toDouble()))
+
+        // 각도를 Float로 변환하여 저장합니다.
+        var angle = angleInDegrees.toFloat()
+
+        // 0도에서 360도 사이의 양수 값으로 변환합니다.
+        // 수평선 아래(시계 반대 방향으로 180도 ~ 360도)는 음수 값이 나오므로 360을 더합니다.
+        if (angle < 0) {
+            angle += 360f
+        }
+
+        return angle
     }
 
+
     // 조이스틱 강도 계산 함수
-    private fun getStrength(): Int {
-        val length = sqrt((mPosX - mCenterX).pow(2) + (mPosY - mCenterY).pow(2))
-        return (length / outerRadius * 100).toInt()
+//    private fun getStrength(): Int {
+//        val length = sqrt((mPosX - mCenterX).pow(2) + (mPosY - mCenterY).pow(2))
+//        return (length / outerRadius * 100).toInt()
+//    }
+
+    private fun getStrength(): Float {
+        // 1. 조이스틱 중심으로부터 현재 위치까지의 거리 (대각선 길이)를 Float로 계산
+        val length = kotlin.math.sqrt((mPosX - mCenterX).pow(2) + (mPosY - mCenterY).pow(2))
+
+        // 2. 길이를 최대 반지름(outerRadius)으로 나누어 비율을 구하고 100을 곱하여 백분율(0.0 ~ 100.0)을 계산
+        // outerRadius가 Float이므로 결과는 자동으로 Float이 됩니다.
+        val strength = length / outerRadius * 100f
+
+        // 3. Float 타입의 강도(Strength) 값을 반환
+        return strength
     }
 
     // 주기적으로 실행되는 스레드
@@ -196,14 +227,14 @@ class JoystickView(context: Context?, attrs: AttributeSet?): View(context, attrs
 
     // 조이스틱 움직임 리스너 인터페이스
     fun interface OnMoveListener {
-        fun onMove(x: Int, y: Int)
+        fun onMove(x: Float, y: Float)
     }
 
     // 상수 및 태그
     companion object {
         private val TAG = JoystickView::class.java.simpleName
         private const val DEFAULT_SIZE = 200
-        private const val DEFAULT_UPDATE_INTERVAL = 50
+        const val DEFAULT_UPDATE_INTERVAL = 50
     }
 
     // 조이스틱 각도 설정 함수

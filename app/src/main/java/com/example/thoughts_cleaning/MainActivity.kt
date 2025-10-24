@@ -2,6 +2,8 @@ package com.example.thoughts_cleaning
 
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
+import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
@@ -10,26 +12,76 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.window.layout.WindowMetricsCalculator
 import com.example.thoughts_cleaning.databinding.ActivityMainBinding
+import com.example.thoughts_cleaning.util.GameView
+import com.example.thoughts_cleaning.util.JoystickState
+import com.three.joystick.JoystickView
 
 class MainActivity : ComponentActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
-//    private lateinit var joystickView: JoyStickView
+    private lateinit var joystickView: JoystickView
     private var isStop = false
 
     private var screenWidth = 0
     private var screenHeight = 0
 
-    private var MOVE_FACTOR = 5f
+    private var MOVE_FACTOR = 0.5f
 
     private var prevAngle = 0
     private lateinit var prevImageResource:LiveData<Int>
 
+    private lateinit var gameView: GameView
+    private val joystickSimulator = JoystickState()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+//        enableEdgeToEdge()
 //        setContentView(R.layout.activity_main)
+
+
+        ///////////
+
+        // 1. 메인 레이아웃 (SurfaceView와 Joystick을 겹치게 하기 위해 FrameLayout 사용)
+//        val containerLayout = FrameLayout(this)
+
+        // 2. GameView (SurfaceView) 초기화 및 추가
+//        gameView = GameView(this, joystickSimulator)
+//        gameView.addcallback()
+
+//        val params = FrameLayout.LayoutParams(
+//            FrameLayout.LayoutParams.MATCH_PARENT,
+//            FrameLayout.LayoutParams.MATCH_PARENT
+//        )
+//        containerLayout.addView(gameView, params)
+//
+//        setContentView(containerLayout)
+
+
+
+//        containerLayout.addView(gameView)
+
+        // 3. 임시 조이스틱 역할 뷰 추가 (화면 하단 중앙에 배치 가정)
+//        val joystickPlaceholder = android.view.View(this).apply {
+//            layoutParams = FrameLayout.LayoutParams(300, 300).apply {
+//                gravity = android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL
+//                setMargins(50, 50, 50, 50) // 하단 여백
+//            }
+//            setBackgroundColor(0x88AAAAAA.toInt()) // 투명한 회색 배경
+//        }
+//        containerLayout.addView(joystickPlaceholder)
+
+        // 4. 터치 이벤트 리스너: 터치 좌표를 조이스틱 입력으로 시뮬레이션
+//        joystickPlaceholder.setOnTouchListener { v, event ->
+//            handleJoystickTouch(v, event)
+//            true
+//        }
+
+
+
+
+        ////////////
 
         // Set up data binding
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -38,33 +90,78 @@ class MainActivity : ComponentActivity() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        // 1. WindowMetricsCalculator 인스턴스 가져오기
-        val windowMetricsCalculator = WindowMetricsCalculator.getOrCreate()
-
-        // 2. 현재 창(Activity)의 WindowMetrics 계산
-        val metrics = windowMetricsCalculator.computeCurrentWindowMetrics(this)
-
-        // 3. 높이(height)와 너비(width) 구하기
-        screenHeight = metrics.bounds.height()
-        screenWidth = metrics.bounds.width()
-
-//        binding.gameSurface.post {
-//            screenWidth = binding.gameSurface.width
-//            screenHeight = binding.gameSurface.height
+//        // 1. WindowMetricsCalculator 인스턴스 가져오기
+//        val windowMetricsCalculator = WindowMetricsCalculator.getOrCreate()
 //
+//        // 2. 현재 창(Activity)의 WindowMetrics 계산
+//        val metrics = windowMetricsCalculator.computeCurrentWindowMetrics(this)
+//
+//        // 3. 높이(height)와 너비(width) 구하기
+//        screenHeight = metrics.bounds.height()
+//        screenWidth = metrics.bounds.width()
+//
+//        Log.d("ScreenSize", "화면 높이: $screenHeight px")
+//        Log.d("ScreenSize", "화면 너비: $screenWidth px")
+
+
+//        setJoystick()
+
+//        viewModel.characterImages.observe(this) { imageResId ->
+//            // LiveData가 변경(새로운 Int ID)될 때마다 ImageView의 이미지를 설정
+//            binding.charImageView.setImageResource(imageResId)
 //        }
 
-        Log.d("ScreenSize", "화면 높이: $screenHeight px")
-        Log.d("ScreenSize", "화면 너비: $screenWidth px")
-
-        setJoystick()
 
 
 
-        viewModel.characterImages.observe(this) { imageResId ->
-            // LiveData가 변경(새로운 Int ID)될 때마다 ImageView의 이미지를 설정
-            binding.charImageView.setImageResource(imageResId)
-        }
+        // 조이스틱 역할을 시뮬레이션하는 터치 핸들러
+//        fun handleJoystickTouch(view: android.view.View, event: MotionEvent) {
+//            val centerX = view.width / 2f
+//            val centerY = view.height / 2f
+//
+//            val x = event.x - centerX
+//            val y = event.y - centerY // 화면 Y축과 일치시키기 위해 -Y를 사용하지 않음
+//
+//            val strength = Math.sqrt((x * x + y * y).toDouble()).coerceAtMost(centerX.toDouble()).toFloat()
+//            val angle = Math.toDegrees(Math.atan2(y.toDouble(), x.toDouble())).toFloat()
+//
+//            when (event.action) {
+//                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+//                    // 각도와 강도를 게임 스레드로 전달할 JoystickState에 업데이트
+//                    joystickSimulator.update(angle, strength)
+//                }
+//                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+//                    // 손을 떼면 힘을 0으로 설정하여 캐릭터 정지
+//                    joystickSimulator.update(0f, 0f)
+//                }
+//            }
+//        }
+
+
+
+//        val engine = GameEngine(screenWidth = screenWidth, screenHeight = screenHeight)
+//
+//        // 1. 초기 상태 확인 (맵 인덱스 0)
+//        println("--- 1. 초기 상태 ---")
+//        engine.drawGame()
+//
+//        // 2. 캐릭터를 위로 500만큼 이동 (조이스틱 Up, 힘 100)
+//        println("--- 2. Y축으로 500 이동 (섹션 경계 미달) ---")
+//        engine.updateGame(angle = 90, strength = 100) // 90도는 Y축 위 방향 (moveY 음수)
+//        engine.drawGame()
+//
+//        // 3. 캐릭터를 위로 600만큼 추가 이동 (총 1100 이동 -> 섹션 경계 1000 초과)
+//        println("--- 3. Y축으로 1100 누적 이동 (새 섹션 연결) ---")
+//        // Note: 실제 strength와 factor에 따라 1100을 넘는 입력값을 직접 시뮬레이션
+//        // 여기서는 간단히 두 번의 호출로 누적 오프셋을 만듦
+//        engine.updateGame(angle = 90, strength = 120) // 총 mapOffset.y가 -1000을 넘도록 설정
+//        engine.drawGame() // 맵 섹션 -1이 생성되고 아이템이 보이기 시작함
+//
+//        // 4. 캐릭터를 위로 1000만큼 추가 이동 (총 2100 이동 -> 다음 섹션 연결)
+//        println("--- 4. Y축으로 2100 누적 이동 (두 번째 새 섹션 연결) ---")
+//        engine.updateGame(angle = 90, strength = 200)
+//        engine.drawGame() // 맵 섹션 -2가 생성됨
+
     }
 
 
@@ -95,30 +192,137 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        isStop = false
-        binding.joystick.setAngle(0)
-        binding.joystick.setStrength(0)
-        binding.joystick.setOnMoveListener { angle, strength ->
-            if (!isStop) {
-                updateCharacterImage(angle, strength, binding.charImageView, viewModel.characterImages)
-                moveCharacter(angle, strength, screenWidth, screenHeight, binding.charImageView)
-//                checkCoinIntersect(binding.charImageView)
-//                checkMonsterIntersect(binding.charImageView)
+
+        val containerLayout = FrameLayout(this)
+        gameView = GameView(this, this, joystickSimulator)
+        val params = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        )
+        containerLayout.addView(gameView, params)
+
+        setContentView(containerLayout)
+
+
+
+        // 조이스틱 인스턴스 생성 및 레이아웃 설정
+        val joystickView = JoystickView(this, null).apply {
+            layoutParams = FrameLayout.LayoutParams(300, 300).apply {
+                gravity = android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL
+                setMargins(50, 50, 50, 50) // 하단 여백
+            }
+
+            // 💡 참고:
+            // setBackgroundColor(0x88AAAAAA.toInt()) 대신
+            // XML 속성(joystickOuterColor, joystickInnerColor)의 기본값이 적용됩니다.
+            // 만약 코드로 색상을 변경하고 싶다면, JoystickView 내부에 public setter를 추가해야 합니다.
+        }
+
+        // 컨테이너 레이아웃에 조이스틱 뷰 추가
+        containerLayout.addView(joystickView)
+
+        // 조이스틱 움직임 감지 리스너 설정
+        // 기존의 handleJoystickTouch() 대신 조이스틱의 onMove() 인터페이스를 사용합니다.
+        joystickView.setOnMoveListener(
+            object : JoystickView.OnMoveListener {
+                override fun onMove(angle: Float, strength: Float) {
+                    // angle: 0~360도의 각도
+                    // strength: 0~100%의 강도
+                    // 여기에 실제 조이스틱 움직임에 따른 로직을 구현합니다.
+                    // 예를 들어:
+                    // Log.d("Joystick", "Angle: $angle, Strength: $strength")
+
+                    // (기존의 handleJoystickTouch가 하던 조이스틱 입력 시뮬레이션 역할을 이 부분이 대체합니다.)
+                    joystickSimulator.update(angle, strength)
+
+                }
+            },
+            JoystickView.DEFAULT_UPDATE_INTERVAL // 주기적 업데이트 간격 (예: 50ms)
+        )
+
+
+
+
+
+
+        // 3. 임시 조이스틱 역할 뷰 추가 (화면 하단 중앙에 배치 가정)
+//        val joystickPlaceholder = android.view.View(this).apply {
+//            layoutParams = FrameLayout.LayoutParams(300, 300).apply {
+//                gravity = android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL
+//                setMargins(50, 50, 50, 50) // 하단 여백
+//            }
+//            setBackgroundColor(0x88AAAAAA.toInt()) // 투명한 회색 배경
+//        }
+//        containerLayout.addView(joystickPlaceholder)
+//
+//        // 4. 터치 이벤트 리스너: 터치 좌표를 조이스틱 입력으로 시뮬레이션
+//        joystickPlaceholder.setOnTouchListener { v, event ->
+//            handleJoystickTouch(v, event)
+//            true
+//        }
+
+
+
+
+//        isStop = false
+//        binding.joystick.setAngle(0)
+//        binding.joystick.setStrength(0)
+//
+//        if (::gameView.isInitialized) gameView.resume()
+//
+//        binding.joystick.setOnMoveListener { angle, strength ->
+//            if (!isStop) {
+////                updateCharacterImage(angle, strength, binding.charImageView, viewModel.characterImages)
+////                moveCharacter(angle, strength, screenWidth, screenHeight, binding.charImageView)
+////                checkCoinIntersect(binding.charImageView)
+////                checkMonsterIntersect(binding.charImageView)
+//            }
+//        }
+    }
+    // 조이스틱 역할을 시뮬레이션하는 터치 핸들러
+    private fun handleJoystickTouch(view: android.view.View, event: MotionEvent) {
+        val centerX = view.width / 2f
+        val centerY = view.height / 2f
+
+        val x = event.x - centerX
+        val y = event.y - centerY // 화면 Y축과 일치시키기 위해 -Y를 사용하지 않음
+
+        val strength = Math.sqrt((x * x + y * y).toDouble()).coerceAtMost(centerX.toDouble()).toFloat()
+        val angle = Math.toDegrees(Math.atan2(y.toDouble(), x.toDouble())).toFloat()
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                // 각도와 강도를 게임 스레드로 전달할 JoystickState에 업데이트
+                joystickSimulator.update(angle, strength)
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                // 손을 떼면 힘을 0으로 설정하여 캐릭터 정지
+                joystickSimulator.update(0f, 0f)
             }
         }
     }
 
-    /** 조이스틱 버튼 설정하는 함수 */
-    private fun setJoystick() {
-        binding.joystick.setOnMoveListener { angle, strength ->
-            if (!isStop) {
-                updateCharacterImage(angle, strength, binding.charImageView, viewModel.characterImages)
-                moveCharacter(angle, strength, screenWidth, screenHeight, binding.charImageView)
-//                checkMonsterIntersect(binding.charImageView)
-//                checkCoinIntersect(binding.charImageView)
-            }
-        }
+
+    override fun onPause() {
+        if (::gameView.isInitialized) gameView.pause()
+        super.onPause()
     }
+
+    /** 조이스틱 버튼 설정하는 함수 */
+//    private fun setJoystick() {
+//        binding.joystick.setOnMoveListener { angle, strength ->
+//            if (!isStop) {
+//
+//                joystickSimulator.update(angle, strength)
+//
+//
+////                updateCharacterImage(angle, strength, binding.charImageView, viewModel.characterImages)
+////                moveCharacter(angle, strength, screenWidth, screenHeight, binding.charImageView)
+////                checkMonsterIntersect(binding.charImageView)
+////                checkCoinIntersect(binding.charImageView)
+//            }
+//        }
+//    }
 
     /** 조이스틱 각도에 따라 캐릭터 이미지 변경하는 함수 */
     private fun updateCharacterImage(
@@ -251,9 +455,6 @@ class MainActivity : ComponentActivity() {
 //
 //        Log.d("moveCharacter3", newX.toString())
 //        Log.d("moveCharacter3", newY.toString())
-
-
-
 
     }
 

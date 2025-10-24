@@ -99,5 +99,4 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
     implementation(project(":joystick"))
     implementation(project(":joystick2"))
-
 }

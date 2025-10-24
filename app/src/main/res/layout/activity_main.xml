@@ -9,102 +9,134 @@
             name="viewModel"
             type="com.example.thoughts_cleaning.MainViewModel" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-        <SurfaceView
-            android:id="@+id/game_surface"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <View
+            android:id="@+id/joystick_placeholder"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="32dp"
+            android:background="#33AAAAAA"/>
+
+    </FrameLayout>
+<!--    <FrameLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:context=".MainActivity">-->
+
+<!--&lt;!&ndash;        <View&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/joystick_placeholder"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="150dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="150dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_gravity="bottom|center_horizontal"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginBottom="32dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:background="#33AAAAAA" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &ndash;&gt;-->
+
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/main"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:background="@color/black"-->
+<!--        tools:context=".MainActivity">-->
+
+<!--&lt;!&ndash;        <SurfaceView&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/game_surface"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintTop_toTopOf="parent" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <ImageView&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/settings_button"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="50dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="50dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:src="@drawable/ic_settings"&ndash;&gt;-->
+
+<!--&lt;!&ndash;            app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintTop_toTopOf="parent"&ndash;&gt;-->
+
+<!--&lt;!&ndash;            android:layout_marginEnd="16dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginTop="16dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:contentDescription="Settings Button" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/value_angle"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginTop="20dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:textSize="24sp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:text="angle : 0"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintHorizontal_bias="0.498"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintLeft_toLeftOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintRight_toRightOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintTop_toTopOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintVertical_bias="0.28" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/value_strength"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginTop="40dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:text="strength : 0"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:textSize="24sp"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintHorizontal_bias="0.498"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintLeft_toLeftOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintRight_toRightOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintTop_toBottomOf="@+id/value_angle" />&ndash;&gt;-->
+
 
 <!--        <ImageView-->
-<!--            android:id="@+id/settings_button"-->
-<!--            android:layout_width="50dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:src="@drawable/ic_settings"-->
-
+<!--            android:id="@+id/charImageView"-->
+<!--            android:layout_width="70dp"-->
+<!--            android:layout_height="70dp"-->
 <!--            app:layout_constraintEnd_toEndOf="parent"-->
 <!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            />-->
 
-<!--            android:layout_marginEnd="16dp"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:contentDescription="Settings Button" />-->
-
-        <TextView
-            android:id="@+id/value_angle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textSize="24sp"
-            android:text="angle : 0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.28" />
-
-        <TextView
-            android:id="@+id/value_strength"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="strength : 0"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/value_angle" />
-
-
-        <ImageView
-            android:id="@+id/charImageView"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
-
-        <com.three.joystick.JoystickView
-            android:id="@+id/joystick"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_margin="10dp"
-            app:joystickInnerColor="@color/white"
-            app:joystickOuterColor="@color/transparent"
-            app:joystickUseSpring="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-<!--        <com.monotics.app.joystick.JoyStickView-->
+<!--        <com.three.joystick.JoystickView-->
 <!--            android:id="@+id/joystick"-->
-<!--            android:layout_width="200dp"-->
-<!--            android:layout_height="200dp"-->
-<!--            android:layout_marginBottom="16dp"-->
-<!--            app:joystickBaseColor="@android:color/holo_orange_light"-->
-<!--            app:joystickStickColor="@android:color/holo_blue_dark"-->
+<!--            android:layout_width="180dp"-->
+<!--            android:layout_height="180dp"-->
+<!--            android:layout_margin="10dp"-->
+<!--            app:joystickInnerColor="@color/white"-->
+<!--            app:joystickOuterColor="@color/transparent"-->
 <!--            app:joystickUseSpring="true"-->
 <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="0.497"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/value_strength"-->
-<!--            app:layout_constraintVertical_bias="0.76" />-->
+<!--            app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--&lt;!&ndash;        <com.monotics.app.joystick.JoyStickView&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/joystick"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="200dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="200dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginBottom="16dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:joystickBaseColor="@android:color/holo_orange_light"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:joystickStickColor="@android:color/holo_blue_dark"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:joystickUseSpring="true"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintHorizontal_bias="0.497"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintTop_toBottomOf="@+id/value_strength"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintVertical_bias="0.76" />&ndash;&gt;-->
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--    </FrameLayout>-->
 </layout>
