@@ -10,11 +10,12 @@ import android.util.Log
 import android.view.SurfaceHolder
 import androidx.window.layout.WindowMetricsCalculator
 import android.graphics.Paint
+import com.example.thoughts_cleaning.MainActivity
 
 class GameThread(
     private val surfaceHolder: SurfaceHolder,
     context: Context,
-    val activity: Activity,
+    val activity: MainActivity,
     private val joystickState: JoystickState
 ) : Thread() {
 
@@ -27,8 +28,8 @@ class GameThread(
         BitmapFactory.decodeResource(context.resources, android.R.drawable.star_on)
 
     // 캐릭터 현재 위치
-    private var charX: Float = 100f
-    private var charY: Float = 100f
+    private var charX: Float = 250f
+    private var charY: Float = 1000f
 
     private val MOVE_SPEED = 5f // 초당 60프레임 기준 5픽셀씩 이동
 
@@ -38,6 +39,8 @@ class GameThread(
 
     private var lastSpawnTime = System.currentTimeMillis()
     private val spawnInterval = 3000 // 3초마다 아이템 생성
+    private val spawnIntervalUntil = 5 // 3초마다 아이템 생성
+    private var spawnIntervalSwitch = true // 3초마다 아이템 생성
 
     // GameThread 클래스 내부 (또는 Draw를 담당하는 클래스)
     private val defaultItemPaint = Paint().apply {
@@ -71,8 +74,8 @@ class GameThread(
         screenHeight = metrics.bounds.height()
         screenWidth = metrics.bounds.width()
 
-        Log.d("ScreenSize", "화면 높이: $screenHeight px")
-        Log.d("ScreenSize", "화면 너비: $screenWidth px")
+//        Log.d("ScreenSize", "화면 높이: $screenHeight px")
+//        Log.d("ScreenSize", "화면 너비: $screenWidth px")
 
 
         var startTime: Long
@@ -80,15 +83,15 @@ class GameThread(
         var waitTime: Long
 
         while (isRunning) {
-            Log.d("canvas", "각도 11: ${joystickState.angle} px")
-            Log.d("canvas", "각도 12: ${joystickState.strength} px")
+//            Log.d("canvas", "각도 11: ${joystickState.angle} px")
+//            Log.d("canvas", "각도 12: ${joystickState.strength} px")
 
             startTime = System.currentTimeMillis()
             var canvas: Canvas? = null
 
             try {
-                Log.d("canvas", "각도 1: ${joystickState.angle} px")
-                Log.d("canvas", "각도 2: ${joystickState.strength} px")
+//                Log.d("canvas", "각도 1: ${joystickState.angle} px")
+//                Log.d("canvas", "각도 2: ${joystickState.strength} px")
 
 
                 // 1. 입력 및 업데이트 (Update Logic)
@@ -118,9 +121,13 @@ class GameThread(
 
             // 2. 아이템 생성 로직
             val currentTime = System.currentTimeMillis()
-            if (currentTime - lastSpawnTime > spawnInterval) {
+            if (currentTime - lastSpawnTime > spawnInterval && gameState.items.size < spawnIntervalUntil && spawnIntervalSwitch) {
                 gameState.spawnItem(screenWidth, screenHeight)
                 lastSpawnTime = currentTime
+            }
+
+            if(gameState.items.size == spawnIntervalUntil){
+                spawnIntervalSwitch = false
             }
 
             // 3. 아이템 충돌 감지 및 처리
@@ -162,6 +169,7 @@ class GameThread(
             charX += moveX
             charY += moveY
 
+            gameState.player.move(charX, charY)
             // TODO: 화면 경계 내로 charX, charY 클램핑 로직 추가
         }
     }
@@ -182,28 +190,39 @@ class GameThread(
      * 플레이어와 모든 아이템 간의 충돌을 확인하고 처리합니다.
      */
     private fun checkItemCollisions() {
-        val playerBounds = gameState.player.getBounds()
 
-        // 충돌이 감지된 아이템을 임시로 저장할 리스트
-        val itemsToRemove = mutableListOf<Item>()
+        val player = gameState.player // Player 객체에 직접 접근
+        gameState.items.removeIf { item ->
+            // 1. 충돌 감지 로직 (원형 충돌, 거리 제곱 사용으로 성능 최적화)
+            val dx = player.x - item.x
+            val dy = player.y - item.y
+            val distanceSquared = dx * dx + dy * dy
+
+            // player와 item 클래스에 radius 속성(size / 2)이 추가되었다고 가정
+            val combinedRadius = player.radius + item.radius
+            val combinedRadiusSquared = combinedRadius * combinedRadius
+
+            val isColliding = distanceSquared <= combinedRadiusSquared
+
+            if (isColliding) {
+                Log.d("Joystick", "item get : ${item.x} , ${item.y}")
+//                Log.d("Joystick", "combinedRadius: ${combinedRadius}")
 
 
-//        Log.d("Joystick", "items: ${gameState.items}")
+                // 2. 충돌 시 부수 효과 로직 (ex: 점수 증가, 효과음 재생 등)
+                // 주의: 이 람다 안에서 UI 업데이트 등 복잡한 스레드 작업은 피하세요.
 
-        for (item in gameState.items) {
-            if (item.getBounds().intersects(playerBounds.left, playerBounds.top, playerBounds.right, playerBounds.bottom)) {
+                // Log.d("Joystick", "Item acquired at (%.1f, %.1f)".format(item.x, item.y))
+                // Log.d("Joystick", "items before removal: ${gameState.items.size}")
 
-                Log.d("Joystick", "items: ${gameState.items}")
-
-
-                // 충돌 발생! 아이템 획득 로직 실행
-                applyItemEffect(item)
-                itemsToRemove.add(item)
+                activity.runOnUiThread {
+                    activity.showCustomDialog() // MainActivity에 정의된 함수 호출
+                }
             }
-        }
 
-        // 충돌된 아이템들을 리스트에서 제거합니다.
-        gameState.items.removeAll(itemsToRemove)
+            // isColliding이 true이면 해당 아이템을 리스트에서 제거합니다.
+            isColliding
+        }
     }
 
     /**

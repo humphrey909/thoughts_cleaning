@@ -5,8 +5,9 @@ import android.content.Context
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import com.example.thoughts_cleaning.MainActivity
 
-class GameView(context: Context, val activity: Activity, private val joystickState: JoystickState) : SurfaceView(context), SurfaceHolder.Callback {
+class GameView(context: Context, val activity: MainActivity, private val joystickState: JoystickState) : SurfaceView(context), SurfaceHolder.Callback {
 
     private lateinit var gameThread: GameThread
 

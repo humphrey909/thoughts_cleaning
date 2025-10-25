@@ -5,18 +5,18 @@ import android.util.Log
 import android.view.MotionEvent
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.activity.ComponentActivity
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
-import androidx.window.layout.WindowMetricsCalculator
 import com.example.thoughts_cleaning.databinding.ActivityMainBinding
+import com.example.thoughts_cleaning.dialog.QuestionInputDialog
 import com.example.thoughts_cleaning.util.GameView
 import com.example.thoughts_cleaning.util.JoystickState
 import com.three.joystick.JoystickView
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
@@ -511,4 +511,29 @@ class MainActivity : ComponentActivity() {
 //        }
 //    }
 //}
+
+     fun showCustomDialog() {
+//        val dialog = dialogCustom()
+//        // supportFragmentManager 또는 childFragmentManager를 사용합니다.
+//        dialog.show(supportFragmentManager, "MyCustomDialogTag")
+
+        // 1. 아직 묻지 않은 질문만 필터링
+        val remainingQuestions = viewModel.allQuestions.filter { it !in viewModel.askedQuestions }
+
+        if (remainingQuestions.isNotEmpty()) {
+            // 2. 남은 질문 중 랜덤으로 하나 선택
+            val nextQuestion = remainingQuestions.random()
+
+            // 3. 질문 사용 처리
+            viewModel.askedQuestions.add(nextQuestion)
+
+            // 4. DialogFragment 생성 및 표시
+            val dialog = QuestionInputDialog.newInstance(nextQuestion)
+            dialog.show(supportFragmentManager, "QuestionDialog")
+
+        } else {
+            // 모든 질문을 다 소진했을 때의 처리
+            Toast.makeText(this, "모든 질문을 완료했습니다!", Toast.LENGTH_LONG).show()
+        }
+     }
 }
