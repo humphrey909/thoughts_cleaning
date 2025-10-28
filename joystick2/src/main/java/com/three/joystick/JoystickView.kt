@@ -57,8 +57,9 @@ class JoystickView(context: Context?, attrs: AttributeSet?): View(context, attrs
         )?.apply {
 
             try {
-                outerColor = getColor(R.styleable.Joystick_joystickOuterColor, Color.YELLOW)
-                innerColor = getColor(R.styleable.Joystick_joystickInnerColor, Color.BLUE)
+//                outerColor = getColor(R.styleable.Joystick_joystickOuterColor, Color.BLACK)
+                outerColor = getColor(R.styleable.Joystick_joystickOuterColor, Color.parseColor("#D1D1D1"))
+                innerColor = getColor(R.styleable.Joystick_joystickInnerColor, Color.BLACK)
                 innerRatio = getFraction(R.styleable.Joystick_joystickInnerRatio, 1, 1, 0.25f)
                 outerRatio = getFraction(R.styleable.Joystick_joystickOuterRatio, 1, 1, 0.75f)
                 useSpring = getBoolean(R.styleable.Joystick_joystickUseSpring, true)

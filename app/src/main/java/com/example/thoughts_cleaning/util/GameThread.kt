@@ -11,6 +11,7 @@ import android.view.SurfaceHolder
 import androidx.window.layout.WindowMetricsCalculator
 import android.graphics.Paint
 import com.example.thoughts_cleaning.MainActivity
+import com.example.thoughts_cleaning.R
 
 class GameThread(
     private val surfaceHolder: SurfaceHolder,
@@ -19,13 +20,27 @@ class GameThread(
     private val joystickState: JoystickState
 ) : Thread() {
 
+    private val desiredWidth: Int = 100 // 원하는 가로 픽셀 크기
+    private val desiredHeight: Int = 100 // 원하는 세로 픽셀 크기
+
     @Volatile var isRunning = true
     private val FPS = 60 // 초당 프레임 수
     private val TIME_PER_FRAME = (1000 / FPS).toLong() // 프레임당 밀리초
 
     // 캐릭터 비트맵 (실제 이미지 리소스로 교체 필요)
+//    private val characterBitmap: Bitmap =
+//        BitmapFactory.decodeResource(context.resources, R.drawable.character_default)
+    private val originalBitmap: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.character_default)
+
     private val characterBitmap: Bitmap =
-        BitmapFactory.decodeResource(context.resources, android.R.drawable.star_on)
+        Bitmap.createScaledBitmap(
+            originalBitmap,
+            desiredWidth,
+            desiredHeight,
+            true // 필터링 적용 여부. true를 권장
+        )
+
 
     // 캐릭터 현재 위치
     private var charX: Float = 250f
