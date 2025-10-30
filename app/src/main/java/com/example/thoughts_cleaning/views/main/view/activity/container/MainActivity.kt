@@ -1,24 +1,24 @@
-package com.example.thoughts_cleaning
+package com.example.thoughts_cleaning.views.main.view.activity.container
 
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
-import android.widget.FrameLayout
+import android.view.View
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
+import com.example.thoughts_cleaning.views.main.vm.activity.container.MainActivityViewModel
+import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.databinding.ActivityMainBinding
-import com.example.thoughts_cleaning.dialog.QuestionInputDialog
 import com.example.thoughts_cleaning.util.GameView
 import com.example.thoughts_cleaning.util.JoystickState
 import com.three.joystick.JoystickView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainActivityViewModel by viewModels()
 
     private lateinit var joystickView: JoystickView
     private var isStop = false
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private var MOVE_FACTOR = 0.5f
 
     private var prevAngle = 0
-    private lateinit var prevImageResource:LiveData<Int>
+    private lateinit var prevImageResource: LiveData<Int>
 
     private lateinit var gameView: GameView
     private val joystickSimulator = JoystickState()
@@ -82,13 +82,18 @@ class MainActivity : AppCompatActivity() {
 
 
         ////////////
+        //이부분 주석처리
 
         // Set up data binding
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         // Bind the ViewModel
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+//        binding.viewModel = viewModel
+//        binding.lifecycleOwner = this
+
+
+        //이부분 주석처리
+        ////////
 
 //        // 1. WindowMetricsCalculator 인스턴스 가져오기
 //        val windowMetricsCalculator = WindowMetricsCalculator.getOrCreate()
@@ -193,52 +198,53 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        val containerLayout = FrameLayout(this)
-        gameView = GameView(this, this, joystickSimulator)
-        val params = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-        )
-        containerLayout.addView(gameView, params)
-
-        setContentView(containerLayout)
-
-
-
-        // 조이스틱 인스턴스 생성 및 레이아웃 설정
-        val joystickView = JoystickView(this, null).apply {
-            layoutParams = FrameLayout.LayoutParams(300, 300).apply {
-                gravity = android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL
-                setMargins(50, 50, 50, 50) // 하단 여백
-            }
-
-            // 💡 참고:
-            // setBackgroundColor(0x88AAAAAA.toInt()) 대신
-            // XML 속성(joystickOuterColor, joystickInnerColor)의 기본값이 적용됩니다.
-            // 만약 코드로 색상을 변경하고 싶다면, JoystickView 내부에 public setter를 추가해야 합니다.
-        }
-
-        // 컨테이너 레이아웃에 조이스틱 뷰 추가
-        containerLayout.addView(joystickView)
-
-        // 조이스틱 움직임 감지 리스너 설정
-        // 기존의 handleJoystickTouch() 대신 조이스틱의 onMove() 인터페이스를 사용합니다.
-        joystickView.setOnMoveListener(
-            object : JoystickView.OnMoveListener {
-                override fun onMove(angle: Float, strength: Float) {
-                    // angle: 0~360도의 각도
-                    // strength: 0~100%의 강도
-                    // 여기에 실제 조이스틱 움직임에 따른 로직을 구현합니다.
-                    // 예를 들어:
-                    // Log.d("Joystick", "Angle: $angle, Strength: $strength")
-
-                    // (기존의 handleJoystickTouch가 하던 조이스틱 입력 시뮬레이션 역할을 이 부분이 대체합니다.)
-                    joystickSimulator.update(angle, strength)
-
-                }
-            },
-            JoystickView.DEFAULT_UPDATE_INTERVAL // 주기적 업데이트 간격 (예: 50ms)
-        )
+        //이부분 주석처리
+//        val containerLayout = FrameLayout(this)
+//        gameView = GameView(this, this, joystickSimulator)
+//        val params = FrameLayout.LayoutParams(
+//            FrameLayout.LayoutParams.MATCH_PARENT,
+//            FrameLayout.LayoutParams.MATCH_PARENT
+//        )
+//        containerLayout.addView(gameView, params)
+//
+//        setContentView(containerLayout)
+//
+//
+//
+//        // 조이스틱 인스턴스 생성 및 레이아웃 설정
+//        val joystickView = JoystickView(this, null).apply {
+//            layoutParams = FrameLayout.LayoutParams(300, 300).apply {
+//                gravity = android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL
+//                setMargins(50, 50, 50, 50) // 하단 여백
+//            }
+//
+//            // 💡 참고:
+//            // setBackgroundColor(0x88AAAAAA.toInt()) 대신
+//            // XML 속성(joystickOuterColor, joystickInnerColor)의 기본값이 적용됩니다.
+//            // 만약 코드로 색상을 변경하고 싶다면, JoystickView 내부에 public setter를 추가해야 합니다.
+//        }
+//
+//        // 컨테이너 레이아웃에 조이스틱 뷰 추가
+//        containerLayout.addView(joystickView)
+//
+//        // 조이스틱 움직임 감지 리스너 설정
+//        // 기존의 handleJoystickTouch() 대신 조이스틱의 onMove() 인터페이스를 사용합니다.
+//        joystickView.setOnMoveListener(
+//            object : JoystickView.OnMoveListener {
+//                override fun onMove(angle: Float, strength: Float) {
+//                    // angle: 0~360도의 각도
+//                    // strength: 0~100%의 강도
+//                    // 여기에 실제 조이스틱 움직임에 따른 로직을 구현합니다.
+//                    // 예를 들어:
+//                    // Log.d("Joystick", "Angle: $angle, Strength: $strength")
+//
+//                    // (기존의 handleJoystickTouch가 하던 조이스틱 입력 시뮬레이션 역할을 이 부분이 대체합니다.)
+//                    joystickSimulator.update(angle, strength)
+//
+//                }
+//            },
+//            JoystickView.DEFAULT_UPDATE_INTERVAL // 주기적 업데이트 간격 (예: 50ms)
+//        )
 
 
 
@@ -278,9 +284,11 @@ class MainActivity : AppCompatActivity() {
 ////                checkMonsterIntersect(binding.charImageView)
 //            }
 //        }
+        //이부분 주석처리
+
     }
     // 조이스틱 역할을 시뮬레이션하는 터치 핸들러
-    private fun handleJoystickTouch(view: android.view.View, event: MotionEvent) {
+    private fun handleJoystickTouch(view: View, event: MotionEvent) {
         val centerX = view.width / 2f
         val centerY = view.height / 2f
 
@@ -512,28 +520,28 @@ class MainActivity : AppCompatActivity() {
 //    }
 //}
 
-     fun showCustomDialog() {
-//        val dialog = dialogCustom()
-//        // supportFragmentManager 또는 childFragmentManager를 사용합니다.
-//        dialog.show(supportFragmentManager, "MyCustomDialogTag")
-
-        // 1. 아직 묻지 않은 질문만 필터링
-        val remainingQuestions = viewModel.allQuestions.filter { it !in viewModel.askedQuestions }
-
-        if (remainingQuestions.isNotEmpty()) {
-            // 2. 남은 질문 중 랜덤으로 하나 선택
-            val nextQuestion = remainingQuestions.random()
-
-            // 3. 질문 사용 처리
-            viewModel.askedQuestions.add(nextQuestion)
-
-            // 4. DialogFragment 생성 및 표시
-            val dialog = QuestionInputDialog.newInstance(nextQuestion)
-            dialog.show(supportFragmentManager, "QuestionDialog")
-
-        } else {
-            // 모든 질문을 다 소진했을 때의 처리
-            Toast.makeText(this, "모든 질문을 완료했습니다!", Toast.LENGTH_LONG).show()
-        }
-     }
+//     fun showCustomDialog() {
+////        val dialog = dialogCustom()
+////        // supportFragmentManager 또는 childFragmentManager를 사용합니다.
+////        dialog.show(supportFragmentManager, "MyCustomDialogTag")
+//
+//        // 1. 아직 묻지 않은 질문만 필터링
+//        val remainingQuestions = viewModel.allQuestions.filter { it !in viewModel.askedQuestions }
+//
+//        if (remainingQuestions.isNotEmpty()) {
+//            // 2. 남은 질문 중 랜덤으로 하나 선택
+//            val nextQuestion = remainingQuestions.random()
+//
+//            // 3. 질문 사용 처리
+//            viewModel.askedQuestions.add(nextQuestion)
+//
+//            // 4. DialogFragment 생성 및 표시
+//            val dialog = QuestionInputDialog.newInstance(nextQuestion)
+//            dialog.show(supportFragmentManager, "QuestionDialog")
+//
+//        } else {
+//            // 모든 질문을 다 소진했을 때의 처리
+//            Toast.makeText(this, "모든 질문을 완료했습니다!", Toast.LENGTH_LONG).show()
+//        }
+//     }
 }

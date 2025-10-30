@@ -10,13 +10,15 @@ import android.util.Log
 import android.view.SurfaceHolder
 import androidx.window.layout.WindowMetricsCalculator
 import android.graphics.Paint
-import com.example.thoughts_cleaning.MainActivity
+import com.example.thoughts_cleaning.views.main.view.activity.container.MainActivity
+import com.example.thoughts_cleaning.views.main.view.fragment.MainFragment
 import com.example.thoughts_cleaning.R
 
 class GameThread(
     private val surfaceHolder: SurfaceHolder,
     context: Context,
     val activity: MainActivity,
+    val fragment: MainFragment,
     private val joystickState: JoystickState
 ) : Thread() {
 
@@ -231,7 +233,7 @@ class GameThread(
                 // Log.d("Joystick", "items before removal: ${gameState.items.size}")
 
                 activity.runOnUiThread {
-                    activity.showCustomDialog() // MainActivity에 정의된 함수 호출
+                    fragment.showCustomDialog() // MainActivity에 정의된 함수 호출
                 }
             }
 

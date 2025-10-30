@@ -101,4 +101,11 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
     implementation(project(":joystick"))
     implementation(project(":joystick2"))
+
+    // Navigation Fragment KTX (Kotlin extension)
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
+    // Navigation UI KTX (BottomNavigationView 등 UI 컴포넌트 연동)
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
+
+    implementation("androidx.window:window:1.2.0")
 }

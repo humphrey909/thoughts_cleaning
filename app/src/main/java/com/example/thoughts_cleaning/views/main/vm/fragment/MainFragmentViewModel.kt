@@ -1,10 +1,11 @@
-package com.example.thoughts_cleaning
+package com.example.thoughts_cleaning.views.main.vm.fragment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.thoughts_cleaning.R
 
-class MainViewModel: ViewModel(){
+class MainFragmentViewModel: ViewModel() {
 
     private val _characterImageResId = MutableLiveData<Int>(R.drawable.character_default)
     val characterImages: LiveData<Int> = _characterImageResId
@@ -35,12 +36,9 @@ class MainViewModel: ViewModel(){
         "이 모든 생각(불안, 비교, 시선)에도 불구하고, 지금 이 순간 감사할 수 있는 아주 작은 것 하나를 찾아보세요."
     )
     // 이미 사용된 질문을 저장하는 Set
-     val askedQuestions = mutableSetOf<String>()
+    val askedQuestions = mutableSetOf<String>()
 
 
 
-    fun resetStopwatch() {
-//        _isRunning.value = false
-//        _timeInMillis.value = 0L
-    }
+
 }
