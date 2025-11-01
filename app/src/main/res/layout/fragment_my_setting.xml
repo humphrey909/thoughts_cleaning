@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel" />
+            type="com.example.thoughts_cleaning.views.main.vm.fragment.MySettingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,7 @@
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="메인 페이지"
+            android:text="세팅 페이지"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
