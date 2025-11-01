@@ -12,4 +12,18 @@
         android:label="Main"
         tools:layout="@layout/fragment_main">
     </fragment>
+
+    <fragment
+        android:id="@+id/LoginFragment"
+        android:name="com.example.thoughts_cleaning.views.main.view.fragment.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
+    </fragment>
+
+    <fragment
+        android:id="@+id/GameFragment"
+        android:name="com.example.thoughts_cleaning.views.main.view.fragment.GameFragment"
+        android:label="Game"
+        tools:layout="@layout/fragment_game">
+    </fragment>
 </navigation>
