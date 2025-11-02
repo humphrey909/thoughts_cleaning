@@ -4,4 +4,13 @@
     <style name="Theme.Thoughts_cleaning" parent="Theme.MaterialComponents.DayNight.NoActionBar">
     </style>
 <!--    <style name="Theme.Thoughts_cleaning" parent="android:Theme.Material.Light.NoActionBar" />-->
+
+
+    <!-- Splash screen theme. -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/main</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.AppCompat</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.thoughts_cleaning.views.main.vm.fragment.LoginViewModel" />
+            type="com.example.thoughts_cleaning.views.start.vm.fragment.LoginViewModel" />
     </data>
 
 
@@ -31,10 +31,6 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.9" />
 
-
-
-
-
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/logo_circle_image"
             android:layout_width="100dp"
@@ -47,10 +43,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
-
-
-
-
         <ImageView
             android:id="@+id/img_login_kakao"
             android:layout_width="0dp"

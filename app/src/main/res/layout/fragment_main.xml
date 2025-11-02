@@ -17,15 +17,80 @@
         >
 
         <TextView
-            android:id="@+id/title"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="메인 페이지"
-            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/point_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="25dp"
+            android:gravity="right"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="10dp"
             />
+
+        <TextView
+            android:id="@+id/state_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="김지훈 생각 청소 2일 째"
+            android:textSize="25dp"
+            android:gravity="right"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/point_score"
+            android:layout_margin="10dp"
+            />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/logo_circle_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:padding="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="20dp"
+            >
+            <TextView
+                android:id="@+id/today_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="오늘의 공간 청소하기"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/enter_game"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="10dp"
+                />
+
+            <ImageView
+                android:id="@+id/enter_game"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/enter_game"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/today_message"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{() -> viewModel.onClicked()}" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

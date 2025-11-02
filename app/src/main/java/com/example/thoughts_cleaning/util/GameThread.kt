@@ -13,12 +13,13 @@ import android.graphics.Paint
 import com.example.thoughts_cleaning.views.main.view.activity.container.MainActivity
 import com.example.thoughts_cleaning.views.main.view.fragment.MainFragment
 import com.example.thoughts_cleaning.R
-import com.example.thoughts_cleaning.views.main.view.fragment.GameFragment
+import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
+import com.example.thoughts_cleaning.views.game.view.fragment.GameFragment
 
 class GameThread(
     private val surfaceHolder: SurfaceHolder,
     context: Context,
-    val activity: MainActivity,
+    val activity: GameActivity,
     val fragment: GameFragment,
     private val joystickState: JoystickState
 ) : Thread() {

@@ -13,10 +13,18 @@
         android:theme="@style/Theme.Thoughts_cleaning"
         tools:targetApi="31">
         <activity
+            android:name=".views.game.view.activity.container.GameActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Thoughts_cleaning"
+            />
+        <activity
+            android:name=".views.start.view.activity.container.StartActivity"
+            android:exported="true"/>
+        <activity
             android:name=".views.main.view.activity.container.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Thoughts_cleaning">
+            android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

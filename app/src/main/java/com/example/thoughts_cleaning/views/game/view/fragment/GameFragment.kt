@@ -1,29 +1,28 @@
-package com.example.thoughts_cleaning.views.main.view.fragment
+package com.example.thoughts_cleaning.views.game.view.fragment
 
 import android.os.Bundle
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
-import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.databinding.FragmentGameBinding
 import com.example.thoughts_cleaning.databinding.FragmentMainBinding
 import com.example.thoughts_cleaning.dialog.QuestionInputDialog
 import com.example.thoughts_cleaning.util.GameView
 import com.example.thoughts_cleaning.util.JoystickState
+import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.main.view.activity.container.MainActivity
-import com.example.thoughts_cleaning.views.main.vm.fragment.GameViewModel
-import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel
+import com.example.thoughts_cleaning.views.game.vm.fragment.GameFragmentViewModel
 import com.three.joystick.JoystickView
-import kotlin.getValue
 
 class GameFragment : Fragment() {
 
-    private val viewModel: GameViewModel by viewModels()
+    private val viewModel: GameFragmentViewModel by viewModels()
 
     private lateinit var joystickView: JoystickView
     private var isStop = false
@@ -40,7 +39,7 @@ class GameFragment : Fragment() {
     private val joystickSimulator = JoystickState()
 
     // 1. View Binding 객체 선언 (null 허용)
-    private var _binding: FragmentMainBinding? = null
+    private var _binding: FragmentGameBinding? = null
 
     // 2. 뷰가 살아있는 동안에만 접근할 수 있는 Non-null Binding 객체
     private val binding get() = _binding!!
@@ -56,7 +55,7 @@ class GameFragment : Fragment() {
     ): View? {
 
 
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        _binding = FragmentGameBinding.inflate(inflater, container, false)
 
         return binding.root
         //return inflater.inflate(R.layout.fragment_main, container, false)
@@ -78,7 +77,7 @@ class GameFragment : Fragment() {
         // joystickSimulator는 미리 초기화되어 있어야 합니다.
         gameView = GameView(
             context, /* GameViewListener: */
-            requireActivity() as MainActivity, this, joystickSimulator
+            requireActivity() as GameActivity, this, joystickSimulator
         )
 
         // 4. 레이아웃 파라미터 정의 (MATCH_PARENT)

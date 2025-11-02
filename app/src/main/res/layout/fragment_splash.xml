@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.thoughts_cleaning.views.main.vm.fragment.SplashViewModel" />
+            type="com.example.thoughts_cleaning.views.start.vm.fragment.SplashViewModel" />
     </data>
 
 

@@ -1,17 +1,18 @@
 package com.example.thoughts_cleaning.views.main.view.fragment
 
-import android.R
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
 import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel
 import com.example.thoughts_cleaning.databinding.FragmentMainBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
+import com.example.thoughts_cleaning.views.game.vm.activity.container.GameActivityViewModel
+import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel.MainFlow
+//import com.example.thoughts_cleaning.views.game.vm.fragment.GameViewModel.MainFlow
 
 class MainFragment : Fragment() {
 
@@ -50,12 +51,25 @@ class MainFragment : Fragment() {
 
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
+
+
         return binding.root
         //return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //이부분 없으면 onclick이 동작하지 않음
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
+
+
+        viewModel._currentMainFlow.postValue(MainFlow.COMMON)
+
+        handleNavigationEvent()
+
 
 //        initNavigation()
 
@@ -206,4 +220,48 @@ class MainFragment : Fragment() {
 //        }
 //
 //    }
+
+
+    // ViewModel의 이벤트에 따라 실제 화면 전환(Intent)을 처리하는 함수
+    private fun handleNavigationEvent() {
+        viewModel.currentMainFlow.observe(viewLifecycleOwner) { flow ->
+
+//            Log.d("currentMainFlow", "ENTER_GAME: ENTER_GAME")
+//            Log.d("currentMainFlow", "ENTER_GAME: $flow")
+
+
+
+            when (flow) {
+                MainFlow.COMMON -> { /* ... */ }
+                MainFlow.ENTER_GAME -> {
+                    enter_game()
+                }
+            }
+//            viewModel.MainFlow
+
+//            binding.nameView.text = it
+
+//            if(it == viewModel.MainFlow){
+//
+//            }else{
+//
+//            }
+//
+        }
+
+
+
+    }
+
+
+    fun enter_game(){
+//        Log.d("ScreenSize", "화면 높이: ENTER_GAME")
+
+        val intent = Intent(requireActivity(), GameActivity::class.java)
+
+        // 2. Activity 시작
+        startActivity(intent)
+
+        viewModel._currentMainFlow.postValue(MainFlow.COMMON)
+    }
 }

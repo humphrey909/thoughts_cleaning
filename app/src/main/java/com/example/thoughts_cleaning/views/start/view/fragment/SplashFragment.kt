@@ -1,4 +1,4 @@
-package com.example.thoughts_cleaning.views.main.view.fragment
+package com.example.thoughts_cleaning.views.start.view.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -1,11 +1,11 @@
-package com.example.thoughts_cleaning.views.main.vm.fragment
+package com.example.thoughts_cleaning.views.game.vm.fragment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.thoughts_cleaning.R
 
-class GameViewModel: ViewModel() {
+class GameFragmentViewModel: ViewModel() {
 
     private val _characterImageResId = MutableLiveData<Int>(R.drawable.character_default)
     val characterImages: LiveData<Int> = _characterImageResId

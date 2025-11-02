@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.thoughts_cleaning.views.main.vm.fragment.GameViewModel" />
+            type="com.example.thoughts_cleaning.views.game.vm.fragment.GameFragmentViewModel" />
     </data>
 
     <FrameLayout

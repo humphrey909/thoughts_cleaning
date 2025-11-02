@@ -5,11 +5,12 @@ import android.content.Context
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.main.view.activity.container.MainActivity
-import com.example.thoughts_cleaning.views.main.view.fragment.GameFragment
+import com.example.thoughts_cleaning.views.game.view.fragment.GameFragment
 import com.example.thoughts_cleaning.views.main.view.fragment.MainFragment
 
-class GameView(context: Context, val activity: MainActivity, var fragment: GameFragment, private val joystickState: JoystickState) : SurfaceView(context), SurfaceHolder.Callback {
+class GameView(context: Context, val activity: GameActivity, var fragment: GameFragment, private val joystickState: JoystickState) : SurfaceView(context), SurfaceHolder.Callback {
 
     private lateinit var gameThread: GameThread
 
