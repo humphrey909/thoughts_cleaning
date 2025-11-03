@@ -40,7 +40,7 @@
             android:layout_margin="10dp"
             />
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:id="@+id/logo_circle_image"
             android:layout_width="100dp"
             android:layout_height="100dp"

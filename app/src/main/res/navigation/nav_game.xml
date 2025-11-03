@@ -9,13 +9,22 @@
         android:id="@+id/PourThoughtFragment"
         android:name="com.example.thoughts_cleaning.views.game.view.fragment.PourThoughtFragment"
         android:label="pourThought"
-        tools:layout="@layout/fragment_pour_thought" />
+        tools:layout="@layout/fragment_pour_thought"
+        >
+        <action
+            android:id="@+id/action_quit_page"
+            app:destination="@id/GameFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/GameFragment"
         android:name="com.example.thoughts_cleaning.views.game.view.fragment.GameFragment"
         android:label="game"
-        tools:layout="@layout/fragment_game" />
+        tools:layout="@layout/fragment_game" >
+
+
+
+    </fragment>
 
 
 </navigation>

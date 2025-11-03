@@ -31,7 +31,7 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.9" />
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:id="@+id/logo_circle_image"
             android:layout_width="100dp"
             android:layout_height="100dp"

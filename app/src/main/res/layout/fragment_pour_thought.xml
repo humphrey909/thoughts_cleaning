@@ -98,6 +98,8 @@
             app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
             app:layout_constraintTop_toBottomOf="@+id/guide_horizontal_bottom"
             app:layout_constraintStart_toEndOf="@+id/button_next"
+            android:onClick="@{() -> viewModel.onClicked(&quot;quit&quot;)}"
+
              />
 
         <Button
@@ -109,7 +111,7 @@
             app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
             app:layout_constraintEnd_toStartOf="@+id/button_stop"
             app:layout_constraintTop_toBottomOf="@+id/guide_horizontal_bottom"
-
+            android:onClick="@{() -> viewModel.onClicked(&quot;next&quot;)}"
             />
 
 
