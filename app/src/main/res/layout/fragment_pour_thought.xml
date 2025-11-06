@@ -5,6 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+
         <variable
             name="viewModel"
             type="com.example.thoughts_cleaning.views.game.vm.fragment.PourThoughtViewModel" />
@@ -49,28 +51,29 @@
 
 
 
-        <!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
+            app:layout_constraintBottom_toTopOf="@+id/guide_horizontal_top"
+            android:text="@{String.valueOf(viewModel.anxietyWriteListSize)}"
+            android:textSize="20dp"
+            android:fontFamily="@font/pretendard_medium"
 
-<!--            />-->
+            />
 
         <ImageView
             android:id="@+id/background_image"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@drawable/ic_launcher_foreground"
+            android:background="@color/edit_back"
             android:contentDescription="아이콘"
             app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
             app:layout_constraintTop_toTopOf="@+id/guide_horizontal_top"
             app:layout_constraintBottom_toBottomOf="@+id/guide_horizontal_bottom"
             app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
             />
-
+<!--        android:src="@drawable/ic_launcher_foreground"-->
 
         <EditText
             android:id="@+id/edit_text_box"
@@ -78,11 +81,13 @@
             android:layout_height="0dp"
             android:hint="자신의 고민과 걱정을 적어주세요."
             android:textSize="16sp"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
             android:layout_margin="10dp"
             android:inputType="textMultiLine"
             android:scrollbars="vertical"
             android:gravity="top"
+            android:background="@null"
             app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
             app:layout_constraintTop_toTopOf="@+id/guide_horizontal_top"
             app:layout_constraintBottom_toBottomOf="@+id/guide_horizontal_bottom"
@@ -90,28 +95,35 @@
             />
 
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_stop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="그만 쓰기"
+            android:background="@color/btn_back"
+            android:textColor="@color/black"
+            android:textSize="15dp"
             app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
-            app:layout_constraintTop_toBottomOf="@+id/guide_horizontal_bottom"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_horizontal_bottom"
             app:layout_constraintStart_toEndOf="@+id/button_next"
             android:onClick="@{() -> viewModel.onClicked(&quot;quit&quot;)}"
-
+            android:layout_margin="10dp"
              />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_next"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="다음 장"
+            android:textSize="15dp"
+            android:background="@color/btn_back"
+            android:textColor="@color/black"
             android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
             app:layout_constraintEnd_toStartOf="@+id/button_stop"
-            app:layout_constraintTop_toBottomOf="@+id/guide_horizontal_bottom"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_horizontal_bottom"
             android:onClick="@{() -> viewModel.onClicked(&quot;next&quot;)}"
+            android:layout_margin="10dp"
             />
 
 

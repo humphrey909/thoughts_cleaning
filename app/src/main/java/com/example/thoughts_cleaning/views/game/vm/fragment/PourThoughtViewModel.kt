@@ -11,15 +11,21 @@ class PourThoughtViewModel: ViewModel() {
     val currentMainFlow: LiveData<PourThoughtViewFlow> = _currentMainFlow
 
 
+    val _anxietyWriteListSize: MutableLiveData<Int> = MutableLiveData(0)
+    val anxietyWriteListSize: LiveData<Int> = _anxietyWriteListSize
+
     fun onClicked(type:String){
 //        Log.d("currentMainFlow", "ENTER_GAME2: ENTER_GAME")
         Log.d("currentMainFlow", "ENTER_GAME2: ${type}")
 
-//        if(){
-//
-//        }
-//
-        _currentMainFlow.postValue(PourThoughtViewFlow.QUIT_PAGE)
+        if(type == "next"){
+            _currentMainFlow.postValue(PourThoughtViewFlow.NEXT_PAGE)
+        }else if(type == "quit"){
+            _currentMainFlow.postValue(PourThoughtViewFlow.QUIT_PAGE)
+        }
+
+
+
     }
 
 //    fun onClicked2(){

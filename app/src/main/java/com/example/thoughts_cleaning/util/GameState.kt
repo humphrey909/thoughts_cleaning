@@ -32,6 +32,37 @@ class GameState(width: Int, height: Int) {
         )
         items.add(newItem)
     }
+
+    fun makeSpawnItems(screenWidth: Int, screenHeight: Int, itemCount: Int) {
+        // 화면 경계를 벗어나지 않도록 설정할 여백 (기존 코드와 동일하게 100 사용)
+        val margin = 100
+
+        // items 리스트에 아이템을 추가하기 전에, 필요하다면 기존 아이템을 클리어할 수 있습니다.
+        // items.clear() // (선택 사항: 기존 아이템을 제거하고 싶다면 주석 해제)
+
+        // 1. buildList를 사용하여 아이템을 itemCount만큼 한 번에 생성합니다.
+        val newItemsList = buildList {
+            repeat(itemCount) {
+                // 랜덤 X, Y 위치 계산
+                val randomX = (margin..screenWidth - margin).random().toFloat()
+                val randomY = (margin..screenHeight - margin).random().toFloat()
+
+                // 아이템 타입 결정
+                val type = if ((0..100).random() < 30) ItemType.SPEED_BOOST else ItemType.DEFAULT
+
+                // Item 객체를 생성하여 buildList의 내부 리스트에 추가합니다.
+                add(Item(
+                    x = randomX,
+                    y = randomY,
+                    radius = 50f,
+                    type = type
+                ))
+            }
+        }
+
+        // 2. 생성된 전체 리스트(newItemsList)를 기존 items 리스트에 한 번의 호출로 추가합니다.
+        items.addAll(newItemsList)
+    }
 }
 
 // 플레이어 클래스 (예시)

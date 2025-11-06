@@ -2,6 +2,7 @@
 <resources>
 
     <style name="Theme.Thoughts_cleaning" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorControlActivated">@color/white</item>
     </style>
 <!--    <style name="Theme.Thoughts_cleaning" parent="android:Theme.Material.Light.NoActionBar" />-->
 

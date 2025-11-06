@@ -22,7 +22,9 @@
         android:label="game"
         tools:layout="@layout/fragment_game" >
 
-
+        <argument
+            android:name="waste_count"
+            app:argType="integer" />
 
     </fragment>
 

@@ -21,7 +21,8 @@ class GameThread(
     context: Context,
     val activity: GameActivity,
     val fragment: GameFragment,
-    private val joystickState: JoystickState
+    private val joystickState: JoystickState,
+    private val wasteCount : Int
 ) : Thread() {
 
     private val desiredWidth: Int = 100 // 원하는 가로 픽셀 크기
@@ -30,6 +31,8 @@ class GameThread(
     @Volatile var isRunning = true
     private val FPS = 60 // 초당 프레임 수
     private val TIME_PER_FRAME = (1000 / FPS).toLong() // 프레임당 밀리초
+
+    private var accessItemMake = true
 
     // 캐릭터 비트맵 (실제 이미지 리소스로 교체 필요)
 //    private val characterBitmap: Bitmap =
@@ -139,11 +142,20 @@ class GameThread(
 
 
             // 2. 아이템 생성 로직
-            val currentTime = System.currentTimeMillis()
-            if (currentTime - lastSpawnTime > spawnInterval && gameState.items.size < spawnIntervalUntil && spawnIntervalSwitch) {
-                gameState.spawnItem(screenWidth, screenHeight)
-                lastSpawnTime = currentTime
+//            val currentTime = System.currentTimeMillis()
+//            if (currentTime - lastSpawnTime > spawnInterval && gameState.items.size < spawnIntervalUntil && spawnIntervalSwitch) {
+//                gameState.spawnItem(screenWidth, screenHeight)
+//                lastSpawnTime = currentTime
+//            }
+
+            //한번만 돌며 한번 돌았을대 아이템 갯수대로 아이템 만들기
+            if(accessItemMake){
+                gameState.makeSpawnItems(screenWidth, screenHeight, wasteCount)
+
+                accessItemMake = !accessItemMake
             }
+
+
 
             if(gameState.items.size == spawnIntervalUntil){
                 spawnIntervalSwitch = false

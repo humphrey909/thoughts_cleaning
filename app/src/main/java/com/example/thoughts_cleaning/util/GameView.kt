@@ -10,7 +10,7 @@ import com.example.thoughts_cleaning.views.main.view.activity.container.MainActi
 import com.example.thoughts_cleaning.views.game.view.fragment.GameFragment
 import com.example.thoughts_cleaning.views.main.view.fragment.MainFragment
 
-class GameView(context: Context, val activity: GameActivity, var fragment: GameFragment, private val joystickState: JoystickState) : SurfaceView(context), SurfaceHolder.Callback {
+class GameView(context: Context, val activity: GameActivity, var fragment: GameFragment, private val joystickState: JoystickState, private val wasteCount:Int) : SurfaceView(context), SurfaceHolder.Callback {
 
     private lateinit var gameThread: GameThread
 
@@ -22,7 +22,7 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         // Surface가 생성되면 스레드를 시작합니다.
-        gameThread = GameThread(holder, context, activity, fragment, joystickState)
+        gameThread = GameThread(holder, context, activity, fragment, joystickState, wasteCount)
         gameThread.start()
     }
 

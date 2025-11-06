@@ -1,19 +1,19 @@
 package com.example.thoughts_cleaning.views.game.view.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.thoughts_cleaning.R
-import com.example.thoughts_cleaning.databinding.FragmentGameBinding
+import com.example.thoughts_cleaning.api.Prefs
 import com.example.thoughts_cleaning.databinding.FragmentPourThoughtBinding
-import com.example.thoughts_cleaning.views.game.vm.fragment.GameFragmentViewModel
 import com.example.thoughts_cleaning.views.game.vm.fragment.PourThoughtViewModel
 import com.example.thoughts_cleaning.views.game.vm.fragment.PourThoughtViewModel.PourThoughtViewFlow
-import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel.MainFlow
 import kotlin.getValue
 
 
@@ -72,16 +72,48 @@ class PourThoughtFragment : Fragment() {
                 PourThoughtViewFlow.COMMON -> {  }
                 PourThoughtViewFlow.NEXT_PAGE -> {
 
+//                    binding.editTextBox.
+                    if(binding.editTextBox.text.isNotEmpty()){
+                        Log.d("currentMainFlow", "ENTER_GAME: ${binding.editTextBox.text}")
+//                    Log.d("currentMainFlow", "ENTER_GAME1: ${Prefs.anxietyWriteList}")
+//
+//                    Prefs.anxietyWrite = binding.editTextBox.text.toString()
+//
+//                    Log.d("currentMainFlow", "ENTER_GAME2: ${Prefs.anxietyWrite}")
+
+
+                        selectAnxietyWriteText()
+                        addAnxietyWriteText(binding.editTextBox.text.toString())
+                        val list = selectAnxietyWriteText()
+
+                        viewModel._anxietyWriteListSize.postValue(list.size)
+
+                        binding.editTextBox.text.clear()
+                    }
                 }
                 PourThoughtViewFlow.QUIT_PAGE -> {
+                    val bundle = bundleOf("waste_count" to viewModel.anxietyWriteListSize.value)
+
+
                     val navController = findNavController()
-                    navController.navigate(R.id.action_quit_page)
+                    navController.navigate(R.id.action_quit_page, bundle)
                 }
             }
         }
+    }
 
+    private fun addAnxietyWriteText(anxietyWrite: String) {
+        val currentList: ArrayList<String> = Prefs.anxietyWriteList
+        currentList.add(anxietyWrite)
+        Prefs.anxietyWriteList = currentList
+    }
 
+    private fun selectAnxietyWriteText(): ArrayList<String> {
+        val records: ArrayList<String> = Prefs.anxietyWriteList
 
+        Log.d("PREF", "기록 목록: $records")
+
+        return records
     }
 }
 
