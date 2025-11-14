@@ -11,6 +11,7 @@
     <color name="main">#DEDEDE</color>
     <color name="edit_back">#5E5E5E</color>
     <color name="btn_back">#A4A4A4</color>
+    <color name="main_text">#3A3A3A</color>
 
 
 </resources>

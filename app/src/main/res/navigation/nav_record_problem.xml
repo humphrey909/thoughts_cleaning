@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_game"
+    app:startDestination="@id/RecordStageFragment">
+
+    <fragment
+        android:id="@+id/RecordStageFragment"
+        android:name="com.example.thoughts_cleaning.views.record_problem.view.fragment.RecordStageFragment"
+        android:label="record_stage"
+        tools:layout="@layout/fragment_record_state"
+        >
+        <action
+            android:id="@+id/action_quit_page"
+            app:destination="@id/GameFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/GameFragment"
+        android:name="com.example.thoughts_cleaning.views.game.view.fragment.GameFragment"
+        android:label="game"
+        tools:layout="@layout/fragment_game" >
+
+        <argument
+            android:name="waste_count"
+            app:argType="integer" />
+
+    </fragment>
+
+
+</navigation>

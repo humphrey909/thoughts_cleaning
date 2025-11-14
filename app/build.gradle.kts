@@ -114,4 +114,6 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
 
     implementation("com.google.code.gson:gson:2.13.2")
+
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
 }

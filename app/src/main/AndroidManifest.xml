@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Thoughts_cleaning"
         tools:targetApi="31">
+<!--        <activity-->
+<!--            android:name=".views.record_problem.view.activity.container.RecordProblemActivity"-->
+<!--            android:exported="true"-->
+<!--            android:theme="@style/Theme.Thoughts_cleaning"-->
+<!--            />-->
+
         <activity
             android:name=".views.game.view.activity.container.GameActivity"
             android:exported="true"
@@ -22,7 +28,7 @@
             android:name=".views.start.view.activity.container.StartActivity"
             android:exported="true"/>
         <activity
-            android:name=".views.main.view.activity.container.MainActivity"
+            android:name=".views.record_problem.view.activity.container.RecordProblemActivity"
             android:exported="true"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>

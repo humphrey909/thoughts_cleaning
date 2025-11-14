@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 둥근 모서리, 배경색, 테두리를 정의하는 Shape Drawable -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#F4EFEA" />
+    <corners android:radius="20dp" />
+</shape>
