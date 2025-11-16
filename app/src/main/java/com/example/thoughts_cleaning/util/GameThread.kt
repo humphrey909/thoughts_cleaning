@@ -1,20 +1,20 @@
 package com.example.thoughts_cleaning.util
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.util.Log
 import android.view.SurfaceHolder
 import androidx.window.layout.WindowMetricsCalculator
-import android.graphics.Paint
-import com.example.thoughts_cleaning.views.main.view.activity.container.MainActivity
-import com.example.thoughts_cleaning.views.main.view.fragment.MainFragment
 import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.api.model.GameWall
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.game.view.fragment.GameFragment
+
 
 class GameThread(
     private val surfaceHolder: SurfaceHolder,
@@ -33,6 +33,8 @@ class GameThread(
     private val TIME_PER_FRAME = (1000 / FPS).toLong() // 프레임당 밀리초
 
     private var accessItemMake = true
+
+
 
     // 캐릭터 비트맵 (실제 이미지 리소스로 교체 필요)
 //    private val characterBitmap: Bitmap =
@@ -63,6 +65,9 @@ class GameThread(
     private val spawnInterval = 3000 // 3초마다 아이템 생성
     private val spawnIntervalUntil = 5 // 3초마다 아이템 생성
     private var spawnIntervalSwitch = true // 3초마다 아이템 생성
+
+
+
 
     // GameThread 클래스 내부 (또는 Draw를 담당하는 클래스)
     private val defaultItemPaint = Paint().apply {
@@ -96,8 +101,11 @@ class GameThread(
         screenHeight = metrics.bounds.height()
         screenWidth = metrics.bounds.width()
 
-//        Log.d("ScreenSize", "화면 높이: $screenHeight px")
-//        Log.d("ScreenSize", "화면 너비: $screenWidth px")
+
+
+        // 중앙 가로 벽
+        gameState.walls?.add(GameWall(100f, 200f, screenWidth - 100f, 250f, Color.RED))
+        gameState.walls?.add(GameWall(screenWidth - 150f, screenHeight - 150f, screenWidth+0f, screenHeight+0f, Color.RED))
 
 
         var startTime: Long
@@ -125,6 +133,7 @@ class GameThread(
                     if (canvas != null) {
                         drawGame(canvas)
                         drawItems(canvas)
+                        drawWallItems(canvas)
                     }
                 }
             } catch (e: Exception) {
@@ -148,14 +157,14 @@ class GameThread(
 //                lastSpawnTime = currentTime
 //            }
 
-            //한번만 돌며 한번 돌았을대 아이템 갯수대로 아이템 만들기
+//            Log.d("canvas", "각도 1: ${accessItemMake} px")
+//            Log.d("canvas", "각도 2: ${accessItemMake} px")
+
+            //한번만 돌며 한번 돌았을 때 아이템 갯수대로 아이템 만들기
             if(accessItemMake){
                 gameState.makeSpawnItems(screenWidth, screenHeight, wasteCount)
-
                 accessItemMake = !accessItemMake
             }
-
-
 
             if(gameState.items.size == spawnIntervalUntil){
                 spawnIntervalSwitch = false
@@ -163,6 +172,8 @@ class GameThread(
 
             // 3. 아이템 충돌 감지 및 처리
             checkItemCollisions()
+
+            checkWallItemCollisions()
 
             try {
                 if (waitTime > 0) {
@@ -256,6 +267,71 @@ class GameThread(
         }
     }
 
+    private fun checkWallItemCollisions(){
+
+        val player = gameState.player
+        gameState.playerLastX = player.x
+        gameState.playerLastY = player.y
+
+        Log.d("canvas", "player: ${player} - 충돌 발생 전!")
+
+        // 5. 벽(장애물)과의 충돌 감지 및 반응
+        for (wall in gameState.walls!!) {
+
+//            val dx = player.x - item.x
+//            val dy = player.y - item.y
+//            val distanceSquared = dx * dx + dy * dy
+
+
+
+//            val playerRec = RectF(player.x, player.y, player.x + player.radius, player.y + player.radius)
+            val playerRec = player.getBounds()
+            val wallRec = RectF(wall.left, wall.top, wall.right, wall.bottom)
+
+            if (checkCollision(playerRec, wallRec)) {
+                // 충돌 발생!
+                // 플레이어 위치를 충돌 전 위치(lastX, lastY)로 되돌립니다.
+
+                Log.d("canvas", "player: ${player} - 충돌 발생!")
+
+
+
+                // --- 충돌 반응 로직 (핵심) ---
+
+                // X축 이동만 이전으로 되돌려봅니다.
+
+                playerRec.offsetTo(gameState.playerLastX, playerRec.top)
+
+                if (checkCollision(playerRec, wallRec)) {
+                    // X축 복구 후에도 충돌한다면, 수평 이동이 문제가 아니었거나
+                    // 코너 충돌이므로 Y축도 복구해야 합니다.
+                    playerRec.offsetTo(playerRec.left, gameState.playerLastY)
+
+
+                    // X축도 다시 원래 위치로 되돌립니다.
+                    playerRec.offsetTo(gameState.playerLastX, gameState.playerLastY)
+                } else {
+                    // X축만 복구했더니 충돌이 해결됨 (수평 충돌)
+                    // Y축은 유지
+                }
+
+
+                // 위 로직은 단순화를 위한 접근이며, 완벽한 슬라이딩 충돌을 위해서는 더 복잡한 벡터 계산이 필요합니다.
+                // 가장 간단하고 확실한 통과 방지는 '충돌 시 이전 위치로 완전 복귀'입니다.
+
+                // 간단한 충돌 반응: 그냥 이전 위치로 완전히 복귀
+                playerRec.offsetTo(gameState.playerLastX, gameState.playerLastY)
+
+                break // 여러 벽이 겹쳐있지 않다면, 첫 충돌에서 루프 종료
+            }
+        }
+    }
+
+    private fun checkCollision(rect1: RectF, rect2: RectF): Boolean {
+        // RectF.intersect() 메서드를 사용하여 간편하게 충돌을 확인할 수 있습니다.
+        return RectF.intersects(rect1, rect2)
+    }
+
     /**
      * 아이템 종류에 따라 플레이어에게 효과를 적용합니다.
      */
@@ -289,6 +365,24 @@ class GameThread(
 
             // 아이템을 원형으로 그립니다.
             canvas.drawCircle(item.x, item.y, item.radius, paint)
+        }
+    }
+
+    private fun drawWallItems(canvas: Canvas) {
+
+//        Log.d("canvas", "drawWallItems: ${gameState.walls} ")
+        //
+
+
+        // 배경 그리기
+//        canvas.drawColor(Color.parseColor("#E0E7FF"));
+
+        for (wall in gameState.walls!!) {
+
+            val paint = Paint()
+            paint.color = wall.color
+
+            canvas.drawRect(RectF(wall.left, wall.top, wall.right, wall.bottom), paint)
         }
     }
 }

@@ -2,4 +2,41 @@
     <string name="app_name">thoughts_cleaning</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ex_other_thought1"> 먼지 1. 오늘 회의에서 말을 더듬었어. 다들 날 바보라고 생각했을 거야</string>
+    <string name="ex_other_thought2"> 먼지 2. 친구가 답장을 안 해. 나한테 질렸나봐.</string>
+    <string name="ex_other_thought3"> 먼지 3. 이번 달도 목표를 못 지켰어. 난 의지가 약한가봐.</string>
+
+
+    <string name="dust_kind_thought1"> 마음의 상처 \n "누군가 날 상처 입혔어" </string>
+    <string name="dust_kind_thought2"> 불안과 걱정 \n "앞으로가 불안해"  </string>
+    <string name="dust_kind_thought3"> 화나는 일 \n "정말 화가 나" </string>
+    <string name="dust_kind_thought4"> 지친 마음 \n "너무 힘들어" </string>
+
+    <string name="word_express_ex1"> 한 단어면 충분해요 </string>
+    <string name="word_express_ex2"> 말로 해도 돼요. </string>
+
+    <string name="detail_dust_ex1"> 짧게 써도 괜찮아요. </string>
+    <string name="detail_dust_ex2"> 말로 해도 돼요. </string>
+
+    <string name="dust_complete_ex1"> 이 쓰레기를 치워버릴까요? </string>
+    <string name="dust_complete_btn_title"> 청소시작 </string>
+
+
+    <string name="dust_feeling_thought1"> 슬펏어요 </string>
+    <string name="dust_feeling_thought2"> 불안했어요 </string>
+    <string name="dust_feeling_thought3"> 화났어요 </string>
+    <string name="dust_feeling_thought4"> 억울했어요 </string>
+    <string name="dust_feeling_thought5"> 지쳤어요 </string>
+    <string name="dust_feeling_thought6"> 외로웠어요 </string>
+
+
+    <string name="dust_complete_title"> 🗑️ 오늘의 쓰레기 </string>
+    <string name="dust_complete_kind"> 종류 :</string>
+    <string name="dust_complete_document"> 내용 :</string>
+    <string name="dust_complete_emotion"> 감정 :</string>
+
+    <string name="dust_complete_kind_ex"> 😤 혼나는 일</string>
+    <string name="dust_complete_document_ex"> [사용자가 쓴 내용 미리보기]</string>
+    <string name="dust_complete_emotion_ex"> 😤😓 화나고 지쳤어요</string>
+
 </resources>

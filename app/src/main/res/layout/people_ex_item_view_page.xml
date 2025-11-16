@@ -8,12 +8,7 @@
 
         <variable
             name="item"
-            type="int" />
-
-<!--        <variable-->
-<!--            name="next"-->
-<!--            type="kr.dnx.ble.android.touchcare.api.model.Live" />-->
-
+            type="String" />
         <variable
             name="clickListener"
             type="com.example.thoughts_cleaning.views.record_problem.adapter.PeopleExItemClickListener" />
@@ -26,12 +21,15 @@
 
         <TextView
             android:id="@+id/text_card"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="20dp"
+            android:layout_marginHorizontal="10dp"
+            android:gravity="start|top"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/stage_content_main"
             android:text="@{item}"
              />
     </androidx.constraintlayout.widget.ConstraintLayout>

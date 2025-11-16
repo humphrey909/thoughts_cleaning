@@ -1,13 +1,14 @@
 package com.example.thoughts_cleaning.views.record_problem.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.databinding.PeopleExItemViewPageBinding
 
-class PeopleExViewPagerAdapter(private var items: ArrayList<Int>, private val clickListener: PeopleExItemClickListener) :
+class PeopleExViewPagerAdapter(private var items: ArrayList<String>, private val clickListener: PeopleExItemClickListener) :
     RecyclerView.Adapter<PeopleExViewPagerAdapter.PagerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerViewHolder {
@@ -25,7 +26,7 @@ class PeopleExViewPagerAdapter(private var items: ArrayList<Int>, private val cl
     override fun getItemCount(): Int = items.size
 
     inner class PagerViewHolder(val binding: PeopleExItemViewPageBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(item: Int, clickListener: PeopleExItemClickListener) = with(binding) {
+        fun bind(item: String, clickListener: PeopleExItemClickListener) = with(binding) {
             this.item = item
 //            this.next = live[1]
             this.clickListener = clickListener
@@ -33,6 +34,6 @@ class PeopleExViewPagerAdapter(private var items: ArrayList<Int>, private val cl
     }
 }
 
-class PeopleExItemClickListener(val clickListener: (item: Int) -> Unit) {
-    fun onClick(item: Int) = clickListener(item)
+class PeopleExItemClickListener(val clickListener: (view: View, item: Int) -> Unit) {
+    fun onClick(view: View, item: Int) = clickListener(view, item)
 }

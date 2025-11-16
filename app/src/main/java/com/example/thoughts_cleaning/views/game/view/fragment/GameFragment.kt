@@ -45,11 +45,33 @@ class GameFragment : Fragment() {
     // 2. 뷰가 살아있는 동안에만 접근할 수 있는 Non-null Binding 객체
     private val binding get() = _binding!!
 
-    private var wasteCount = 0
+//    private var wasteCount = 0
+
+    companion object {
+        // 이 부분이 있어야 외부에서 BFragment.newInstance(...) 로 호출 가능합니다.
+        private const val ARG_DATA_KEY = "waste_count"
+
+        // ⭐ 이 newInstance 메서드가 정의되어 있어야 에러가 해결됩니다.
+//        @JvmStatic
+//        fun newInstance(data: String) =
+//            GameFragment().apply {
+//                arguments = Bundle().apply {
+//                    putString(ARG_DATA_KEY, data)
+//                }
+//            }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+//        val args = requireArguments()
+//        val wasteCount = args.getString("waste_count") ?: "0"
+
+//        arguments?.let {
+////            wasteCount = bundle.getInt("waste_count", 0) // Int는 기본값(0)을 지정하는 것이 안전합니다.
+//            wasteCount = it.getInt("waste_count")
+//        }
+//        Log.d("Fragment에서 받은 데이터", "waste_count: ${wasteCount}")
     }
 
     override fun onCreateView(
@@ -70,14 +92,14 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 1. Bundle 전체를 가져옵니다.
-        val bundle = arguments
+//        val bundle = arguments
 
         // 2. Bundle이 null이 아닌지 확인하고, 보낸 키(Key)를 사용하여 데이터를 추출합니다.
-        if (bundle != null) {
-            // 예시: "id_key"라는 키로 Int를 보냈을 경우
-            wasteCount = bundle.getInt("waste_count", 0) // Int는 기본값(0)을 지정하는 것이 안전합니다.
-            Log.d("waste_count", "waste_count: ${wasteCount}")
-        }
+//        if (bundle != null) {
+//            // 예시: "id_key"라는 키로 Int를 보냈을 경우
+//            wasteCount = bundle.getInt("waste_count", 0) // Int는 기본값(0)을 지정하는 것이 안전합니다.
+//            Log.d("waste_count", "waste_count: ${wasteCount}")
+//        }
 
         // 1. Context 가져오기 (Fragment에서는 requireContext()를 사용)
         val context = requireContext()
@@ -91,7 +113,7 @@ class GameFragment : Fragment() {
         gameView = GameView(
             context, /* GameViewListener: */
             requireActivity() as GameActivity, this, joystickSimulator,
-            wasteCount
+            viewModel.wasteCount
         )
 
         // 4. 레이아웃 파라미터 정의 (MATCH_PARENT)

@@ -1,13 +1,14 @@
 package com.example.thoughts_cleaning.util
 
 import android.graphics.RectF
-import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.random.Random
+import com.example.thoughts_cleaning.api.model.GameWall
 
 class GameState(width: Int, height: Int) {
     // 💡 여러 스레드에서 접근할 수 있으므로 CopyOnWriteArrayList를 사용하여 안전하게 관리합니다.
 //    val items = CopyOnWriteArrayList<Item>()
     val items = ArrayList<Item>()
+
+    val walls: MutableList<GameWall>? = mutableListOf()
 
     // 플레이어 객체 (실제 구현에 맞게 Player 클래스를 가정합니다.)
     val player = Player(
@@ -15,6 +16,9 @@ class GameState(width: Int, height: Int) {
         y = (height / 2).toFloat(),
         radius = 50f
     )
+
+    var playerLastX = 0f
+    var playerLastY = 0f
 
     // 아이템을 랜덤한 위치에 생성하는 함수
     fun spawnItem(screenWidth: Int, screenHeight: Int) {
@@ -63,6 +67,17 @@ class GameState(width: Int, height: Int) {
         // 2. 생성된 전체 리스트(newItemsList)를 기존 items 리스트에 한 번의 호출로 추가합니다.
         items.addAll(newItemsList)
     }
+
+
+
+    //벽 만드는 코드
+//    fun makeWallItems(left: Float, top: Float, right: Float, bottom: Float, color: Int){
+//        rect = RectF(left, top, right, bottom)
+//        paint = Paint()
+//        paint?.setColor(color)
+//
+//
+//    }
 }
 
 // 플레이어 클래스 (예시)
@@ -72,6 +87,17 @@ data class Player(
     val radius: Float,
     var health: Int = 100
 ) {
+//    var lastX: Float = 0f
+//    var lastY: Float = 0f
+
+//    fun Player(x: Float, y: Float, size: Float, color: Int) {
+//        rect = RectF(x, y, x + size, y + size)
+//        paint = Paint()
+//        paint.setColor(color)
+//        lastX = x
+//        lastY = y
+//    }
+
     fun getBounds(): RectF {
         return RectF(
             x - radius,
@@ -95,3 +121,25 @@ data class Player(
         // - 서버로 위치 정보 전송 등
     }
 }
+
+
+
+//class Wall(left: Float, top: Float, right: Float, bottom: Float, color: Int) {
+//    var rect: RectF
+//    var paint: Paint
+//
+//    init {
+//        rect = RectF(left, top, right, bottom)
+//        paint = Paint()
+//        paint.setColor(color)
+//    }
+//
+//    fun draw(canvas: Canvas) {
+//        canvas.drawRect(rect, paint)
+//    }
+//}
+
+
+
+
+

@@ -7,6 +7,8 @@ import com.example.thoughts_cleaning.R
 
 class GameFragmentViewModel: ViewModel() {
 
+    val wasteCount = 5
+
     private val _characterImageResId = MutableLiveData<Int>(R.drawable.character_default)
     val characterImages: LiveData<Int> = _characterImageResId
 

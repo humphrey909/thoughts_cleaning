@@ -92,11 +92,11 @@ class PourThoughtFragment : Fragment() {
                     }
                 }
                 PourThoughtViewFlow.QUIT_PAGE -> {
-                    val bundle = bundleOf("waste_count" to viewModel.anxietyWriteListSize.value)
-
-
-                    val navController = findNavController()
-                    navController.navigate(R.id.action_quit_page, bundle)
+//                    val bundle = bundleOf("waste_count" to viewModel.anxietyWriteListSize.value)
+//
+//
+//                    val navController = findNavController()
+//                    navController.navigate(R.id.action_quit_page, bundle)
                 }
             }
         }

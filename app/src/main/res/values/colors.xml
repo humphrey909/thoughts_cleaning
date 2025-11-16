@@ -12,6 +12,14 @@
     <color name="edit_back">#5E5E5E</color>
     <color name="btn_back">#A4A4A4</color>
     <color name="main_text">#3A3A3A</color>
+    <color name="main_background">#E7E4B4</color>
+    <color name="point_color">#7EC6B3</color>
+    <color name="point_color2">#C7D2B9</color>
+
+    <color name="btn_background1">#F4EFEA</color>
+    <color name="edit_hint">#AAAAAA</color>
+
+    <color name="grey1">#C8C8C8</color>
 
 
 </resources>

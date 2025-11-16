@@ -1,24 +1,40 @@
 package com.example.thoughts_cleaning.views.record_problem.view.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel
-import com.example.thoughts_cleaning.databinding.FragmentMainBinding
+import androidx.lifecycle.ViewModelProvider
+import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.common.TrulyGenericViewModelFactory
 import com.example.thoughts_cleaning.databinding.FragmentRecordStateBinding
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel.MainFlow
+import com.example.thoughts_cleaning.views.record_problem.adapter.DustFeelingItemClickListener
+import com.example.thoughts_cleaning.views.record_problem.adapter.DustFeelingListViewPagerAdapter
+import com.example.thoughts_cleaning.views.record_problem.adapter.DustKindItemClickListener
+import com.example.thoughts_cleaning.views.record_problem.adapter.DustKindListViewPagerAdapter
+import com.example.thoughts_cleaning.views.record_problem.adapter.PeopleExItemClickListener
+import com.example.thoughts_cleaning.views.record_problem.adapter.PeopleExViewPagerAdapter
 import com.example.thoughts_cleaning.views.record_problem.vm.fragment.RecordStageFragmentViewModel
 
-//import com.example.thoughts_cleaning.views.game.vm.fragment.GameViewModel.MainFlow
 
 class RecordStageFragment : Fragment() {
 
-    private val viewModel: RecordStageFragmentViewModel by viewModels()
+    lateinit var mContext: Context
+
+    private lateinit var viewModel: RecordStageFragmentViewModel
+
+    private var peopleExViewadapter: PeopleExViewPagerAdapter? = null
+    private var dustKindListadapter: DustKindListViewPagerAdapter? = null
+    private var dustFeelingListadapter: DustFeelingListViewPagerAdapter? = null
+
+    private lateinit var viewModelFactory: TrulyGenericViewModelFactory
 
 //    private lateinit var joystickView: JoystickView
 //    private var isStop = false
@@ -49,12 +65,7 @@ class RecordStageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         _binding = FragmentRecordStateBinding.inflate(inflater, container, false)
-
-
-
         return binding.root
         //return inflater.inflate(R.layout.fragment_main, container, false)
     }
@@ -62,13 +73,27 @@ class RecordStageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModelFactory = TrulyGenericViewModelFactory(mContext = mContext)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(RecordStageFragmentViewModel::class.java)
+
+        peopleExViewadapter = PeopleExViewPagerAdapter(viewModel.reviewOtherPeople, peopleExItemClickListener)
+        dustKindListadapter = DustKindListViewPagerAdapter(viewModel.dustKindList, dustKindItemClickListener)
+        dustFeelingListadapter = DustFeelingListViewPagerAdapter(viewModel.dustFeelingList, dustFeelingItemClickListener)
+
         //이부분 없으면 onclick이 동작하지 않음
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        binding.pagerOtherPeopleReview.adapter = peopleExViewadapter
+        binding.indicatorOtherPeopleReview.setViewPager(binding.pagerOtherPeopleReview)
 
+        binding.dustKindRecycler.adapter = dustKindListadapter
+        binding.dustFeelingRecycler.adapter = dustFeelingListadapter
 
         viewModel._currentMainFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
+
+
+
 
         handleNavigationEvent()
 
@@ -254,19 +279,32 @@ class RecordStageFragment : Fragment() {
                 }
 
                 RecordStageFragmentViewModel.RecordStageFlow.STAGE_3 -> {
-//                    viewModel._backBtnStateText.postValue(true)
+                    if(viewModel.fixDustKind.value?.index == 0){
+                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 상처를 받았는지 단어 하나로만 말해줄래요?")
+                    }else if(viewModel.fixDustKind.value?.index == 1){
+                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 불안 했는지 단어 하나로만 말해줄래요?")
+                    }else if(viewModel.fixDustKind.value?.index == 2){
+                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 화가 났는지 단어 하나로만 말해줄래요?")
+                    }else if(viewModel.fixDustKind.value?.index == 3){
+                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 마음이 힘들었는지 단어 하나로만 말해줄래요?")
+                    }
                 }
                 RecordStageFragmentViewModel.RecordStageFlow.STAGE_4 -> {
-//                    viewModel._backBtnStateText.postValue(true)
+                    viewModel._dustFairyMessageText.postValue(viewModel.fixDustOneWord.value +" 때문이었군요. 한 문장만 더 써줄 수 있을까요?")
                 }
                 RecordStageFragmentViewModel.RecordStageFlow.STAGE_5 -> {
-//                    viewModel._backBtnStateText.postValue(true)
+                    viewModel._dustFairyMessageText.postValue("이 일이 있었을 때 어떤 기분이었어요?")
                 }
                 RecordStageFragmentViewModel.RecordStageFlow.STAGE_6 -> {
-//                    viewModel._backBtnStateText.postValue(true)
+                    viewModel._dustFairyMessageText.postValue("이만큼이나 무거운 걸 혼자 안고 있었네요. 수고했어요.")
+
+                    Log.d("fixDustKind", " - " + viewModel.fixDustKind)
+                    Log.d("fixDustKind", " - " + viewModel.fixDustOneWord.value)
+                    Log.d("fixDustKind", " - " + viewModel.fixDustDetail.value)
                 }
                 RecordStageFragmentViewModel.RecordStageFlow.STAGE_7 -> {
-//                    viewModel._backBtnStateText.postValue(true)
+                    //게임으로 이동
+                    enter_game()
                 }
             }
 //            viewModel.MainFlow
@@ -281,9 +319,19 @@ class RecordStageFragment : Fragment() {
 //
         }
 
+        viewModel.fixDustDetail.observe(viewLifecycleOwner) { flow ->
+            Log.d("fixDustDetail", " - " + flow)
+
+            if(flow.length > 10){
+                viewModel._dustFairyMessageText.postValue("잘하고 있어요. 더 털어 놓고 싶은 게 있나요?")
+
+            }
+        }
+
 
         viewModel._currentMainFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
 
+//        adapter?.setItems(it.messageList)
 
 //        binding.recordStateCenterLayout
 //        binding.adapter = ViewPagerAdapter(getIdolList()) // 어댑터 생성
@@ -302,4 +350,46 @@ class RecordStageFragment : Fragment() {
 //
 //        viewModel._currentMainFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
 //    }
+
+    private val peopleExItemClickListener = PeopleExItemClickListener { view, item ->
+//        Log.i("doctorListFragment", ": view tag = ${view.tag}")
+//        Log.i("doctorListFragment", ": item clicked $item")
+//        Log.i("doctorListFragment", ": item clicked ${item.openCk}")
+    }
+
+    private val dustKindItemClickListener = DustKindItemClickListener { state, position ->
+//        Log.i("dustKindItemClickListener", ": view tag = ${view.tag}")
+//        Log.i("dustKindItemClickListener", ": item clicked $state")
+//        Log.i("dustKindItemClickListener", ": item clicked $position")
+
+
+        viewModel._fixDustKind.postValue(state)
+//        viewModel.fixDustKind = state
+    }
+    private val dustFeelingItemClickListener = DustFeelingItemClickListener { state, position ->
+//        Log.i("dustKindItemClickListener", ": view tag = ${view.tag}")
+//        Log.i("dustKindItemClickListener", ": item clicked $state")
+//        Log.i("dustKindItemClickListener", ": item clicked $position")
+
+//        viewModel.fixDustKind = state
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        mContext = context
+    }
+
+    fun enter_game(){
+//        Log.d("ScreenSize", "화면 높이: ENTER_GAME")
+
+        val intent = Intent(requireActivity(), GameActivity::class.java)
+//        intent.putExtra("waste_count", 5)
+
+        // 2. Activity 시작
+        startActivity(intent)
+        requireActivity().finish()
+
+//        viewModel._currentMainFlow.postValue(MainFlow.COMMON)
+    }
 }

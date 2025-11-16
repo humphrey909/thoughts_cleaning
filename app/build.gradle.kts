@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+    id("kotlin-kapt")
 }
 
 android {
@@ -116,4 +117,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.13.2")
 
     implementation("androidx.viewpager2:viewpager2:1.1.0")
+
+    implementation("me.relex:circleindicator:2.1.6")
+
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
 }
