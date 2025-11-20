@@ -11,6 +11,10 @@
     <string name="dust_kind_thought2"> 불안과 걱정 \n "앞으로가 불안해"  </string>
     <string name="dust_kind_thought3"> 화나는 일 \n "정말 화가 나" </string>
     <string name="dust_kind_thought4"> 지친 마음 \n "너무 힘들어" </string>
+    <string name="dust_kind_thought5"> 지친 마음2 \n "너무 힘들어2" </string>
+    <string name="dust_kind_thought6"> 지친 마음3 \n "너무 힘들어3" </string>
+    <string name="dust_kind_thought7"> 지친 마음4 \n "너무 힘들어4" </string>
+    <string name="dust_kind_thought8"> 지친 마음5 \n "너무 힘들어5" </string>
 
     <string name="word_express_ex1"> 한 단어면 충분해요 </string>
     <string name="word_express_ex2"> 말로 해도 돼요. </string>
@@ -28,6 +32,8 @@
     <string name="dust_feeling_thought4"> 억울했어요 </string>
     <string name="dust_feeling_thought5"> 지쳤어요 </string>
     <string name="dust_feeling_thought6"> 외로웠어요 </string>
+    <string name="dust_feeling_thought7"> 외로웠어요2 </string>
+    <string name="dust_feeling_thought8"> 외로웠어요3 </string>
 
 
     <string name="dust_complete_title"> 🗑️ 오늘의 쓰레기 </string>

@@ -23,5 +23,71 @@
             android:layout_marginBottom="32dp"
             android:background="#33AAAAAA"/>
 
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_vertical_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_vertical_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_horizontal_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.03" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_horizontal_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.95" />
+
+            <ImageView
+                android:id="@+id/dust_main_logo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/logo_icon"
+                app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
+                app:layout_constraintBottom_toBottomOf="@+id/guide_horizontal_bottom"
+                tools:ignore="ContentDescription" />
+
+
+            <TextView
+                android:id="@+id/dust_main_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/main_text"
+                android:text="@{viewModel.dustFairyMessageText}"
+                android:textSize="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/dust_main_logo"
+                app:layout_constraintStart_toStartOf="@+id/dust_main_logo"
+                app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="15dp"
+                android:background="@drawable/message_main"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
+
 </layout>

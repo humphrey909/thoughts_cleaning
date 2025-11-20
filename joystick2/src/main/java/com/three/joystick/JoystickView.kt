@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import kotlin.math.atan2
@@ -30,6 +31,7 @@ class JoystickView(context: Context?, attrs: AttributeSet?): View(context, attrs
 
     // 조이스틱 움직임 업데이트를 위한 스레드
     private var mThread = Thread(this)
+    private var isThreadRunning = false // 스레드 실행 상태 추적
 
     // 조이스틱 움직임 업데이트 간격 (밀리초)
     private var moveUpdateInterval = DEFAULT_UPDATE_INTERVAL
@@ -60,8 +62,8 @@ class JoystickView(context: Context?, attrs: AttributeSet?): View(context, attrs
 //                outerColor = getColor(R.styleable.Joystick_joystickOuterColor, Color.BLACK)
                 outerColor = getColor(R.styleable.Joystick_joystickOuterColor, Color.parseColor("#D1D1D1"))
                 innerColor = getColor(R.styleable.Joystick_joystickInnerColor, Color.BLACK)
-                innerRatio = getFraction(R.styleable.Joystick_joystickInnerRatio, 1, 1, 0.25f)
-                outerRatio = getFraction(R.styleable.Joystick_joystickOuterRatio, 1, 1, 0.75f)
+                innerRatio = getFraction(R.styleable.Joystick_joystickInnerRatio, 1, 1, 0.20f)
+                outerRatio = getFraction(R.styleable.Joystick_joystickOuterRatio, 1, 1, 0.60f)
                 useSpring = getBoolean(R.styleable.Joystick_joystickUseSpring, true)
             } finally {
                 recycle()
@@ -81,54 +83,23 @@ class JoystickView(context: Context?, attrs: AttributeSet?): View(context, attrs
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         // 초기 조이스틱, 중심 위치 설정
-        mPosX = (width / 2).toFloat()
-        mPosY = (width / 2).toFloat()
-        mCenterX = mPosX
-        mCenterY = mPosY
+//        mPosX = (width / 2).toFloat()
+//        mPosY = (width / 2).toFloat()
+//        mCenterX = mPosX
+//        mCenterY = mPosY
+
+        // 조이스틱의 크기가 W, H로 결정되므로 중심과 반지름을 다시 계산
+        mCenterX = (w / 2).toFloat()
+        mCenterY = (h / 2).toFloat()
+
+        // 초기 조이스틱 위치를 중심으로 설정
+        mPosX = mCenterX
+        mPosY = mCenterY
 
         // 조이스틱의 내부, 외부 반지름 계산
         val d = w.coerceAtMost(h)
         innerRadius = d / 2 * innerRatio
         outerRadius = d / 2 * outerRatio
-    }
-
-    // 터치 이벤트 처리 함수
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        mPosX = event!!.x
-        mPosY = event.y
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                // 스레드 실행 중, 중단 및 새로 시작
-                if (mThread.isAlive)
-                    mThread.interrupt()
-                mThread = Thread(this)
-                mThread.start()
-                moveListener?.onMove(getAngle(), getStrength())
-            }
-            MotionEvent.ACTION_UP -> {
-                // 스레드 중단 및 스프링 효과 적용
-                mThread.interrupt()
-                if (useSpring) {
-                    mPosX = mCenterX
-                    mPosY = mCenterY
-                    moveListener?.onMove(getAngle(), getStrength())
-                }
-            }
-        }
-
-        // 조이스틱이 외부 원을 벗어나지 않도록 조정
-        val length = sqrt((mPosX - mCenterX).pow(2) + (mPosY - mCenterY).pow(2))
-        if (length > outerRadius) {
-            // length:radius = (mPosX - mCenterX):new mPosX
-            // length:radius = (mPosY - mCenterY):new mPosY
-            mPosX = (mPosX - mCenterX) * outerRadius / length + mCenterX
-            mPosY = (mPosY - mCenterY) * outerRadius / length + mCenterY
-        }
-
-        // 화면 다시 그리기 요청
-        invalidate()
-        return true
     }
 
     // View 그리는 함수
@@ -155,14 +126,6 @@ class JoystickView(context: Context?, attrs: AttributeSet?): View(context, attrs
         }
     }
 
-    // 조이스틱 각도 계산 함수
-//    private fun getAngle(): Int {
-//        val xx = mPosX - mCenterX
-//        val yy = mCenterY - mPosY
-//        val angle = Math.toDegrees(atan2(yy, xx).toDouble()).toInt()
-//        // 수평선 아래는 음수 값 계산
-//        return if (angle < 0) angle + 360 else angle
-//    }
     private fun getAngle(): Float {
         val xx = mPosX - mCenterX
         val yy = mPosY - mCenterY
@@ -182,13 +145,6 @@ class JoystickView(context: Context?, attrs: AttributeSet?): View(context, attrs
         return angle
     }
 
-
-    // 조이스틱 강도 계산 함수
-//    private fun getStrength(): Int {
-//        val length = sqrt((mPosX - mCenterX).pow(2) + (mPosY - mCenterY).pow(2))
-//        return (length / outerRadius * 100).toInt()
-//    }
-
     private fun getStrength(): Float {
         // 1. 조이스틱 중심으로부터 현재 위치까지의 거리 (대각선 길이)를 Float로 계산
         val length = kotlin.math.sqrt((mPosX - mCenterX).pow(2) + (mPosY - mCenterY).pow(2))
@@ -198,19 +154,24 @@ class JoystickView(context: Context?, attrs: AttributeSet?): View(context, attrs
         val strength = length / outerRadius * 100f
 
         // 3. Float 타입의 강도(Strength) 값을 반환
-        return strength
+//        return strength
+        return strength.coerceIn(0f, 100f) // 0~100 사이 값으로 보장
     }
 
     // 주기적으로 실행되는 스레드
     override fun run() {
-        while (!Thread.interrupted()) {
+        // 스레드 시작 시점에 mThread가 null이 아니라는 것은 보장됨
+        while (isThreadRunning && mThread?.isInterrupted == false) {
             post {
+                // UI 스레드에서 리스너 호출
                 moveListener?.onMove(getAngle(), getStrength())
             }
             try {
                 Thread.sleep(moveUpdateInterval.toLong())
             } catch (e: InterruptedException) {
-                break
+                // 인터럽트 발생 시 루프 종료
+                Thread.currentThread().interrupt()
+                isThreadRunning = false
             }
         }
     }
@@ -263,5 +224,65 @@ class JoystickView(context: Context?, attrs: AttributeSet?): View(context, attrs
         mPosY = newY
         // 화면 다시 그리기 요청
         invalidate()
+    }
+    /**
+     * 외부(Fragment)에서 호출하여 조이스틱의 위치를 업데이트하는 함수
+     * @param x Inner Circle의 새로운 X 좌표 (화면 좌표)
+     * @param y Inner Circle의 새로운 Y 좌표 (화면 좌표)
+     * @param center 초기 조이스틱의 중심 X/Y 좌표 (이 조이스틱 인스턴스의 중심)
+     */
+    fun updatePositionAndCenter(x: Float, y: Float, centerX: Float, centerY: Float) {
+        // 조이스틱의 중심 위치를 갱신합니다. (터치 DOWN 시 조이스틱이 나타나는 위치)
+        mCenterX = centerX
+        mCenterY = centerY
+
+        var newPosX = x
+        var newPosY = y
+
+        // 1. 조이스틱이 외부 원을 벗어나지 않도록 조정하는 로직
+        val length = sqrt((newPosX - mCenterX).pow(2) + (newPosY - mCenterY).pow(2))
+        if (length > outerRadius) {
+            // 조이스틱이 외곽선에 있도록 위치를 재계산
+            newPosX = (newPosX - mCenterX) * outerRadius / length + mCenterX
+            newPosY = (newPosY - mCenterY) * outerRadius / length + mCenterY
+        }
+
+        mPosX = newPosX
+        mPosY = newPosY
+
+        // 화면 다시 그리기 요청
+        invalidate()
+    }
+
+    /**
+     * 조이스틱 움직임 업데이트 스레드를 시작합니다.
+     */
+    fun startThread() {
+        if (mThread?.isAlive == true) {
+            mThread?.interrupt() // 기존 스레드가 살아있다면 중단 요청
+        }
+        isThreadRunning = true
+        mThread = Thread(this).apply { start() }
+    }
+
+    /**
+     * 조이스틱 움직임 업데이트 스레드를 중단합니다.
+     */
+    fun stopThread() {
+        isThreadRunning = false
+        mThread?.interrupt()
+//        mThread = null // 스레드 객체 해제
+    }
+    /**
+     * 조이스틱을 중심으로 되돌리고 강도 0을 보고합니다. (스프링 효과)
+     */
+    fun returnToCenter() {
+        if (useSpring) {
+            mPosX = mCenterX
+            mPosY = mCenterY
+            // 즉시 강도 0 보고
+            moveListener?.onMove(getAngle(), 0f)
+            invalidate() // 화면 갱신
+        }
     }
 }

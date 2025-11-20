@@ -9,6 +9,9 @@ class GameFragmentViewModel: ViewModel() {
 
     val wasteCount = 5
 
+    val _dustFairyMessageText: MutableLiveData<String> = MutableLiveData("")
+    val dustFairyMessageText: LiveData<String> = _dustFairyMessageText
+
     private val _characterImageResId = MutableLiveData<Int>(R.drawable.character_default)
     val characterImages: LiveData<Int> = _characterImageResId
 
@@ -41,4 +44,6 @@ class GameFragmentViewModel: ViewModel() {
     val askedQuestions = mutableSetOf<String>()
 
 
+
+    enum class GameFlow {COMMON, STAGE_1}
 }

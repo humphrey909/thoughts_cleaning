@@ -52,8 +52,8 @@ class GameThread(
 
 
     // 캐릭터 현재 위치
-    private var charX: Float = 250f
-    private var charY: Float = 1000f
+    private var charX: Float = 0f
+    private var charY: Float = 0f
 
     private val MOVE_SPEED = 5f // 초당 60프레임 기준 5픽셀씩 이동
 
@@ -71,7 +71,7 @@ class GameThread(
 
     // GameThread 클래스 내부 (또는 Draw를 담당하는 클래스)
     private val defaultItemPaint = Paint().apply {
-        color = Color.GREEN // 일반 아이템 (DEFAULT) 색상
+        color = Color.rgb(182, 57, 57) // 일반 아이템 (DEFAULT) 색상
         style = Paint.Style.FILL
         isAntiAlias = true
     }
@@ -101,12 +101,18 @@ class GameThread(
         screenHeight = metrics.bounds.height()
         screenWidth = metrics.bounds.width()
 
+        // 벽 생성
+        gameState.walls?.add(GameWall(10f, 30f, 300f, 900f, Color.rgb(68, 90, 39)))
+        gameState.walls?.add(GameWall(screenWidth - 150f, 90f, screenWidth-10f, 700f, Color.rgb(68, 90, 39)))
+        gameState.walls?.add(GameWall(screenWidth - 150f, 1000f, screenWidth-10f, 1500f, Color.rgb(68, 90, 39)))
 
 
-        // 중앙 가로 벽
-        gameState.walls?.add(GameWall(100f, 200f, screenWidth - 100f, 250f, Color.RED))
-        gameState.walls?.add(GameWall(screenWidth - 150f, screenHeight - 150f, screenWidth+0f, screenHeight+0f, Color.RED))
+        //wallsNot
+        gameState.wallsNot?.add(GameWall(10f, 950f, 300f, 1200f, Color.rgb(231, 228, 180)))
+        gameState.wallsNot?.add(GameWall(screenWidth - 150f, 720f, screenWidth-10f, 980f, Color.rgb(231, 228, 180)))
 
+        charX = screenWidth/2f
+        charY = screenHeight-500f
 
         var startTime: Long
         var timeMillis: Long
@@ -120,20 +126,21 @@ class GameThread(
             var canvas: Canvas? = null
 
             try {
-//                Log.d("canvas", "각도 1: ${joystickState.angle} px")
+//                Log.d("canvas", "각도 1: ${joystickState.angle}
+//
+//                // 1. 입력 및 업데이트 (Update Logic)
+                updateGame()
+//
+//                // 2. 렌더링 (Draw Logic)px")
 //                Log.d("canvas", "각도 2: ${joystickState.strength} px")
 
-
-                // 1. 입력 및 업데이트 (Update Logic)
-                updateGame()
-
-                // 2. 렌더링 (Draw Logic)
                 canvas = surfaceHolder.lockCanvas()
                 synchronized(surfaceHolder) {
                     if (canvas != null) {
                         drawGame(canvas)
-                        drawItems(canvas)
                         drawWallItems(canvas)
+
+                        drawItems(canvas)
                     }
                 }
             } catch (e: Exception) {
@@ -221,7 +228,7 @@ class GameThread(
      */
     private fun drawGame(canvas: Canvas) {
         // 배경을 지웁니다.
-        canvas.drawColor(Color.rgb(10, 50, 80))
+        canvas.drawColor(Color.rgb(231, 228, 180))
 
         // 캐릭터를 현재 위치에 그립니다.
         // drawBitmap(비트맵, 그릴 X 좌표, 그릴 Y 좌표, Paint 객체)
@@ -273,7 +280,7 @@ class GameThread(
         gameState.playerLastX = player.x
         gameState.playerLastY = player.y
 
-        Log.d("canvas", "player: ${player} - 충돌 발생 전!")
+//        Log.d("canvas", "player: ${player} - 충돌 발생 전!")
 
         // 5. 벽(장애물)과의 충돌 감지 및 반응
         for (wall in gameState.walls!!) {
@@ -292,7 +299,7 @@ class GameThread(
                 // 충돌 발생!
                 // 플레이어 위치를 충돌 전 위치(lastX, lastY)로 되돌립니다.
 
-                Log.d("canvas", "player: ${player} - 충돌 발생!")
+//                Log.d("canvas", "player: ${player} - 충돌 발생!")
 
 
 
@@ -370,7 +377,7 @@ class GameThread(
 
     private fun drawWallItems(canvas: Canvas) {
 
-//        Log.d("canvas", "drawWallItems: ${gameState.walls} ")
+//        Log.d("canvas", "drawWallItems: ${gameState.walls} 3")
         //
 
 

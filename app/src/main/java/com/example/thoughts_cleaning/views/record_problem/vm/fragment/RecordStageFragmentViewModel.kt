@@ -46,6 +46,11 @@ class RecordStageFragmentViewModel(mContext: Context): ViewModel() {
         dustKindList.add(DustKindItem(1,false, mContext.getString(R.string.dust_kind_thought2)))
         dustKindList.add(DustKindItem(2,false,mContext.getString(R.string.dust_kind_thought3)))
         dustKindList.add(DustKindItem(3,false, mContext.getString(R.string.dust_kind_thought4)))
+        dustKindList.add(DustKindItem(4,false, mContext.getString(R.string.dust_kind_thought4)))
+        dustKindList.add(DustKindItem(5,false, mContext.getString(R.string.dust_kind_thought4)))
+        dustKindList.add(DustKindItem(6,false, mContext.getString(R.string.dust_kind_thought4)))
+        dustKindList.add(DustKindItem(7,false, mContext.getString(R.string.dust_kind_thought4)))
+        dustKindList.add(DustKindItem(8,false, mContext.getString(R.string.dust_kind_thought4)))
 
 
 
@@ -55,6 +60,9 @@ class RecordStageFragmentViewModel(mContext: Context): ViewModel() {
         dustFeelingList.add(DustFeelingItem(3,false, mContext.getString(R.string.dust_feeling_thought4)))
         dustFeelingList.add(DustFeelingItem(4,false, mContext.getString(R.string.dust_feeling_thought5)))
         dustFeelingList.add(DustFeelingItem(5,false, mContext.getString(R.string.dust_feeling_thought6)))
+        dustFeelingList.add(DustFeelingItem(6,false, mContext.getString(R.string.dust_feeling_thought6)))
+        dustFeelingList.add(DustFeelingItem(7,false, mContext.getString(R.string.dust_feeling_thought7)))
+        dustFeelingList.add(DustFeelingItem(8,false, mContext.getString(R.string.dust_feeling_thought8)))
     }
 
 
