@@ -1,5 +1,6 @@
 package com.example.thoughts_cleaning.util
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -34,7 +35,10 @@ class GameThread(
 
     private var accessItemMake = true
 
-
+    val crashDifferenceLeft = 32f
+    val crashDifferenceTop = 40f
+    val crashDifferenceRight = 58f
+    val crashDifferenceBottom = 50f
 
     // 캐릭터 비트맵 (실제 이미지 리소스로 교체 필요)
 //    private val characterBitmap: Bitmap =
@@ -49,11 +53,6 @@ class GameThread(
             desiredHeight,
             true // 필터링 적용 여부. true를 권장
         )
-
-
-    // 캐릭터 현재 위치
-    private var charX: Float = 0f
-    private var charY: Float = 0f
 
     private val MOVE_SPEED = 5f // 초당 60프레임 기준 5픽셀씩 이동
 
@@ -106,13 +105,11 @@ class GameThread(
         gameState.walls?.add(GameWall(screenWidth - 150f, 90f, screenWidth-10f, 700f, Color.rgb(68, 90, 39)))
         gameState.walls?.add(GameWall(screenWidth - 150f, 1000f, screenWidth-10f, 1500f, Color.rgb(68, 90, 39)))
 
-
         //wallsNot
         gameState.wallsNot?.add(GameWall(10f, 950f, 300f, 1200f, Color.rgb(231, 228, 180)))
         gameState.wallsNot?.add(GameWall(screenWidth - 150f, 720f, screenWidth-10f, 980f, Color.rgb(231, 228, 180)))
 
-        charX = screenWidth/2f
-        charY = screenHeight-500f
+        gameState.player.setBounds(screenWidth/2f, screenHeight-500f)
 
         var startTime: Long
         var timeMillis: Long
@@ -126,8 +123,6 @@ class GameThread(
             var canvas: Canvas? = null
 
             try {
-//                Log.d("canvas", "각도 1: ${joystickState.angle}
-//
 //                // 1. 입력 및 업데이트 (Update Logic)
                 updateGame()
 //
@@ -139,7 +134,6 @@ class GameThread(
                     if (canvas != null) {
                         drawGame(canvas)
                         drawWallItems(canvas)
-
                         drawItems(canvas)
                     }
                 }
@@ -169,7 +163,7 @@ class GameThread(
 
             //한번만 돌며 한번 돌았을 때 아이템 갯수대로 아이템 만들기
             if(accessItemMake){
-                gameState.makeSpawnItems(screenWidth, screenHeight, wasteCount)
+                gameState.makeSpawnItems(wasteCount)
                 accessItemMake = !accessItemMake
             }
 
@@ -180,7 +174,18 @@ class GameThread(
             // 3. 아이템 충돌 감지 및 처리
             checkItemCollisions()
 
-            checkWallItemCollisions()
+            // 벽 충돌 로직
+            canvas?.let { nonNullCanvas ->
+                checkWallItemCollisions(canvas)
+            }
+
+            //전체 화면 막기
+            val checkScreenIn = isWithinScreenBounds()
+            if(!checkScreenIn){
+                gameState.player.setBounds(gameState.playerLastX, gameState.playerLastY)
+                canvas?.drawBitmap(characterBitmap, gameState.player.x, gameState.player.y, null)
+            }
+
 
             try {
                 if (waitTime > 0) {
@@ -196,6 +201,11 @@ class GameThread(
      * 조이스틱 입력에 따라 캐릭터 위치를 업데이트합니다.
      */
     private fun updateGame() {
+
+        //이전 캐릭터 좌표 저장
+        gameState.playerLastX = gameState.player.x
+        gameState.playerLastY = gameState.player.y
+
         val strength = joystickState.strength
         val angle = joystickState.angle
 
@@ -215,10 +225,10 @@ class GameThread(
             val moveY = moveAmount * Math.sin(radian).toFloat()
 
             // 위치 업데이트
-            charX += moveX
-            charY += moveY
+            gameState.player.x += moveX
+            gameState.player.y += moveY
 
-            gameState.player.move(charX, charY)
+            gameState.player.move(gameState.player.x, gameState.player.y)
             // TODO: 화면 경계 내로 charX, charY 클램핑 로직 추가
         }
     }
@@ -230,9 +240,11 @@ class GameThread(
         // 배경을 지웁니다.
         canvas.drawColor(Color.rgb(231, 228, 180))
 
+        gameState.player.setBounds(gameState.player.x, gameState.player.y)
+
         // 캐릭터를 현재 위치에 그립니다.
         // drawBitmap(비트맵, 그릴 X 좌표, 그릴 Y 좌표, Paint 객체)
-        canvas.drawBitmap(characterBitmap, charX, charY, null)
+        canvas.drawBitmap(characterBitmap, gameState.player.x, gameState.player.y, null)
     }
 
     /**
@@ -274,69 +286,61 @@ class GameThread(
         }
     }
 
-    private fun checkWallItemCollisions(){
-
-        val player = gameState.player
-        gameState.playerLastX = player.x
-        gameState.playerLastY = player.y
-
-//        Log.d("canvas", "player: ${player} - 충돌 발생 전!")
-
-        // 5. 벽(장애물)과의 충돌 감지 및 반응
+    private fun checkWallItemCollisions(canvas: Canvas){
+        // 벽(장애물)과의 충돌 감지 및 반응
         for (wall in gameState.walls!!) {
-
-//            val dx = player.x - item.x
-//            val dy = player.y - item.y
-//            val distanceSquared = dx * dx + dy * dy
-
-
-
-//            val playerRec = RectF(player.x, player.y, player.x + player.radius, player.y + player.radius)
-            val playerRec = player.getBounds()
-            val wallRec = RectF(wall.left, wall.top, wall.right, wall.bottom)
-
-            if (checkCollision(playerRec, wallRec)) {
-                // 충돌 발생!
-                // 플레이어 위치를 충돌 전 위치(lastX, lastY)로 되돌립니다.
-
-//                Log.d("canvas", "player: ${player} - 충돌 발생!")
-
-
-
-                // --- 충돌 반응 로직 (핵심) ---
-
-                // X축 이동만 이전으로 되돌려봅니다.
-
-                playerRec.offsetTo(gameState.playerLastX, playerRec.top)
-
-                if (checkCollision(playerRec, wallRec)) {
-                    // X축 복구 후에도 충돌한다면, 수평 이동이 문제가 아니었거나
-                    // 코너 충돌이므로 Y축도 복구해야 합니다.
-                    playerRec.offsetTo(playerRec.left, gameState.playerLastY)
-
-
-                    // X축도 다시 원래 위치로 되돌립니다.
-                    playerRec.offsetTo(gameState.playerLastX, gameState.playerLastY)
-                } else {
-                    // X축만 복구했더니 충돌이 해결됨 (수평 충돌)
-                    // Y축은 유지
-                }
-
-
-                // 위 로직은 단순화를 위한 접근이며, 완벽한 슬라이딩 충돌을 위해서는 더 복잡한 벡터 계산이 필요합니다.
-                // 가장 간단하고 확실한 통과 방지는 '충돌 시 이전 위치로 완전 복귀'입니다.
-
-                // 간단한 충돌 반응: 그냥 이전 위치로 완전히 복귀
-                playerRec.offsetTo(gameState.playerLastX, gameState.playerLastY)
-
-                break // 여러 벽이 겹쳐있지 않다면, 첫 충돌에서 루프 종료
+            val wallRec = RectF(wall.left-crashDifferenceLeft, wall.top-crashDifferenceTop, wall.right-crashDifferenceRight, wall.bottom-crashDifferenceBottom)
+            if (checkCircleRectangleCollision(gameState.player.x, gameState.player.y, gameState.player.radius, wallRec)) {
+                gameState.player.setBounds(gameState.playerLastX, gameState.playerLastY)
+                canvas.drawBitmap(characterBitmap, gameState.player.x, gameState.player.y, null)
+                break
             }
         }
     }
 
-    private fun checkCollision(rect1: RectF, rect2: RectF): Boolean {
-        // RectF.intersect() 메서드를 사용하여 간편하게 충돌을 확인할 수 있습니다.
-        return RectF.intersects(rect1, rect2)
+    //전체 화면 충돌 로직
+    fun isWithinScreenBounds(): Boolean {
+        // 허용 가능한 최소/최대 X 좌표
+        val minX = gameState.player.radius-crashDifferenceLeft
+        val maxX = screenWidth - gameState.player.radius-crashDifferenceRight
+
+        // 허용 가능한 최소/최대 Y 좌표
+        val minY = gameState.player.radius-crashDifferenceTop
+        val maxY = screenHeight - gameState.player.radius-crashDifferenceBottom
+
+        // targetX와 targetY가 각 범위 내에 있는지 확인
+        val isXValid = gameState.player.x >= minX && gameState.player.x <= maxX
+        val isYValid = gameState.player.y >= minY && gameState.player.y <= maxY
+
+        return isXValid && isYValid
+    }
+
+//    private fun checkCollision(rect1: RectF, rect2: RectF): Boolean {
+//        // RectF.intersect() 메서드를 사용하여 간편하게 충돌을 확인할 수 있습니다.
+//        return RectF.intersects(rect1, rect2)
+//    }
+
+    fun checkCircleRectangleCollision(
+        centerX: Float,
+        centerY: Float,
+        radius: Float,
+        wallRect: RectF
+    ): Boolean {
+
+        // Step 1: 직사각형 B에서 원의 중심 C와 가장 가까운 점 P 찾기
+        val closestX = Math.max(wallRect.left, Math.min(centerX, wallRect.right))
+        val closestY = Math.max(wallRect.top, Math.min(centerY, wallRect.bottom))
+
+        // Step 2: C(centerX, centerY)와 P(closestX, closestY) 사이의 거리 제곱 D^2 계산
+        val deltaX = centerX - closestX
+        val deltaY = centerY - closestY
+
+        val distanceSquared = (deltaX * deltaX) + (deltaY * deltaY)
+
+        // Step 3: 충돌 여부 판단 (D^2 <= R^2)
+        val radiusSquared = radius * radius
+
+        return distanceSquared <= radiusSquared
     }
 
     /**

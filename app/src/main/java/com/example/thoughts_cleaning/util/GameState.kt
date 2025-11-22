@@ -13,7 +13,11 @@ class GameState(width: Int, height: Int) {
     val walls: MutableList<GameWall>? = mutableListOf() //사물이 있는 공간
     val wallsNot: MutableList<GameWall>? = mutableListOf() //사물이 없는 공간
 
-    // 플레이어 객체 (실제 구현에 맞게 Player 클래스를 가정합니다.)
+    // 캐릭터 현재 위치
+//     var charX: Float = 0f
+//     var charY: Float = 0f
+
+    // 플레이어 객체
     val player = Player(
         x = (width / 2).toFloat(),
         y = (height / 2).toFloat(),
@@ -23,26 +27,29 @@ class GameState(width: Int, height: Int) {
     var playerLastX = 0f
     var playerLastY = 0f
 
+    var itemRadius = 50f
+
+
     // 아이템을 랜덤한 위치에 생성하는 함수
-    fun spawnItem(screenWidth: Int, screenHeight: Int) {
-        // 화면 경계를 벗어나지 않도록 랜덤 위치 설정
-        val margin = 100
+//    fun spawnItem(screenWidth: Int, screenHeight: Int) {
+//        // 화면 경계를 벗어나지 않도록 랜덤 위치 설정
+//        val margin = 100
+//
+//        val randomX = (margin..screenWidth - margin).random().toFloat()
+//        val randomY = (margin..screenHeight - margin).random().toFloat()
+//
+//        val newItem = Item(
+//            x = randomX,
+//            y = randomY,
+//            radius = 50f,
+//            type = if ((0..100).random() < 30) ItemType.SPEED_BOOST else ItemType.DEFAULT
+//        )
+//        items.add(newItem)
+//    }
 
-        val randomX = (margin..screenWidth - margin).random().toFloat()
-        val randomY = (margin..screenHeight - margin).random().toFloat()
-
-        val newItem = Item(
-            x = randomX,
-            y = randomY,
-            radius = 50f,
-            type = if ((0..100).random() < 30) ItemType.SPEED_BOOST else ItemType.DEFAULT
-        )
-        items.add(newItem)
-    }
-
-    fun makeSpawnItems(screenWidth: Int, screenHeight: Int, itemTotalCount: Int) {
+    fun makeSpawnItems(itemTotalCount: Int) {
         // 화면 경계를 벗어나지 않도록 설정할 여백 (기존 코드와 동일하게 100 사용)
-        val margin = 80
+//        val margin = 80
 
         // items 리스트에 아이템을 추가하기 전에, 필요하다면 기존 아이템을 클리어할 수 있습니다.
         // items.clear() // (선택 사항: 기존 아이템을 제거하고 싶다면 주석 해제)
@@ -63,8 +70,23 @@ class GameState(width: Int, height: Int) {
                     wall = wallsNot!!.get(itemCount-walls.size)
                 }
 
-                randomX = wall.left + (wall.right - wall.left) * Random.nextFloat()
-                randomY = wall.top + (wall.bottom - wall.top) * Random.nextFloat()
+                //반지름을 적용하여 좌표를 재 조정한다.
+                // 1. X축 허용 범위 계산: 벽의 좌우 경계를 반지름만큼 안쪽으로 축소
+                val minSafeX = wall.left + itemRadius
+                val maxSafeX = wall.right - itemRadius
+
+                // 2. Y축 허용 범위 계산: 벽의 상하 경계를 반지름만큼 안쪽으로 축소
+                val minSafeY = wall.top + itemRadius
+                val maxSafeY = wall.bottom - itemRadius
+
+                // 3. X 좌표 랜덤 생성: minSafeX와 maxSafeX 사이에서 랜덤 선택
+                // 공식: min + (range) * randomFloat
+                val rangeX = maxSafeX - minSafeX
+                randomX = minSafeX + rangeX * Random.nextFloat()
+
+                // 4. Y 좌표 랜덤 생성: minSafeY와 maxSafeY 사이에서 랜덤 선택
+                val rangeY = maxSafeY - minSafeY
+                randomY = minSafeY + rangeY * Random.nextFloat()
 
                 val type = ItemType.DEFAULT
 
@@ -72,10 +94,9 @@ class GameState(width: Int, height: Int) {
                 add(Item(
                     x = randomX,
                     y = randomY,
-                    radius = 50f,
+                    radius = itemRadius,
                     type = type
                 ))
-
 
                 itemCount++
             }
@@ -103,6 +124,11 @@ data class Player(
 //        lastX = x
 //        lastY = y
 //    }
+
+    fun setBounds(x: Float, y: Float){
+        this.x = x
+        this.y = y
+    }
 
     fun getBounds(): RectF {
         return RectF(
