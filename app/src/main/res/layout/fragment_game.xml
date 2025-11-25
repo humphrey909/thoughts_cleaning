@@ -12,16 +12,15 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".views.main.view.fragment.MainFragment">
+        android:layout_height="match_parent">
 
-        <View
-            android:id="@+id/joystick_placeholder"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="32dp"
-            android:background="#33AAAAAA"/>
+<!--        <View-->
+<!--            android:id="@+id/joystick_placeholder"-->
+<!--            android:layout_width="150dp"-->
+<!--            android:layout_height="150dp"-->
+<!--            android:layout_gravity="bottom|center_horizontal"-->
+<!--            android:layout_marginBottom="32dp"-->
+<!--            android:background="#33AAAAAA"/>-->
 
 
         <androidx.constraintlayout.widget.ConstraintLayout

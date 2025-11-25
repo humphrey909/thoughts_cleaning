@@ -1,5 +1,7 @@
 package com.example.thoughts_cleaning.util
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Bitmap
@@ -15,6 +17,7 @@ import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.api.model.GameWall
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.game.view.fragment.GameFragment
+import androidx.core.graphics.withSave
 
 
 class GameThread(
@@ -23,7 +26,8 @@ class GameThread(
     val activity: GameActivity,
     val fragment: GameFragment,
     private val joystickState: JoystickState,
-    private val wasteCount : Int
+    private val wasteCount : Int,
+    val gameView: GameView
 ) : Thread() {
 
     private val desiredWidth: Int = 100 // 원하는 가로 픽셀 크기
@@ -65,7 +69,8 @@ class GameThread(
     private val spawnIntervalUntil = 5 // 3초마다 아이템 생성
     private var spawnIntervalSwitch = true // 3초마다 아이템 생성
 
-
+    var k = 1
+    var nearestWall: GameWall? = null
 
 
     // GameThread 클래스 내부 (또는 Draw를 담당하는 클래스)
@@ -240,11 +245,34 @@ class GameThread(
         // 배경을 지웁니다.
         canvas.drawColor(Color.rgb(231, 228, 180))
 
-        gameState.player.setBounds(gameState.player.x, gameState.player.y)
+        if (gameView.gameStateDirection == GameState.GameStateFlow.ZOOMING || gameView.gameStateDirection == GameState.GameStateFlow.CLEANING_MODE) {
+            Log.d("currentScale", "ZOOMING: $k++}")
+            Log.d("currentScale", "ZOOMING: $nearestWall}")
 
-        // 캐릭터를 현재 위치에 그립니다.
-        // drawBitmap(비트맵, 그릴 X 좌표, 그릴 Y 좌표, Paint 객체)
-        canvas.drawBitmap(characterBitmap, gameState.player.x, gameState.player.y, null)
+            canvas.withSave {
+                // ✅ 변환 적용: drawGameScene(canvas) 호출보다 앞에 있어야 합니다.
+                translate(gameView.currentPanX, gameView.currentPanY+500)
+                // 목표 아이템의 맵 좌표를 중심으로 확대
+                scale(
+                    gameView.currentScale,
+                    gameView.currentScale,
+                    gameView.targetFocusX,
+                    gameView.targetFocusY
+                )
+
+                drawBitmap(characterBitmap, gameState.player.x, gameState.player.y, null)
+
+                val paint = Paint()
+                paint.color = nearestWall!!.color
+                canvas.drawRect(RectF(nearestWall!!.left, nearestWall!!.top, nearestWall!!.right, nearestWall!!.bottom), paint)
+            }
+        }else{
+            gameState.player.setBounds(gameState.player.x, gameState.player.y)
+
+            // 캐릭터를 현재 위치에 그립니다.
+            // drawBitmap(비트맵, 그릴 X 좌표, 그릴 Y 좌표, Paint 객체)
+            canvas.drawBitmap(characterBitmap, gameState.player.x, gameState.player.y, null)
+        }
     }
 
     /**
@@ -270,15 +298,30 @@ class GameThread(
 //                Log.d("Joystick", "combinedRadius: ${combinedRadius}")
 
 
-                // 2. 충돌 시 부수 효과 로직 (ex: 점수 증가, 효과음 재생 등)
-                // 주의: 이 람다 안에서 UI 업데이트 등 복잡한 스레드 작업은 피하세요.
+                //선택한 벽 체크
+                var minDistanceSq = Float.MAX_VALUE
+                for (wall in gameState.walls!!) {
+                    // 거리의 제곱 계산 (성능 최적화)
+                    val dx = wall.right - item.x
+                    val dy = wall.bottom - item.y
+                    val distanceSq = dx * dx + dy * dy
 
-                // Log.d("Joystick", "Item acquired at (%.1f, %.1f)".format(item.x, item.y))
-                // Log.d("Joystick", "items before removal: ${gameState.items.size}")
-
-                activity.runOnUiThread {
-                    fragment.showCustomDialog() // MainActivity에 정의된 함수 호출
+                    if (distanceSq < minDistanceSq) {
+                        minDistanceSq = distanceSq
+                        nearestWall = wall
+                    }
                 }
+
+                gameView.post {
+                    gameView.startZoomInAnimation(
+                        item.x,
+                        item.y,
+                        screenWidth,
+                        screenHeight
+                    )
+                }
+
+                gameView.gameStateDirection = GameState.GameStateFlow.ZOOMING
             }
 
             // isColliding이 true이면 해당 아이템을 리스트에서 제거합니다.
@@ -367,33 +410,63 @@ class GameThread(
      * 아이템 리스트를 순회하며 각 아이템을 Canvas에 그립니다.
      */
     private fun drawItems(canvas: Canvas) {
-        for (item in gameState.items) {
-            val paint = when (item.type) {
-                ItemType.DEFAULT -> defaultItemPaint
-                ItemType.SPEED_BOOST -> speedBoostItemPaint
-                ItemType.HEALTH_PACK -> healthPackItemPaint
-            }
+        if (gameView.gameStateDirection == GameState.GameStateFlow.COMMON) {
+            for (item in gameState.items) {
+                val paint = when (item.type) {
+                    ItemType.DEFAULT -> defaultItemPaint
+                    ItemType.SPEED_BOOST -> speedBoostItemPaint
+                    ItemType.HEALTH_PACK -> healthPackItemPaint
+                }
 
-            // 아이템을 원형으로 그립니다.
-            canvas.drawCircle(item.x, item.y, item.radius, paint)
+                // 아이템을 원형으로 그립니다.
+                canvas.drawCircle(item.x, item.y, item.radius, paint)
+            }
         }
     }
 
     private fun drawWallItems(canvas: Canvas) {
+        if (gameView.gameStateDirection == GameState.GameStateFlow.COMMON) {
+            for (wall in gameState.walls!!) {
 
-//        Log.d("canvas", "drawWallItems: ${gameState.walls} 3")
-        //
+                val paint = Paint()
+                paint.color = wall.color
 
-
-        // 배경 그리기
-//        canvas.drawColor(Color.parseColor("#E0E7FF"));
-
-        for (wall in gameState.walls!!) {
-
-            val paint = Paint()
-            paint.color = wall.color
-
-            canvas.drawRect(RectF(wall.left, wall.top, wall.right, wall.bottom), paint)
+                canvas.drawRect(RectF(wall.left, wall.top, wall.right, wall.bottom), paint)
+            }
         }
     }
+
+//    fun startZoomInAnimation(objectCenterX: Float, objectCenterY: Float) {
+//        targetFocusX = objectCenterX
+//        targetFocusY = objectCenterY
+//
+//        // 뷰 중앙에 목표 아이템이 오도록 최종 Pan 목표 계산
+//        val targetPanX = (screenWidth / 2f) - (targetFocusX * zoomTargetScale)
+//        val targetPanY = (screenHeight / 2f) - (targetFocusY * zoomTargetScale)
+//
+//        // ValueAnimator를 사용하여 currentScale, currentPanX/Y 값을 부드럽게 변경
+//        animator = ValueAnimator.ofFloat(0f, 1f).apply {
+//            duration = 500L
+//
+//            addUpdateListener {
+//                val fraction = it.animatedValue as Float
+//
+//                currentScale = 1.0f + (zoomTargetScale - 1.0f) * fraction
+//                currentPanX = targetPanX * fraction
+//                currentPanY = targetPanY * fraction
+//
+//                // SurfaceView는 invalidate() 대신 렌더링 스레드가 다음 프레임을 그리도록 합니다.
+//                // (대부분의 SurfaceView 게임 루프는 자동으로 화면을 계속 갱신합니다.)
+//            }
+//
+////            addListener(object : AnimatorListenerAdapter() {
+////                override fun onAnimationEnd(animation: Animator) {
+////                    // 애니메이션 종료 후 청소 모드로 전환
+////                    gameStateDirection = GameState.GameStateFlow.CLEANING_MODE
+////                    // startCleaningMode() 호출
+////                }
+////            })
+//            start()
+//        }
+//    }
 }

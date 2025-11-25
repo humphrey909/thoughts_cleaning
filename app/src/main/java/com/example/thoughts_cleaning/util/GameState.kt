@@ -105,6 +105,8 @@ class GameState(width: Int, height: Int) {
         // 2. 생성된 전체 리스트(newItemsList)를 기존 items 리스트에 한 번의 호출로 추가합니다.
         items.addAll(newItemsList)
     }
+
+    enum class GameStateFlow {COMMON, ZOOMING, CLEANING_MODE}
 }
 
 // 플레이어 클래스 (예시)

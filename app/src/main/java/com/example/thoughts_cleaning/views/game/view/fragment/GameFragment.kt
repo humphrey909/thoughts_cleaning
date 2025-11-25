@@ -94,7 +94,7 @@ class GameFragment : Fragment() {
         mContext = requireContext()
 
         // 2. 동적으로 FrameLayout 생성
-        val containerLayout = FrameLayout(mContext)
+//        val containerLayout = FrameLayout(mContext)
 
         // 3. GameView 인스턴스 생성
         // Fragment를 리스너로 사용하려면 'this'를 인수로 전달합니다.

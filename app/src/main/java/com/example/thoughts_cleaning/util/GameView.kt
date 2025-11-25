@@ -1,7 +1,11 @@
 package com.example.thoughts_cleaning.util
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -9,10 +13,28 @@ import com.example.thoughts_cleaning.views.game.view.activity.container.GameActi
 import com.example.thoughts_cleaning.views.main.view.activity.container.MainActivity
 import com.example.thoughts_cleaning.views.game.view.fragment.GameFragment
 import com.example.thoughts_cleaning.views.main.view.fragment.MainFragment
+import android.animation.AnimatorListenerAdapter
 
 class GameView(context: Context, val activity: GameActivity, var fragment: GameFragment, private val joystickState: JoystickState, private val wasteCount:Int) : SurfaceView(context), SurfaceHolder.Callback {
 
     private lateinit var gameThread: GameThread
+    private val uiHandler = Handler(Looper.getMainLooper())
+
+    // 1. 현재 화면 상태 변수 (애니메이션에 의해 변경됨)
+     var currentScale = 1.0f
+    var currentPanX = 0f
+    var currentPanY = 0f
+
+    // 2. 확대할 목표 지점 (줌인 대상 물체의 중심 좌표)
+    var targetFocusX = 0f
+    var targetFocusY = 0f
+    private val zoomTargetScale = 1.5f // 3배 확대 목표
+
+    // 애니메이션 객체
+    private var animator: ValueAnimator? = null
+
+    var gameStateDirection: GameState.GameStateFlow = GameState.GameStateFlow.COMMON // RUNNING, ZOOMING, CLEANING_MODE
+
 
     init {
         holder.addCallback(this)
@@ -22,12 +44,14 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         // Surface가 생성되면 스레드를 시작합니다.
-        gameThread = GameThread(holder, context, activity, fragment, joystickState, wasteCount)
+        gameThread = GameThread(holder, context, activity, fragment, joystickState, wasteCount, this)
         gameThread.start()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
         // 화면 크기가 변경될 때 처리 (필요시)
+
+
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
@@ -55,6 +79,59 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
             gameThread.isRunning = true
             // 새로운 스레드를 시작하거나 재개 로직이 필요할 수 있습니다.
             // 여기서는 단순화하여 run()에서 while(isRunning)만 제어합니다.
+        }
+    }
+
+
+//    fun startZoomInAnimation(objectCenterX: Float, objectCenterY: Float) {
+//        uiHandler.post {
+//            // ValueAnimator 시작 코드를 여기에 넣습니다.
+//            // ... animator.start() ...
+//
+//            gameThread.startZoomInAnimation(objectCenterX, objectCenterY)
+//        }
+//    }
+
+    fun startZoomInAnimation(objectCenterX: Float, objectCenterY: Float, screenWidth: Int, screenHeight: Int) {
+        targetFocusX = objectCenterX
+        targetFocusY = objectCenterY
+
+        // 뷰 중앙에 목표 아이템이 오도록 최종 Pan 목표 계산
+        val targetPanX = (screenWidth / 2f) - (targetFocusX * zoomTargetScale)
+        val targetPanY = (screenHeight / 2f) - (targetFocusY * zoomTargetScale)
+
+        // ValueAnimator를 사용하여 currentScale, currentPanX/Y 값을 부드럽게 변경
+        animator = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 5000L
+
+            addUpdateListener {
+                val fraction = it.animatedValue as Float
+
+                currentScale = 1.0f + (zoomTargetScale - 1.0f) * fraction
+
+                Log.d("currentScale", "currentScale: $currentScale")
+
+                currentPanX = targetPanX * fraction
+                currentPanY = targetPanY * fraction
+
+                Log.d("currentScale", "currentPanX: $currentPanX")
+                Log.d("currentScale", "currentPanY: $currentPanY")
+
+                // SurfaceView는 invalidate() 대신 렌더링 스레드가 다음 프레임을 그리도록 합니다.
+                // (대부분의 SurfaceView 게임 루프는 자동으로 화면을 계속 갱신합니다.)
+            }
+
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    // 애니메이션 종료 후 청소 모드로 전환
+                    gameStateDirection = GameState.GameStateFlow.CLEANING_MODE
+
+
+                    // startCleaningMode() 호출
+                }
+            })
+
+            start()
         }
     }
 }
