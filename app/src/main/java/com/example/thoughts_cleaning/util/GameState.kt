@@ -1,5 +1,6 @@
 package com.example.thoughts_cleaning.util
 
+import android.graphics.Matrix
 import android.graphics.RectF
 import android.util.Log
 import com.example.thoughts_cleaning.api.model.GameWall
@@ -29,6 +30,7 @@ class GameState(width: Int, height: Int) {
 
     var itemRadius = 50f
 
+    private val transformationMatrix = Matrix()
 
     // 아이템을 랜덤한 위치에 생성하는 함수
 //    fun spawnItem(screenWidth: Int, screenHeight: Int) {
@@ -55,7 +57,6 @@ class GameState(width: Int, height: Int) {
         // items.clear() // (선택 사항: 기존 아이템을 제거하고 싶다면 주석 해제)
 
         var itemCount = 0
-        // 1. buildList를 사용하여 아이템을 itemCount만큼 한 번에 생성합니다.
         val newItemsList = buildList {
             repeat(itemTotalCount) {
 //                Log.d("canvas", "itemCount: ${itemCount}") // 5
@@ -106,8 +107,68 @@ class GameState(width: Int, height: Int) {
         items.addAll(newItemsList)
     }
 
+    fun fixSpawnItems(screenWidth: Int, screenHeight: Int) {
+
+
+        // a. 원본 좌표 배열 (float[2] = [X, Y])
+        val originalCoords = floatArrayOf(screenWidth-200f, 200f)
+
+        // b. 변환된 최종 캔버스 좌표를 저장할 배열
+        val finalCoords = floatArrayOf(0f, 0f)
+
+        transformationMatrix.mapPoints(finalCoords, originalCoords)
+
+        val newItemsList = buildList {
+//            repeat(itemTotalCount) {
+//                Log.d("canvas", "itemCount: ${itemCount}") // 5
+
+//                var randomX = 0f
+//                var randomY = 0f
+//                var wall: GameWall
+
+//                if(walls!!.size > itemCount){
+//                    wall = walls.get(itemCount)
+//                }else{
+//                    wall = wallsNot!!.get(itemCount-walls.size)
+//                }
+//
+//                //반지름을 적용하여 좌표를 재 조정한다.
+//                // 1. X축 허용 범위 계산: 벽의 좌우 경계를 반지름만큼 안쪽으로 축소
+//                val minSafeX = wall.left + itemRadius
+//                val maxSafeX = wall.right - itemRadius
+//
+//                // 2. Y축 허용 범위 계산: 벽의 상하 경계를 반지름만큼 안쪽으로 축소
+//                val minSafeY = wall.top + itemRadius
+//                val maxSafeY = wall.bottom - itemRadius
+//
+//                // 3. X 좌표 랜덤 생성: minSafeX와 maxSafeX 사이에서 랜덤 선택
+//                // 공식: min + (range) * randomFloat
+//                val rangeX = maxSafeX - minSafeX
+//                randomX = minSafeX + rangeX * Random.nextFloat()
+//
+//                // 4. Y 좌표 랜덤 생성: minSafeY와 maxSafeY 사이에서 랜덤 선택
+//                val rangeY = maxSafeY - minSafeY
+//                randomY = minSafeY + rangeY * Random.nextFloat()
+//
+                val type = ItemType.DEFAULT
+
+                // Item 객체를 생성하여 buildList의 내부 리스트에 추가합니다.
+                add(Item(
+                    x = finalCoords[0],
+                    y = finalCoords[1],
+                    radius = itemRadius,
+                    type = type
+                ))
+        }
+
+        items.addAll(newItemsList)
+    }
+
+
     enum class GameStateFlow {COMMON, ZOOMING, CLEANING_MODE}
 }
+
+
 
 // 플레이어 클래스 (예시)
 data class Player(

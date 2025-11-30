@@ -17,18 +17,22 @@
 <!--            app:nullable="true"-->
 <!--            android:defaultValue="@null"/>-->
 
+        <action
+            android:id="@+id/action_window_clean_page"
+            app:destination="@id/WindowFragment" />
+
     </fragment>
 
-<!--    <fragment-->
-<!--        android:id="@+id/PourThoughtFragment"-->
-<!--        android:name="com.example.thoughts_cleaning.views.game.view.fragment.PourThoughtFragment"-->
-<!--        android:label="pourThought"-->
-<!--        tools:layout="@layout/fragment_pour_thought"-->
-<!--        >-->
+    <fragment
+        android:id="@+id/WindowFragment"
+        android:name="com.example.thoughts_cleaning.views.game.view.fragment.WindowFragment"
+        android:label="WindowFragment"
+        tools:layout="@layout/fragment_window"
+        >
 <!--        <action-->
 <!--            android:id="@+id/action_quit_page"-->
 <!--            app:destination="@id/GameFragment" />-->
-<!--    </fragment>-->
+    </fragment>
 
 
 </navigation>

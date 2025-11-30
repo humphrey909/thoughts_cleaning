@@ -1,5 +1,6 @@
 package com.example.thoughts_cleaning.views.game.view.fragment
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -44,6 +45,8 @@ class WindowFragment : Fragment() {
         handleNavigationEvent()
 
 
+
+
     }
 
     override fun onResume() {
@@ -57,6 +60,9 @@ class WindowFragment : Fragment() {
     }
 
     private fun handleNavigationEvent() {
+
+        val imageBitmap = BitmapFactory.decodeResource(resources, R.drawable.smudge_texture)
+        binding.drawingView.setImage(imageBitmap)
 
     }
 }

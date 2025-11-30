@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.RectF
 import android.util.Log
 import android.view.SurfaceHolder
@@ -22,13 +23,15 @@ import androidx.core.graphics.withSave
 
 class GameThread(
     private val surfaceHolder: SurfaceHolder,
-    context: Context,
+    private val context: Context,
     val activity: GameActivity,
     val fragment: GameFragment,
     private val joystickState: JoystickState,
     private val wasteCount : Int,
     val gameView: GameView
 ) : Thread() {
+
+    var canvas: Canvas? = null
 
     private val desiredWidth: Int = 100 // 원하는 가로 픽셀 크기
     private val desiredHeight: Int = 100 // 원하는 세로 픽셀 크기
@@ -53,6 +56,17 @@ class GameThread(
     private val characterBitmap: Bitmap =
         Bitmap.createScaledBitmap(
             originalBitmap,
+            desiredWidth,
+            desiredHeight,
+            true // 필터링 적용 여부. true를 권장
+        )
+
+    private val windowBitmap: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.window_cleaner_tool)
+
+    private val windowCleanerToolBitmap: Bitmap =
+        Bitmap.createScaledBitmap(
+            windowBitmap,
             desiredWidth,
             desiredHeight,
             true // 필터링 적용 여부. true를 권장
@@ -92,6 +106,7 @@ class GameThread(
         isAntiAlias = true
     }
 
+    private var preRenderedBackgroundBitmap: Bitmap? = null
 
     override fun run() {
 
@@ -105,14 +120,20 @@ class GameThread(
         screenHeight = metrics.bounds.height()
         screenWidth = metrics.bounds.width()
 
+//        var pain = Color.argb(255, 173, 255, 47)
+        var pain = Color.argb(0, 0, 0, 0)
         // 벽 생성
-        gameState.walls?.add(GameWall(10f, 30f, 300f, 900f, Color.rgb(68, 90, 39)))
-        gameState.walls?.add(GameWall(screenWidth - 150f, 90f, screenWidth-10f, 700f, Color.rgb(68, 90, 39)))
-        gameState.walls?.add(GameWall(screenWidth - 150f, 1000f, screenWidth-10f, 1500f, Color.rgb(68, 90, 39)))
+        gameState.walls?.add(GameWall(10f, 30f, 300f, 900f, pain))
+
+        //창문
+        gameState.wallsNot?.add(GameWall(screenWidth - 400f, 90f, screenWidth-10f, 400f, pain))
+
+        //옷장
+        gameState.walls?.add(GameWall(screenWidth - 200f, 800f, screenWidth-10f, 1500f, pain))
 
         //wallsNot
-        gameState.wallsNot?.add(GameWall(10f, 950f, 300f, 1200f, Color.rgb(231, 228, 180)))
-        gameState.wallsNot?.add(GameWall(screenWidth - 150f, 720f, screenWidth-10f, 980f, Color.rgb(231, 228, 180)))
+        gameState.wallsNot?.add(GameWall(10f, 950f, 300f, 1200f, Color.argb(0, 0, 0, 0)))
+        gameState.wallsNot?.add(GameWall(screenWidth - 150f, 720f, screenWidth-10f, 980f, Color.argb(0, 0, 0, 0)))
 
         gameState.player.setBounds(screenWidth/2f, screenHeight-500f)
 
@@ -120,12 +141,21 @@ class GameThread(
         var timeMillis: Long
         var waitTime: Long
 
+
+///
+//
+        initializeBackground(screenWidth,screenHeight)
+
+///
+
+
+
         while (isRunning) {
 //            Log.d("canvas", "각도 11: ${joystickState.angle} px")
 //            Log.d("canvas", "각도 12: ${joystickState.strength} px")
 
             startTime = System.currentTimeMillis()
-            var canvas: Canvas? = null
+
 
             try {
 //                // 1. 입력 및 업데이트 (Update Logic)
@@ -137,9 +167,9 @@ class GameThread(
                 canvas = surfaceHolder.lockCanvas()
                 synchronized(surfaceHolder) {
                     if (canvas != null) {
-                        drawGame(canvas)
-                        drawWallItems(canvas)
-                        drawItems(canvas)
+                        drawGame(canvas!!)
+                        drawWallItems(canvas!!)
+                        drawItems(canvas!!)
                     }
                 }
             } catch (e: Exception) {
@@ -166,9 +196,9 @@ class GameThread(
 //            Log.d("canvas", "각도 1: ${accessItemMake} px")
 //            Log.d("canvas", "각도 2: ${accessItemMake} px")
 
-            //한번만 돌며 한번 돌았을 때 아이템 갯수대로 아이템 만들기
+            //한번 돌았을 때 아이템 갯수대로 아이템 만들기
             if(accessItemMake){
-                gameState.makeSpawnItems(wasteCount)
+                gameState.fixSpawnItems(screenWidth, screenHeight)
                 accessItemMake = !accessItemMake
             }
 
@@ -181,7 +211,7 @@ class GameThread(
 
             // 벽 충돌 로직
             canvas?.let { nonNullCanvas ->
-                checkWallItemCollisions(canvas)
+                checkWallItemCollisions(canvas!!)
             }
 
             //전체 화면 막기
@@ -199,6 +229,73 @@ class GameThread(
             } catch (e: InterruptedException) {
                 Thread.currentThread().interrupt()
             }
+        }
+    }
+
+    fun initializeBackground(width: Int, height: Int) {
+        // 1. 기존 비트맵이 있다면 해제
+        preRenderedBackgroundBitmap?.recycle()
+
+        // 2. 새로운 Bitmap 객체 생성 (화면 크기에 맞게)
+        preRenderedBackgroundBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+
+        // 3. 이 Bitmap에 그리기 위한 Canvas 생성
+        val backgroundCanvas = Canvas(preRenderedBackgroundBitmap!!)
+
+        // 4. 이 'backgroundCanvas'에 모든 정적 배경 요소를 그림 (딱 한 번)
+        backgroundCanvas.apply {
+            drawColor(Color.rgb(231, 228, 180))
+            val image = BitmapFactory.decodeResource(context.resources, R.drawable.room_structure2)
+
+            if (image != null) {
+                // 1. 원본 비트맵 전체를 지정할 소스 사각형 (srcRect)
+                val srcRect = Rect(0, 0, image.width, image.height)
+
+//                // 이미지와 뷰의 비율 계산
+//                val imageRatio = image.width.toFloat() / image.height.toFloat()
+//                val viewRatio: Float = width.toFloat() / height.toFloat()
+//                // 2. 종횡비를 유지하며 뷰 내부에 모두 들어오도록 스케일 팩터 계산
+//                // Contain 방식: 두 비율 중 작은 값(min)을 스케일 팩터로 사용
+//                val scaleFactor: Float = if (imageRatio > viewRatio) {
+//                    width.toFloat() / image.width // 너비에 맞춤
+//                } else {
+//                    height.toFloat() / image.height // 높이에 맞춤
+//                }
+//
+//                // 3. 이미지가 실제로 그려질 최종 크기와 시작 위치 계산
+//                val scaledWidth = image.width * scaleFactor
+//                val scaledHeight = image.height * scaleFactor
+//
+//                // 중앙 정렬을 위한 시작점 (여백 계산)
+//                val startX = (width - scaledWidth) / 2
+//                val startY = (height - scaledHeight) / 2
+//
+//
+//                val dstRect = Rect(
+//                    startX.toInt(),
+//                    startY.toInt(),
+//                    (startX + scaledWidth).toInt(),
+//                    (startY + scaledHeight).toInt()
+//                )
+
+
+
+                // 2. 이미지가 그려질 화면의 전체 영역을 지정할 대상 사각형 (dstRect)
+                // 즉, 0,0 에서 뷰의 너비, 높이까지
+                val dstRect = Rect(0, 0, width, height)
+
+                // 3. srcRect의 이미지를 dstRect에 맞게 그립니다.
+                // 이미지가 dstRect에 맞춰 늘어나거나 줄어들게 됩니다.
+                drawBitmap(image, srcRect, dstRect, null)
+
+                // 리소스 비트맵은 한 번 로드 후 더 이상 필요 없다면 해제 (메모리 절약)
+                image.recycle()
+            }
+
+//            drawBitmap(image, 0f, 0f, null)
+            val linePaint = Paint().apply { color = Color.GRAY; strokeWidth = 1f }
+//            drawLine(0f, 100f, width.toFloat(), 100f, linePaint)
+            drawLine(0f, height / 4f, width.toFloat(), height / 4f, linePaint)
         }
     }
 
@@ -234,7 +331,6 @@ class GameThread(
             gameState.player.y += moveY
 
             gameState.player.move(gameState.player.x, gameState.player.y)
-            // TODO: 화면 경계 내로 charX, charY 클램핑 로직 추가
         }
     }
 
@@ -243,14 +339,17 @@ class GameThread(
      */
     private fun drawGame(canvas: Canvas) {
         // 배경을 지웁니다.
-        canvas.drawColor(Color.rgb(231, 228, 180))
+//        canvas.drawColor(Color.rgb(231, 228, 180))
+
+        preRenderedBackgroundBitmap?.let {
+            canvas.drawBitmap(it, 0f, 0f, null)
+        }
 
         if (gameView.gameStateDirection == GameState.GameStateFlow.ZOOMING || gameView.gameStateDirection == GameState.GameStateFlow.CLEANING_MODE) {
             Log.d("currentScale", "ZOOMING: $k++}")
             Log.d("currentScale", "ZOOMING: $nearestWall}")
 
             canvas.withSave {
-                // ✅ 변환 적용: drawGameScene(canvas) 호출보다 앞에 있어야 합니다.
                 translate(gameView.currentPanX, gameView.currentPanY+500)
                 // 목표 아이템의 맵 좌표를 중심으로 확대
                 scale(
@@ -298,30 +397,35 @@ class GameThread(
 //                Log.d("Joystick", "combinedRadius: ${combinedRadius}")
 
 
-                //선택한 벽 체크
-                var minDistanceSq = Float.MAX_VALUE
-                for (wall in gameState.walls!!) {
-                    // 거리의 제곱 계산 (성능 최적화)
-                    val dx = wall.right - item.x
-                    val dy = wall.bottom - item.y
-                    val distanceSq = dx * dx + dy * dy
+                //가까운 벽 체크
+//                var minDistanceSq = Float.MAX_VALUE
+//                for (wall in gameState.walls!!) {
+//                    // 거리의 제곱 계산 (성능 최적화)
+//                    val dx = wall.right - item.x
+//                    val dy = wall.bottom - item.y
+//                    val distanceSq = dx * dx + dy * dy
+//
+//                    if (distanceSq < minDistanceSq) {
+//                        minDistanceSq = distanceSq
+//                        nearestWall = wall
+//                    }
+//                }
+//
+//                gameView.post {
+//                    gameView.startZoomInAnimation(
+//                        item.x,
+//                        item.y,
+//                        screenWidth,
+//                        screenHeight
+//                    )
+//                }
 
-                    if (distanceSq < minDistanceSq) {
-                        minDistanceSq = distanceSq
-                        nearestWall = wall
-                    }
-                }
+//                gameView.gameStateDirection = GameState.GameStateFlow.ZOOMING
 
-                gameView.post {
-                    gameView.startZoomInAnimation(
-                        item.x,
-                        item.y,
-                        screenWidth,
-                        screenHeight
-                    )
-                }
 
-                gameView.gameStateDirection = GameState.GameStateFlow.ZOOMING
+                //페이지 이동 해봐
+                gameView.checkGameOverCondition()
+
             }
 
             // isColliding이 true이면 해당 아이템을 리스트에서 제거합니다.
@@ -419,7 +523,8 @@ class GameThread(
                 }
 
                 // 아이템을 원형으로 그립니다.
-                canvas.drawCircle(item.x, item.y, item.radius, paint)
+                canvas.drawBitmap(windowCleanerToolBitmap, item.x, item.y, null)
+
             }
         }
     }

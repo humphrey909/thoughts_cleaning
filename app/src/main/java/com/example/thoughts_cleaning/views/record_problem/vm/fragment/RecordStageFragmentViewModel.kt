@@ -25,7 +25,7 @@ class RecordStageFragmentViewModel(mContext: Context): ViewModel() {
 
     val reviewOtherPeople: ArrayList<String> = ArrayList()
     val dustKindList: ArrayList<DustKindItem> = ArrayList()
-    val dustFeelingList: ArrayList<DustFeelingItem> = ArrayList()
+//    val dustFeelingList: ArrayList<DustFeelingItem> = ArrayList()
 
 
 //    var fixDustKind: DustKindItem? = null
@@ -54,15 +54,15 @@ class RecordStageFragmentViewModel(mContext: Context): ViewModel() {
 
 
 
-        dustFeelingList.add(DustFeelingItem(0,false, mContext.getString(R.string.dust_feeling_thought1)))
-        dustFeelingList.add(DustFeelingItem(1,false, mContext.getString(R.string.dust_feeling_thought2)))
-        dustFeelingList.add(DustFeelingItem(2,false,mContext.getString(R.string.dust_feeling_thought3)))
-        dustFeelingList.add(DustFeelingItem(3,false, mContext.getString(R.string.dust_feeling_thought4)))
-        dustFeelingList.add(DustFeelingItem(4,false, mContext.getString(R.string.dust_feeling_thought5)))
-        dustFeelingList.add(DustFeelingItem(5,false, mContext.getString(R.string.dust_feeling_thought6)))
-        dustFeelingList.add(DustFeelingItem(6,false, mContext.getString(R.string.dust_feeling_thought6)))
-        dustFeelingList.add(DustFeelingItem(7,false, mContext.getString(R.string.dust_feeling_thought7)))
-        dustFeelingList.add(DustFeelingItem(8,false, mContext.getString(R.string.dust_feeling_thought8)))
+//        dustFeelingList.add(DustFeelingItem(0,false, mContext.getString(R.string.dust_feeling_thought1)))
+//        dustFeelingList.add(DustFeelingItem(1,false, mContext.getString(R.string.dust_feeling_thought2)))
+//        dustFeelingList.add(DustFeelingItem(2,false,mContext.getString(R.string.dust_feeling_thought3)))
+//        dustFeelingList.add(DustFeelingItem(3,false, mContext.getString(R.string.dust_feeling_thought4)))
+//        dustFeelingList.add(DustFeelingItem(4,false, mContext.getString(R.string.dust_feeling_thought5)))
+//        dustFeelingList.add(DustFeelingItem(5,false, mContext.getString(R.string.dust_feeling_thought6)))
+//        dustFeelingList.add(DustFeelingItem(6,false, mContext.getString(R.string.dust_feeling_thought6)))
+//        dustFeelingList.add(DustFeelingItem(7,false, mContext.getString(R.string.dust_feeling_thought7)))
+//        dustFeelingList.add(DustFeelingItem(8,false, mContext.getString(R.string.dust_feeling_thought8)))
     }
 
 
@@ -110,15 +110,16 @@ class RecordStageFragmentViewModel(mContext: Context): ViewModel() {
     fun onClickedForward(){
         if(currentMainFlow.value == RecordStageFlow.STAGE_2){
             _currentMainFlow.postValue(RecordStageFlow.STAGE_3)
-        }else if(currentMainFlow.value == RecordStageFlow.STAGE_3){
+        }else if(currentMainFlow.value == RecordStageFlow.STAGE_3) {
             _currentMainFlow.postValue(RecordStageFlow.STAGE_4)
-        }else if(currentMainFlow.value == RecordStageFlow.STAGE_4){
-            _currentMainFlow.postValue(RecordStageFlow.STAGE_5)
-        }else if(currentMainFlow.value == RecordStageFlow.STAGE_5){
-            _currentMainFlow.postValue(RecordStageFlow.STAGE_6)
-        }else if(currentMainFlow.value == RecordStageFlow.STAGE_6){
-            _currentMainFlow.postValue(RecordStageFlow.STAGE_7)
         }
+//        }else if(currentMainFlow.value == RecordStageFlow.STAGE_4){
+//            _currentMainFlow.postValue(RecordStageFlow.STAGE_5)
+//        }else if(currentMainFlow.value == RecordStageFlow.STAGE_5){
+//            _currentMainFlow.postValue(RecordStageFlow.STAGE_6)
+//        }else if(currentMainFlow.value == RecordStageFlow.STAGE_6){
+//            _currentMainFlow.postValue(RecordStageFlow.STAGE_7)
+//        }
     }
 
 
@@ -129,15 +130,17 @@ class RecordStageFragmentViewModel(mContext: Context): ViewModel() {
             _currentMainFlow.postValue(RecordStageFlow.STAGE_1)
         }else if(currentMainFlow.value == RecordStageFlow.STAGE_3){
             _currentMainFlow.postValue(RecordStageFlow.STAGE_2)
-        }else if(currentMainFlow.value == RecordStageFlow.STAGE_4){
-            _currentMainFlow.postValue(RecordStageFlow.STAGE_3)
-        }else if(currentMainFlow.value == RecordStageFlow.STAGE_5){
-            _currentMainFlow.postValue(RecordStageFlow.STAGE_4)
-        }else if(currentMainFlow.value == RecordStageFlow.STAGE_6){
-            _currentMainFlow.postValue(RecordStageFlow.STAGE_5)
-        }else if(currentMainFlow.value == RecordStageFlow.STAGE_7){
-            _currentMainFlow.postValue(RecordStageFlow.STAGE_6)
         }
+//        else if(currentMainFlow.value == RecordStageFlow.STAGE_4) {
+//            _currentMainFlow.postValue(RecordStageFlow.STAGE_3)
+//        }
+//        }else if(currentMainFlow.value == RecordStageFlow.STAGE_5){
+//            _currentMainFlow.postValue(RecordStageFlow.STAGE_4)
+//        }else if(currentMainFlow.value == RecordStageFlow.STAGE_6){
+//            _currentMainFlow.postValue(RecordStageFlow.STAGE_5)
+//        }else if(currentMainFlow.value == RecordStageFlow.STAGE_7){
+//            _currentMainFlow.postValue(RecordStageFlow.STAGE_6)
+//        }
     }
 
 

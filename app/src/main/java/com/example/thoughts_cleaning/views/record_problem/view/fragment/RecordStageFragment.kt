@@ -78,7 +78,7 @@ class RecordStageFragment : Fragment() {
 
         peopleExViewadapter = PeopleExViewPagerAdapter(viewModel.reviewOtherPeople, peopleExItemClickListener)
         dustKindListadapter = DustKindListViewPagerAdapter(viewModel.dustKindList, dustKindItemClickListener)
-        dustFeelingListadapter = DustFeelingListViewPagerAdapter(viewModel.dustFeelingList, dustFeelingItemClickListener)
+//        dustFeelingListadapter = DustFeelingListViewPagerAdapter(viewModel.dustFeelingList, dustFeelingItemClickListener)
 
         //이부분 없으면 onclick이 동작하지 않음
         binding.viewModel = viewModel
@@ -88,7 +88,7 @@ class RecordStageFragment : Fragment() {
         binding.indicatorOtherPeopleReview.setViewPager(binding.pagerOtherPeopleReview)
 
         binding.dustKindRecycler.adapter = dustKindListadapter
-        binding.dustFeelingRecycler.adapter = dustFeelingListadapter
+//        binding.dustFeelingRecycler.adapter = dustFeelingListadapter
 
         viewModel._currentMainFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
 
@@ -265,46 +265,40 @@ class RecordStageFragment : Fragment() {
                 }
                 RecordStageFragmentViewModel.RecordStageFlow.STAGE_1 -> {
                     viewModel._dustFairyMessageText.postValue("다른 사람들은 이런 쓰레기를 버렸어요.")
-
-
-//                    viewModel._backBtnStateText.postValue(true)
-//                    enter_game()
                 }
                 RecordStageFragmentViewModel.RecordStageFlow.STAGE_2 -> {
                     viewModel._dustFairyMessageText.postValue("오늘은 어떤 쓰레기를 버리고 싶으세요?")
-
-
-//                    viewModel._backBtnStateText.postValue(true)
-//                    enter_game()
                 }
 
                 RecordStageFragmentViewModel.RecordStageFlow.STAGE_3 -> {
                     if(viewModel.fixDustKind.value?.index == 0){
-                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 상처를 받았는지 단어 하나로만 말해줄래요?")
+                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 상처를 받았는지 말해줄래요?")
                     }else if(viewModel.fixDustKind.value?.index == 1){
-                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 불안 했는지 단어 하나로만 말해줄래요?")
+                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 불안 했는지 말해줄래요?")
                     }else if(viewModel.fixDustKind.value?.index == 2){
-                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 화가 났는지 단어 하나로만 말해줄래요?")
+                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 화가 났는지 말해줄래요?")
                     }else if(viewModel.fixDustKind.value?.index == 3){
-                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 마음이 힘들었는지 단어 하나로만 말해줄래요?")
+                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 마음이 힘들었는지 말해줄래요?")
                     }
                 }
                 RecordStageFragmentViewModel.RecordStageFlow.STAGE_4 -> {
-                    viewModel._dustFairyMessageText.postValue(viewModel.fixDustOneWord.value +" 때문이었군요. 한 문장만 더 써줄 수 있을까요?")
+                    enter_game()
+
+//                    viewModel._dustFairyMessageText.postValue(viewModel.fixDustOneWord.value +" 때문이었군요. 한 문장만 더 써줄 수 있을까요?")
                 }
                 RecordStageFragmentViewModel.RecordStageFlow.STAGE_5 -> {
-                    viewModel._dustFairyMessageText.postValue("이 일이 있었을 때 어떤 기분이었어요?")
+//                    viewModel._dustFairyMessageText.postValue("이 일이 있었을 때 어떤 기분이었어요?")
                 }
                 RecordStageFragmentViewModel.RecordStageFlow.STAGE_6 -> {
-                    viewModel._dustFairyMessageText.postValue("이만큼이나 무거운 걸 혼자 안고 있었네요. 수고했어요.")
+//                    viewModel._dustFairyMessageText.postValue("이만큼이나 무거운 걸 혼자 안고 있었네요. 수고했어요.")
 
-                    Log.d("fixDustKind", " - " + viewModel.fixDustKind)
-                    Log.d("fixDustKind", " - " + viewModel.fixDustOneWord.value)
-                    Log.d("fixDustKind", " - " + viewModel.fixDustDetail.value)
+//                    Log.d("fixDustKind", " - " + viewModel.fixDustKind)
+//                    Log.d("fixDustKind", " - " + viewModel.fixDustOneWord.value)
+//                    Log.d("fixDustKind", " - " + viewModel.fixDustDetail.value)
                 }
                 RecordStageFragmentViewModel.RecordStageFlow.STAGE_7 -> {
                     //게임으로 이동
-                    enter_game()
+//                    enter_game()
                 }
             }
 //            viewModel.MainFlow
@@ -320,12 +314,19 @@ class RecordStageFragment : Fragment() {
         }
 
         viewModel.fixDustDetail.observe(viewLifecycleOwner) { flow ->
-            Log.d("fixDustDetail", " - " + flow)
-
             if(flow.length > 10){
                 viewModel._dustFairyMessageText.postValue("잘하고 있어요. 더 털어 놓고 싶은 게 있나요?")
-
             }
+
+            val currentLength = flow.length
+            val maxLength = 100f // 최대 글자 수 (기준)
+
+            var alphaRatio = (currentLength / maxLength).coerceIn(0.0f, 1.0f)
+            Log.d("alphaRatio", " - " + alphaRatio)
+            val alphaRatio2 = Math.pow(alphaRatio.toDouble(), 2.0).toFloat()
+
+            // 계산된 비율을 alpha 값으로 적용
+            binding.smudgeTextureImg.alpha = alphaRatio2
         }
 
 

@@ -17,6 +17,14 @@ import android.animation.AnimatorListenerAdapter
 
 class GameView(context: Context, val activity: GameActivity, var fragment: GameFragment, private val joystickState: JoystickState, private val wasteCount:Int) : SurfaceView(context), SurfaceHolder.Callback {
 
+    // 1. 페이지 이동 요청을 위한 인터페이스 정의
+    interface GameActionListener {
+        fun onGameOver()
+        fun onLevelCleared()
+    }
+
+    private var listener: GameActionListener? = null
+
     private lateinit var gameThread: GameThread
     private val uiHandler = Handler(Looper.getMainLooper())
 
@@ -133,5 +141,25 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
 
             start()
         }
+    }
+
+    // 3. 리스너 설정 함수
+    fun setGameActionListener(listener: GameActionListener) {
+        this.listener = listener
+    }
+
+    // 4. 게임 스레드 내부에서 이벤트 발생 시 콜백 호출
+    fun checkGameOverCondition() {
+//        if (isGameOver) {
+            // UI 작업을 위해 메인 스레드에서 실행하도록 요청
+            handler.post {
+                listener?.onGameOver()
+            }
+//        }
+    }
+
+    //페이지 이동
+    fun goCleanWindow() {
+
     }
 }

@@ -1,6 +1,7 @@
 package com.example.thoughts_cleaning.views.game.view.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -13,17 +14,17 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
+import androidx.navigation.fragment.findNavController
+import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.databinding.FragmentGameBinding
-import com.example.thoughts_cleaning.databinding.FragmentMainBinding
 import com.example.thoughts_cleaning.dialog.QuestionInputDialog
 import com.example.thoughts_cleaning.util.GameView
 import com.example.thoughts_cleaning.util.JoystickState
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
-import com.example.thoughts_cleaning.views.main.view.activity.container.MainActivity
 import com.example.thoughts_cleaning.views.game.vm.fragment.GameFragmentViewModel
 import com.three.joystick.JoystickView
 
-class GameFragment : Fragment() {
+class GameFragment : Fragment(), GameView.GameActionListener {
 
     private val viewModel: GameFragmentViewModel by viewModels()
 
@@ -116,6 +117,8 @@ class GameFragment : Fragment() {
             handleJoystickTouch(v, event)
             true // 이벤트 소비
         }
+
+        gameView.setGameActionListener(this)
     }
 
     override fun onResume() {
@@ -249,5 +252,34 @@ class GameFragment : Fragment() {
 
         // 루트 레이아웃에 추가
         (binding.root as? FrameLayout)?.addView(joystickView)
+    }
+
+    override fun onGameOver() {
+        // 이 코드는 이제 메인 스레드에서 안전하게 실행됩니다.
+//        val nextFragment = GameOverFragment()
+//        parentFragmentManager.beginTransaction()
+//            .replace(R.id.fragment_container, nextFragment)
+//            .addToBackStack(null)
+//            .commit()
+
+//        action_window_clean_page
+
+//        val intent = Intent(requireActivity(), WindowFragment::class.java)
+////        intent.putExtra("waste_count", 5)
+//
+//        // 2. Activity 시작
+//        startActivity(intent)
+//        requireActivity().finish()
+
+//        val action = WindowFragment.actionHomeFragmentToDetailFragment(itemIdToSend)
+//
+//        // 2. Action 객체로 이동
+//        findNavController().navigate(action)
+//        val navController = findNavController()
+        findNavController().navigate(R.id.WindowFragment)
+    }
+
+    override fun onLevelCleared() {
+        TODO("Not yet implemented")
     }
 }

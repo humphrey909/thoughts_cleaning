@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/main_background"
+        change_background="@{viewModel.currentMainFlow}"
         >
 
         <androidx.constraintlayout.widget.Guideline
@@ -46,6 +47,73 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.9" />
 
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_vertical_left2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_3 ? View.VISIBLE : View.INVISIBLE, default=visible}"
+            app:layout_constraintGuide_percent="0.12" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_vertical_right2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_3 ? View.VISIBLE : View.INVISIBLE, default=visible}"
+            app:layout_constraintGuide_percent="0.88" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_horizontal_bottom2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.85" />
+
+        <ImageView
+            android:id="@+id/outside_field_img"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/wiondow_outside_field"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_3 ? View.VISIBLE : View.INVISIBLE, default=visible}"
+            />
+
+
+        <ImageView
+            android:id="@+id/smudge_texture_img"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/smudge_texture"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_3 ? View.VISIBLE : View.INVISIBLE, default=visible}"
+            />
+
+
+        <ImageView
+            android:id="@+id/window_card_img"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/window_background2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_3 ? View.VISIBLE : View.INVISIBLE, default=visible}"
+            tools:ignore="ContentDescription" />
+
+
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_back"
             android:layout_width="50dp"
@@ -62,11 +130,11 @@
 
         <ImageView
             android:id="@+id/dust_main_logo"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="190dp"
+            android:layout_height="190dp"
             android:layout_marginStart="15dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/logo_dust_rebbit_front"
+            android:src="@drawable/dust_rabbit_front"
             app:layout_constraintTop_toBottomOf="@id/btn_back"
             app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
             tools:ignore="ContentDescription" />
@@ -87,6 +155,24 @@
             android:paddingHorizontal="15dp"
             android:paddingVertical="15dp"
             android:background="@drawable/message_main"
+            android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_3 ? View.INVISIBLE : View.VISIBLE, default=invisible}"
+            />
+
+        <TextView
+            android:id="@+id/dust_main_message2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/main_text"
+            android:text="@{viewModel.dustFairyMessageText}"
+            android:textSize="15dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/dust_main_logo"
+            app:layout_constraintStart_toStartOf="@+id/guide_vertical_left2"
+            app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right2"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="15dp"
+            android:background="@drawable/message_main"
+            android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_3 ? View.VISIBLE : View.INVISIBLE, default=visible}"
             />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -167,120 +253,120 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/middle_word_expression_area"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/main_background"
-            app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
-            app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
-            app:layout_constraintTop_toBottomOf="@id/dust_main_message"
-            app:layout_constraintBottom_toTopOf="@id/guide_horizontal_bottom"
-            android:layout_marginHorizontal="15dp"
-            android:layout_marginVertical="15dp"
-            android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_3 ? View.VISIBLE : View.INVISIBLE, default=invisible}"
-            >
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/middle_word_expression_area"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:background="@color/main_background"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/dust_main_message"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/guide_horizontal_bottom"-->
+<!--            android:layout_marginHorizontal="15dp"-->
+<!--            android:layout_marginVertical="15dp"-->
+<!--            android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_3 ? View.VISIBLE : View.INVISIBLE, default=invisible}"-->
+<!--            >-->
 
 
-            <EditText
-                android:id="@+id/word_expression_edit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:hint="예시:상사, 친구..."
-                android:textColorHint="@color/edit_hint"
-                android:textColor="@color/black"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:background="@drawable/edittext_background"
-                android:padding="20dp"
-                app:layout_constraintBottom_toTopOf="@+id/word_expression_ex_area"
-                app:layout_constraintVertical_chainStyle="packed"
-                android:text="@={viewModel.fixDustOneWord}"
-                />
+<!--            <EditText-->
+<!--                android:id="@+id/word_expression_edit"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="start"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                android:hint="예시:상사, 친구..."-->
+<!--                android:textColorHint="@color/edit_hint"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:layout_weight="1"-->
+<!--                android:ems="10"-->
+<!--                android:inputType="textPersonName"-->
+<!--                android:background="@drawable/edittext_background"-->
+<!--                android:padding="20dp"-->
+<!--                app:layout_constraintBottom_toTopOf="@+id/word_expression_ex_area"-->
+<!--                app:layout_constraintVertical_chainStyle="packed"-->
+<!--                android:text="@={viewModel.fixDustOneWord}"-->
+<!--                />-->
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/word_expression_ex_area"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginVertical="7dp"
-                app:layout_constraintTop_toBottomOf="@+id/word_expression_edit"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/word_expression_ex_area2"
-                >
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:id="@+id/word_expression_ex_area"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="15dp"-->
+<!--                android:layout_marginVertical="7dp"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/word_expression_edit"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintBottom_toTopOf="@+id/word_expression_ex_area2"-->
+<!--                >-->
 
-                <ImageView
-                    android:id="@+id/word_expression_icon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/document_icon"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="ContentDescription" />
-
-
-                <TextView
-                    android:id="@+id/word_expression_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@+id/word_expression_icon"
-                    app:layout_constraintTop_toTopOf="@+id/word_expression_icon"
-                    app:layout_constraintBottom_toBottomOf="@+id/word_expression_icon"
-                    android:text="@string/word_express_ex1"
-                    android:paddingStart="10dp"
-                    />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/word_expression_ex_area2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginVertical="7dp"
-                app:layout_constraintTop_toBottomOf="@+id/word_expression_ex_area"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                >
-
-                <ImageView
-                    android:id="@+id/word_expression_icon2"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/voice_record_icon"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="ContentDescription" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/word_expression_icon"-->
+<!--                    android:layout_width="40dp"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:scaleType="centerCrop"-->
+<!--                    android:src="@drawable/document_icon"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    tools:ignore="ContentDescription" />-->
 
 
-                <TextView
-                    android:id="@+id/word_expression_text2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@+id/word_expression_icon2"
-                    app:layout_constraintTop_toTopOf="@+id/word_expression_icon2"
-                    app:layout_constraintBottom_toBottomOf="@+id/word_expression_icon2"
-                    android:text="@string/word_express_ex2"
-                    android:paddingStart="10dp"
-                    />
+<!--                <TextView-->
+<!--                    android:id="@+id/word_expression_text"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/word_expression_icon"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/word_expression_icon"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/word_expression_icon"-->
+<!--                    android:text="@string/word_express_ex1"-->
+<!--                    android:paddingStart="10dp"-->
+<!--                    />-->
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:id="@+id/word_expression_ex_area2"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="15dp"-->
+<!--                android:layout_marginVertical="7dp"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/word_expression_ex_area"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                >-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/word_expression_icon2"-->
+<!--                    android:layout_width="40dp"-->
+<!--                    android:layout_height="40dp"-->
+
+<!--                    android:scaleType="centerCrop"-->
+<!--                    android:src="@drawable/voice_record_icon"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    tools:ignore="ContentDescription" />-->
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/word_expression_text2"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/word_expression_icon2"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/word_expression_icon2"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/word_expression_icon2"-->
+<!--                    android:text="@string/word_express_ex2"-->
+<!--                    android:paddingStart="10dp"-->
+<!--                    />-->
+
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
 
@@ -288,14 +374,13 @@
         android:id="@+id/middle_detail_dust_area"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/main_background"
-        app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
-        app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
-        app:layout_constraintTop_toBottomOf="@id/dust_main_message"
-        app:layout_constraintBottom_toTopOf="@id/guide_horizontal_bottom"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginVertical="15dp"
-        android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_4 ? View.VISIBLE : View.INVISIBLE, default=invisible}"
+        android:background="@color/transparent"
+        app:layout_constraintStart_toStartOf="@+id/guide_vertical_left2"
+        app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right2"
+        app:layout_constraintTop_toBottomOf="@id/dust_main_message2"
+        app:layout_constraintBottom_toTopOf="@id/guide_horizontal_bottom2"
+        android:layout_marginVertical="7dp"
+        android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_3 ? View.VISIBLE : View.INVISIBLE, default=visible}"
         >
 
 
@@ -315,317 +400,317 @@
             android:ems="10"
             android:background="@drawable/edittext_background"
             android:padding="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/detail_dust_ex_area"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             android:text="@={viewModel.fixDustDetail}"
             />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/detail_dust_ex_area"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:layout_marginVertical="7dp"
-            app:layout_constraintTop_toBottomOf="@+id/detail_dust_edit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/detail_dust_ex_area2"
-            >
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/detail_dust_ex_area"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginHorizontal="15dp"-->
+<!--            android:layout_marginVertical="7dp"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/detail_dust_edit"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            >-->
 
-            <ImageView
-                android:id="@+id/detail_dust_icon1"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/document_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription" />
-
-
-            <TextView
-                android:id="@+id/detail_dust_text1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@+id/detail_dust_icon1"
-                app:layout_constraintTop_toTopOf="@+id/detail_dust_icon1"
-                app:layout_constraintBottom_toBottomOf="@+id/detail_dust_icon1"
-                android:text="@string/detail_dust_ex1"
-                android:paddingStart="10dp"
-                />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/detail_dust_ex_area2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:layout_marginVertical="7dp"
-            app:layout_constraintTop_toBottomOf="@+id/detail_dust_ex_area"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            >
-
-            <ImageView
-                android:id="@+id/detail_dust_icon2"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-
-                android:scaleType="centerCrop"
-                android:src="@drawable/voice_record_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription" />
+<!--            <ImageView-->
+<!--                android:id="@+id/detail_dust_icon1"-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/document_icon"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                tools:ignore="ContentDescription" />-->
 
 
-            <TextView
-                android:id="@+id/detail_dust_text2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@+id/detail_dust_icon2"
-                app:layout_constraintTop_toTopOf="@+id/detail_dust_icon2"
-                app:layout_constraintBottom_toBottomOf="@+id/detail_dust_icon2"
-                android:text="@string/detail_dust_ex2"
-                android:paddingStart="10dp"
-                />
+<!--            <TextView-->
+<!--                android:id="@+id/detail_dust_text1"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/detail_dust_icon1"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/detail_dust_icon1"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/detail_dust_icon1"-->
+<!--                android:text="@string/detail_dust_ex1"-->
+<!--                android:paddingStart="10dp"-->
+<!--                />-->
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/detail_dust_ex_area2"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginHorizontal="15dp"-->
+<!--            android:layout_marginVertical="7dp"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/detail_dust_ex_area"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            >-->
 
+<!--            <ImageView-->
+<!--                android:id="@+id/detail_dust_icon2"-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="40dp"-->
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/middle_dust_feeling_area"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/main_background"
-            app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
-            app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
-            app:layout_constraintTop_toBottomOf="@id/dust_main_message"
-            app:layout_constraintBottom_toTopOf="@id/guide_horizontal_bottom"
-            android:layout_marginHorizontal="15dp"
-            android:layout_marginVertical="15dp"
-            android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_5 ? View.VISIBLE : View.INVISIBLE, default=invisible}"
-            >
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/dust_feeling_recycler"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@color/white"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:listitem="@layout/dust_kind_item_view_page"
-                />
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/voice_record_icon"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                tools:ignore="ContentDescription" />-->
 
 
+<!--            <TextView-->
+<!--                android:id="@+id/detail_dust_text2"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/detail_dust_icon2"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/detail_dust_icon2"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/detail_dust_icon2"-->
+<!--                android:text="@string/detail_dust_ex2"-->
+<!--                android:paddingStart="10dp"-->
+<!--                />-->
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/middle_dust_complete_area"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
-        app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
-        app:layout_constraintTop_toBottomOf="@id/dust_main_message"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginVertical="15dp"
-        android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_6 ? View.VISIBLE : View.INVISIBLE, default=invisible}"
-        >
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/middle_dust_complete_area_box1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_default2_color_normal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/middle_dust_complete_area_box2"
-            >
-
-
-            <TextView
-                android:id="@+id/dust_complete_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/main_text"
-                android:text="@string/dust_complete_title"
-                android:textSize="15dp"
-                android:layout_margin="10dp"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="15dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
-
-            <View
-                android:id="@+id/width_line"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#CCCCCC"
-                android:layout_marginHorizontal="15dp"
-                app:layout_constraintTop_toBottomOf="@id/dust_complete_title"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/middle_dust_complete_kind_area"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingVertical="15dp"
-                android:layout_marginHorizontal="15dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/width_line"
-                android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_6 ? View.VISIBLE : View.INVISIBLE, default=visible}"
-                >
-                <TextView
-                    android:id="@+id/dust_complete_kind"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/main_text"
-                    android:text="@string/dust_complete_kind"
-                    android:gravity="center|top"
-                    android:textSize="15dp"
-                    android:paddingVertical="5dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/dust_complete_kind_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="0.2"
-                    />
-                <TextView
-                    android:id="@+id/dust_complete_kind_content"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/main_text"
-                    android:text="@{viewModel._fixDustKind.document}"
-                    android:hint="@string/dust_complete_kind_ex"
-                    android:gravity="top|start"
-                    android:textSize="15dp"
-                    android:paddingVertical="5dp"
-                    app:layout_constraintStart_toEndOf="@+id/dust_complete_kind"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-
-                <TextView
-                    android:id="@+id/dust_complete_document"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/main_text"
-                    android:text="@string/dust_complete_document"
-                    android:gravity="center|top"
-                    android:textSize="15dp"
-                    android:paddingVertical="5dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/dust_complete_document_content"
-                    app:layout_constraintTop_toBottomOf="@+id/dust_complete_kind"
-                    app:layout_constraintWidth_percent="0.2"
-                    />
-                <TextView
-                    android:id="@+id/dust_complete_document_content"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/main_text"
-                    android:text="@{viewModel.fixDustOneWord}"
-                    android:hint="@string/dust_complete_document_ex"
-                    android:gravity="top|start"
-                    android:textSize="15dp"
-                    android:paddingVertical="5dp"
-                    app:layout_constraintStart_toEndOf="@+id/dust_complete_document"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/dust_complete_kind_content"
-                    />
-
-                <TextView
-                    android:id="@+id/dust_complete_emotion"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/main_text"
-                    android:text="@string/dust_complete_emotion"
-                    android:gravity="center|top"
-                    android:textSize="15dp"
-                    android:paddingVertical="5dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/dust_complete_emotion_content"
-                    app:layout_constraintTop_toBottomOf="@+id/dust_complete_document"
-                    app:layout_constraintWidth_percent="0.2"
-                    />
-                <TextView
-                    android:id="@+id/dust_complete_emotion_content"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/main_text"
-                    android:text="@{viewModel.fixDustDetail}"
-                    android:hint="@string/dust_complete_emotion_ex"
-                    android:gravity="top|start"
-                    android:textSize="15dp"
-                    android:paddingVertical="5dp"
-                    app:layout_constraintStart_toEndOf="@+id/dust_complete_emotion"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/dust_complete_document_content"
-                    />
-    <!--            android:text="@{viewModel.fixDustKind.document}"-->
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/middle_dust_complete_area_box2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/middle_dust_complete_area_box1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            >
-
-            <ImageView
-                android:id="@+id/dust_complete_icon1"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/document_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription" />
-
-
-            <TextView
-                android:id="@+id/dust_complete_text1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@+id/dust_complete_icon1"
-                app:layout_constraintTop_toTopOf="@+id/dust_complete_icon1"
-                app:layout_constraintBottom_toBottomOf="@+id/dust_complete_icon1"
-                android:text="@string/dust_complete_ex1"
-                android:paddingStart="10dp"
-                />
-
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/middle_dust_feeling_area"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:background="@color/main_background"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/dust_main_message"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/guide_horizontal_bottom"-->
+<!--            android:layout_marginHorizontal="15dp"-->
+<!--            android:layout_marginVertical="15dp"-->
+<!--            android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_5 ? View.VISIBLE : View.INVISIBLE, default=invisible}"-->
+<!--            >-->
+
+
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/dust_feeling_recycler"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:background="@color/white"-->
+<!--                android:orientation="vertical"-->
+<!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                tools:listitem="@layout/dust_kind_item_view_page"-->
+<!--                />-->
+
+
+
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/middle_dust_complete_area"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/dust_main_message"-->
+<!--        android:layout_marginHorizontal="15dp"-->
+<!--        android:layout_marginVertical="15dp"-->
+<!--        android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_6 ? View.VISIBLE : View.INVISIBLE, default=invisible}"-->
+<!--        >-->
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/middle_dust_complete_area_box1"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/btn_default2_color_normal"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/middle_dust_complete_area_box2"-->
+<!--            >-->
+
+
+<!--            <TextView-->
+<!--                android:id="@+id/dust_complete_title"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/main_text"-->
+<!--                android:text="@string/dust_complete_title"-->
+<!--                android:textSize="15dp"-->
+<!--                android:layout_margin="10dp"-->
+<!--                android:paddingHorizontal="15dp"-->
+<!--                android:paddingVertical="15dp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                />-->
+
+<!--            <View-->
+<!--                android:id="@+id/width_line"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:background="#CCCCCC"-->
+<!--                android:layout_marginHorizontal="15dp"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/dust_complete_title"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                />-->
+
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:id="@+id/middle_dust_complete_kind_area"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:paddingVertical="15dp"-->
+<!--                android:layout_marginHorizontal="15dp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="@id/width_line"-->
+<!--                android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_6 ? View.VISIBLE : View.INVISIBLE, default=visible}"-->
+<!--                >-->
+<!--                <TextView-->
+<!--                    android:id="@+id/dust_complete_kind"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="@color/main_text"-->
+<!--                    android:text="@string/dust_complete_kind"-->
+<!--                    android:gravity="center|top"-->
+<!--                    android:textSize="15dp"-->
+<!--                    android:paddingVertical="5dp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintEnd_toStartOf="@+id/dust_complete_kind_content"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:layout_constraintWidth_percent="0.2"-->
+<!--                    />-->
+<!--                <TextView-->
+<!--                    android:id="@+id/dust_complete_kind_content"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="@color/main_text"-->
+<!--                    android:text="@{viewModel._fixDustKind.document}"-->
+<!--                    android:hint="@string/dust_complete_kind_ex"-->
+<!--                    android:gravity="top|start"-->
+<!--                    android:textSize="15dp"-->
+<!--                    android:paddingVertical="5dp"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/dust_complete_kind"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/dust_complete_document"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="@color/main_text"-->
+<!--                    android:text="@string/dust_complete_document"-->
+<!--                    android:gravity="center|top"-->
+<!--                    android:textSize="15dp"-->
+<!--                    android:paddingVertical="5dp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintEnd_toStartOf="@+id/dust_complete_document_content"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/dust_complete_kind"-->
+<!--                    app:layout_constraintWidth_percent="0.2"-->
+<!--                    />-->
+<!--                <TextView-->
+<!--                    android:id="@+id/dust_complete_document_content"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="@color/main_text"-->
+<!--                    android:text="@{viewModel.fixDustOneWord}"-->
+<!--                    android:hint="@string/dust_complete_document_ex"-->
+<!--                    android:gravity="top|start"-->
+<!--                    android:textSize="15dp"-->
+<!--                    android:paddingVertical="5dp"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/dust_complete_document"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/dust_complete_kind_content"-->
+<!--                    />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/dust_complete_emotion"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="@color/main_text"-->
+<!--                    android:text="@string/dust_complete_emotion"-->
+<!--                    android:gravity="center|top"-->
+<!--                    android:textSize="15dp"-->
+<!--                    android:paddingVertical="5dp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintEnd_toStartOf="@+id/dust_complete_emotion_content"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/dust_complete_document"-->
+<!--                    app:layout_constraintWidth_percent="0.2"-->
+<!--                    />-->
+<!--                <TextView-->
+<!--                    android:id="@+id/dust_complete_emotion_content"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="@color/main_text"-->
+<!--                    android:text="@{viewModel.fixDustDetail}"-->
+<!--                    android:hint="@string/dust_complete_emotion_ex"-->
+<!--                    android:gravity="top|start"-->
+<!--                    android:textSize="15dp"-->
+<!--                    android:paddingVertical="5dp"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/dust_complete_emotion"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/dust_complete_document_content"-->
+<!--                    />-->
+<!--    &lt;!&ndash;            android:text="@{viewModel.fixDustKind.document}"&ndash;&gt;-->
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/middle_dust_complete_area_box2"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginVertical="10dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/middle_dust_complete_area_box1"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            >-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/dust_complete_icon1"-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/document_icon"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                tools:ignore="ContentDescription" />-->
+
+
+<!--            <TextView-->
+<!--                android:id="@+id/dust_complete_text1"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/dust_complete_icon1"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/dust_complete_icon1"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/dust_complete_icon1"-->
+<!--                android:text="@string/dust_complete_ex1"-->
+<!--                android:paddingStart="10dp"-->
+<!--                />-->
+
+
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
 
@@ -692,7 +777,7 @@
             app:layout_constraintTop_toTopOf="@+id/btn_next_stage"
             app:layout_constraintBottom_toBottomOf="@+id/btn_next_stage"
             android:layout_marginEnd="10dp"
-            android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_6 ? View.VISIBLE : View.INVISIBLE, default=visible}"
+            android:visibility="@{viewModel.currentMainFlow == viewModel._currentMainFlow.STAGE_3 ? View.VISIBLE : View.INVISIBLE, default=visible}"
             />
 
         <androidx.appcompat.widget.AppCompatButton
