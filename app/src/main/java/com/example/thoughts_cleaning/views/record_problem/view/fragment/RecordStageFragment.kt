@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.common.TrulyGenericViewModelFactory
 import com.example.thoughts_cleaning.databinding.FragmentRecordStateBinding
@@ -22,33 +24,18 @@ import com.example.thoughts_cleaning.views.record_problem.adapter.DustKindListVi
 import com.example.thoughts_cleaning.views.record_problem.adapter.PeopleExItemClickListener
 import com.example.thoughts_cleaning.views.record_problem.adapter.PeopleExViewPagerAdapter
 import com.example.thoughts_cleaning.views.record_problem.vm.fragment.RecordStageFragmentViewModel
+import com.example.thoughts_cleaning.views.record_problem.vm.fragment.SelectKindDustViewModel.TypeFlow
 
 
 class RecordStageFragment : Fragment() {
-
     lateinit var mContext: Context
-
     private lateinit var viewModel: RecordStageFragmentViewModel
 
     private var peopleExViewadapter: PeopleExViewPagerAdapter? = null
     private var dustKindListadapter: DustKindListViewPagerAdapter? = null
-    private var dustFeelingListadapter: DustFeelingListViewPagerAdapter? = null
+//    private var dustFeelingListadapter: DustFeelingListViewPagerAdapter? = null
 
     private lateinit var viewModelFactory: TrulyGenericViewModelFactory
-
-//    private lateinit var joystickView: JoystickView
-//    private var isStop = false
-//
-//    private var screenWidth = 0
-//    private var screenHeight = 0
-//
-//    private var MOVE_FACTOR = 0.5f
-//
-//    private var prevAngle = 0
-//    private lateinit var prevImageResource: LiveData<Int>
-//
-//    private lateinit var gameView: GameView
-//    private val joystickSimulator = JoystickState()
 
     // 1. View Binding 객체 선언 (null 허용)
     private var _binding: FragmentRecordStateBinding? = null
@@ -84,10 +71,10 @@ class RecordStageFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.pagerOtherPeopleReview.adapter = peopleExViewadapter
-        binding.indicatorOtherPeopleReview.setViewPager(binding.pagerOtherPeopleReview)
-
-        binding.dustKindRecycler.adapter = dustKindListadapter
+//        binding.pagerOtherPeopleReview.adapter = peopleExViewadapter
+//        binding.indicatorOtherPeopleReview.setViewPager(binding.pagerOtherPeopleReview)
+//
+//        binding.dustKindRecycler.adapter = dustKindListadapter
 //        binding.dustFeelingRecycler.adapter = dustFeelingListadapter
 
         viewModel._currentMainFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
@@ -260,47 +247,87 @@ class RecordStageFragment : Fragment() {
 
             when (flow) {
                 RecordStageFragmentViewModel.RecordStageFlow.COMMON -> {
-//                    viewModel._backBtnStateText.postValue(false)
-                    viewModel._dustFairyMessageText.postValue("여기는 당신만의 비밀 공간이에요. 이 방에서 한 이야기는 절대 밖으로 나가지 않아요.")
-                }
-                RecordStageFragmentViewModel.RecordStageFlow.STAGE_1 -> {
-                    viewModel._dustFairyMessageText.postValue("다른 사람들은 이런 쓰레기를 버렸어요.")
-                }
-                RecordStageFragmentViewModel.RecordStageFlow.STAGE_2 -> {
                     viewModel._dustFairyMessageText.postValue("오늘은 어떤 쓰레기를 버리고 싶으세요?")
                 }
 
-                RecordStageFragmentViewModel.RecordStageFlow.STAGE_3 -> {
-                    if(viewModel.fixDustKind.value?.index == 0){
-                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 상처를 받았는지 말해줄래요?")
-                    }else if(viewModel.fixDustKind.value?.index == 1){
-                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 불안 했는지 말해줄래요?")
-                    }else if(viewModel.fixDustKind.value?.index == 2){
-                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 화가 났는지 말해줄래요?")
-                    }else if(viewModel.fixDustKind.value?.index == 3){
-                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 마음이 힘들었는지 말해줄래요?")
-                    }
-                }
-                RecordStageFragmentViewModel.RecordStageFlow.STAGE_4 -> {
+                RecordStageFragmentViewModel.RecordStageFlow.NEXT_PAGE -> {
                     enter_game()
+                }
+                RecordStageFragmentViewModel.RecordStageFlow.BACK -> {
+                    requireActivity().onBackPressedDispatcher.onBackPressed()
 
-//                    viewModel._dustFairyMessageText.postValue(viewModel.fixDustOneWord.value +" 때문이었군요. 한 문장만 더 써줄 수 있을까요?")
-                }
-                RecordStageFragmentViewModel.RecordStageFlow.STAGE_5 -> {
-//                    viewModel._dustFairyMessageText.postValue("이 일이 있었을 때 어떤 기분이었어요?")
-                }
-                RecordStageFragmentViewModel.RecordStageFlow.STAGE_6 -> {
-//                    viewModel._dustFairyMessageText.postValue("이만큼이나 무거운 걸 혼자 안고 있었네요. 수고했어요.")
 
-//                    Log.d("fixDustKind", " - " + viewModel.fixDustKind)
-//                    Log.d("fixDustKind", " - " + viewModel.fixDustOneWord.value)
-//                    Log.d("fixDustKind", " - " + viewModel.fixDustDetail.value)
-                }
-                RecordStageFragmentViewModel.RecordStageFlow.STAGE_7 -> {
-                    //게임으로 이동
-//                    enter_game()
+//                    requireActivity().onBackPressedDispatcher.onBackPressed()
+//                    requireActivity().supportFragmentManager.popBackStack()
+//                    requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+//                    NavController.popBackStack()
+
+//                    val navController = findNavController()
+//
+//                    val initialFragmentId = R.id.SelectKindDustFragment
+//                    navController.popBackStack(initialFragmentId, false)
+
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.fragment_container, FragmentB())
+//                        .commit()
+
+                    // 현재 NavController의 백 스택 항목을 모두 출력해 봅니다.
+//                    val navController = findNavController()
+
+// popBackStack()을 호출하여 뒤로가기 시도
+//                    val isPopped = navController.popBackStack()
+//
+//                    if (isPopped) {
+//                        // 백 스택에서 성공적으로 하나의 Fragment를 제거하고 이전 Fragment로 돌아갔습니다.
+//                        Log.d("NAV_DEBUG", "popBackStack() 성공: 이전 Fragment로 돌아감.")
+//                    } else {
+//                        // 백 스택이 비어있거나, 해당 목적지가 존재하지 않아 실패했습니다.
+//                        Log.d("NAV_DEBUG", "popBackStack() 실패: 백 스택이 비어있거나 NavController가 처리하지 못함.")
+//                        // Activity를 종료해야 할 수도 있습니다.
+//                        requireActivity().finish()
+//                    }
+
+//                    findNavController().popBackStack()
+//                    findNavController().popBackStack(R.id.SelectKindDustFragment, inclusive = false)
                 }
             }
+
+
+//                RecordStageFragmentViewModel.RecordStageFlow.STAGE_2 -> {
+//                    viewModel._dustFairyMessageText.postValue("오늘은 어떤 쓰레기를 버리고 싶으세요?")
+//                }
+//
+//                RecordStageFragmentViewModel.RecordStageFlow.STAGE_3 -> {
+//                    if(viewModel.fixDustKind.value?.index == 0){
+//                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 상처를 받았는지 말해줄래요?")
+//                    }else if(viewModel.fixDustKind.value?.index == 1){
+//                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 불안 했는지 말해줄래요?")
+//                    }else if(viewModel.fixDustKind.value?.index == 2){
+//                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 화가 났는지 말해줄래요?")
+//                    }else if(viewModel.fixDustKind.value?.index == 3){
+//                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 마음이 힘들었는지 말해줄래요?")
+//                    }
+//                }
+//                RecordStageFragmentViewModel.RecordStageFlow.STAGE_4 -> {
+//                    enter_game()
+//
+////                    viewModel._dustFairyMessageText.postValue(viewModel.fixDustOneWord.value +" 때문이었군요. 한 문장만 더 써줄 수 있을까요?")
+//                }
+//                RecordStageFragmentViewModel.RecordStageFlow.STAGE_5 -> {
+////                    viewModel._dustFairyMessageText.postValue("이 일이 있었을 때 어떤 기분이었어요?")
+//                }
+//                RecordStageFragmentViewModel.RecordStageFlow.STAGE_6 -> {
+////                    viewModel._dustFairyMessageText.postValue("이만큼이나 무거운 걸 혼자 안고 있었네요. 수고했어요.")
+//
+////                    Log.d("fixDustKind", " - " + viewModel.fixDustKind)
+////                    Log.d("fixDustKind", " - " + viewModel.fixDustOneWord.value)
+////                    Log.d("fixDustKind", " - " + viewModel.fixDustDetail.value)
+//                }
+//                RecordStageFragmentViewModel.RecordStageFlow.STAGE_7 -> {
+//                    //게임으로 이동
+////                    enter_game()
+//                }
+//            }
 //            viewModel.MainFlow
 
 //            binding.nameView.text = it
@@ -326,7 +353,7 @@ class RecordStageFragment : Fragment() {
             val alphaRatio2 = Math.pow(alphaRatio.toDouble(), 2.0).toFloat()
 
             // 계산된 비율을 alpha 값으로 적용
-            binding.smudgeTextureImg.alpha = alphaRatio2
+//            binding.smudgeTextureImg.alpha = alphaRatio2
         }
 
 
@@ -393,4 +420,19 @@ class RecordStageFragment : Fragment() {
 
 //        viewModel._currentMainFlow.postValue(MainFlow.COMMON)
     }
+
+
+//    override fun onBackPressed() {
+//        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
+//        val currentFragment = navHostFragment?.childFragmentManager?.fragments?.get(0)
+//
+//        // NavController에 먼저 뒤로가기 처리를 시도합니다.
+//        if (navHostFragment?.navController?.popBackStack() == true) {
+//            // NavController가 처리를 성공했으면 여기서 종료
+//            return
+//        }
+//
+//        // NavController가 처리하지 못했을 때만 Activity 기본 동작 실행
+//        super.onBackPressed()
+//    }
 }

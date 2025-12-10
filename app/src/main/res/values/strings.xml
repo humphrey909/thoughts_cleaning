@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">thoughts_cleaning</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">생각 청소</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ex_other_thought1"> 먼지 1. 오늘 회의에서 말을 더듬었어. 다들 날 바보라고 생각했을 거야</string>
     <string name="ex_other_thought2"> 먼지 2. 친구가 답장을 안 해. 나한테 질렸나봐.</string>
@@ -44,5 +43,11 @@
     <string name="dust_complete_kind_ex"> 😤 혼나는 일</string>
     <string name="dust_complete_document_ex"> [사용자가 쓴 내용 미리보기]</string>
     <string name="dust_complete_emotion_ex"> 😤😓 화나고 지쳤어요</string>
+
+
+    <string name="ex_main_title">여기는 당신만의 비밀 공간이에요. 이 방에서 한 이야기는 절대 밖으로 나가지 않아요.</string>
+    <string name="ex_select_kind_dust_title">오늘은 어떤 쓰레기를 버리고 싶으세요?</string>
+    <string name="clean_count_title">청소 횟수</string>
+
 
 </resources>

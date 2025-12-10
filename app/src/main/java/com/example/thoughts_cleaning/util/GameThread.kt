@@ -245,7 +245,7 @@ class GameThread(
         // 4. 이 'backgroundCanvas'에 모든 정적 배경 요소를 그림 (딱 한 번)
         backgroundCanvas.apply {
             drawColor(Color.rgb(231, 228, 180))
-            val image = BitmapFactory.decodeResource(context.resources, R.drawable.room_structure2)
+            val image = BitmapFactory.decodeResource(context.resources, R.drawable.room_background2)
 
             if (image != null) {
                 // 1. 원본 비트맵 전체를 지정할 소스 사각형 (srcRect)

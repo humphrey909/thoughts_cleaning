@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
     id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -121,4 +122,23 @@ dependencies {
     implementation("me.relex:circleindicator:2.1.6")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+// 최신 버전에 맞게 조정
+// Gson Converter (JSON 데이터 파싱)
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+// OkHttp (선택 사항: 로깅 인터셉터 등 고급 설정 시 유용)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+// 최신 버전에 맞게 조정
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+// 디버깅용
+
+    //네이버 소셜 로그인
+    implementation("com.navercorp.nid:oauth-jdk8:5.9.1")
+    // jdk 8
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+    // 카카오 로그인 API 모듈
+//    implementation("com.kakao.sdk:v2-user:2.23.0")
 }

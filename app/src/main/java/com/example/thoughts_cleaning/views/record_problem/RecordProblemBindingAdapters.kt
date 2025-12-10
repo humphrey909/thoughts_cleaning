@@ -34,14 +34,16 @@ object RecordProblemBindingAdapters {
     @BindingAdapter("change_background")
     fun changeBackground(view: ConstraintLayout, currentMainFlow : RecordStageFragmentViewModel.RecordStageFlow) {
 
-        if(currentMainFlow == RecordStageFragmentViewModel.RecordStageFlow.STAGE_3){
-//            view.setBackgroundResource(R.drawable.smudge_texture)
-            view.setBackgroundColor(Color.parseColor("#00000000"))
-
-//            view.setBackgroundColor(color)
-        }else{
-            view.setBackgroundColor(Color.parseColor("#E7E4B4"))
-        }
+//        if(currentMainFlow == RecordStageFragmentViewModel.RecordStageFlow.STAGE_3){
+////            view.setBackgroundResource(R.drawable.smudge_texture)
+////            view.setBackgroundColor(Color.parseColor("#00000000"))
+//            view.setBackgroundResource(R.drawable.basic_background)
+////            view.setBackgroundColor(color)
+//        }else{
+//            //basic_background
+////            view.setBackgroundColor(Color.parseColor("#E7E4B4"))
+//            view.setBackgroundResource(R.drawable.basic_background)
+//        }
     }
 
 }

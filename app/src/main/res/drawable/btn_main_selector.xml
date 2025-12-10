@@ -11,7 +11,7 @@
     <!-- 기본 상태 (안 눌렀을 때) -->
     <item>
         <shape>
-            <solid android:color="#C7D2B9" />
+            <solid android:color="#B0CD8B" />
             <corners android:radius="10dp" />
         </shape>
     </item>

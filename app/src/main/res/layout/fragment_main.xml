@@ -13,80 +13,149 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#DEDEDE"
+        android:background="@drawable/basic_background"
         >
 
-        <TextView
-            android:id="@+id/point_score"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_horizontal_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="25dp"
-            android:gravity="right"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_margin="10dp"
-            />
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
 
-        <TextView
-            android:id="@+id/state_message"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_vertical_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="김지훈 생각 청소 2일 째"
-            android:textSize="25dp"
-            android:gravity="right"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/point_score"
-            android:layout_margin="10dp"
-            />
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
 
-        <ImageView
-            android:id="@+id/logo_circle_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:padding="5dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/logo_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_vertical_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_horizontal_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.03" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/top_area"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/guide_horizontal_top"
+            app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
+            app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
+
+            >
+
+            <TextView
+                android:id="@+id/clean_count_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="20dp"
+                android:paddingEnd="10dp"
+                android:text="@string/clean_count_title"
+                tools:text="@string/clean_count_title"
+                />
+
+            <TextView
+                android:id="@+id/clean_count_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:gravity="center"
+                app:layout_constraintStart_toEndOf="@+id/clean_count_title"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="20dp"
+                android:text="0"
+                tools:text="0"
+                />
+            <ImageView
+                android:id="@+id/btn_menu"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/btn_main_menu"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="ContentDescription" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/main_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="22dp"
+            android:paddingHorizontal="10dp"
+            android:text="@{viewModel.dustFairyMessageText}"
+            tools:text="@string/ex_main_title"
+            />
+
+
+
+<!--        <ImageView-->
+<!--            android:id="@+id/logo_circle_image"-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="100dp"-->
+<!--            android:padding="5dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:src="@drawable/logo_icon"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            tools:ignore="ContentDescription" />-->
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_bottom_area"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_horizontal_bottom"
             android:layout_marginBottom="20dp"
             >
-            <TextView
-                android:id="@+id/today_message"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_common"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="오늘의 공간 청소하기"
+                android:gravity="center"
+                android:text="생각 청소 시작하기"
                 android:textSize="20dp"
+                android:textColor="@color/main_text"
+                android:paddingHorizontal="30dp"
+                android:paddingVertical="10dp"
+                android:background="@drawable/btn_main_selector"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/enter_game"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="10dp"
-                />
-
-            <ImageView
-                android:id="@+id/enter_game"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/enter_game"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/today_message"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:onClick="@{() -> viewModel.onClicked()}" />
-
+                android:stateListAnimator="@null"
+                android:onClick="@{() -> viewModel.onClicked()}"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

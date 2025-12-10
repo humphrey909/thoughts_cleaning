@@ -26,9 +26,17 @@
             />
         <activity
             android:name=".views.start.view.activity.container.StartActivity"
-            android:exported="true"/>
+            android:exported="true">
+        </activity>
         <activity
             android:name=".views.record_problem.view.activity.container.RecordProblemActivity"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting">
+        </activity>
+
+
+        <activity
+            android:name=".views.main.view.activity.container.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>

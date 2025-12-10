@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.Thoughts_cleaning" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorControlActivated">@color/white</item>
+    </style>
+    <!--    <style name="Theme.Thoughts_cleaning" parent="android:Theme.Material.Light.NoActionBar" />-->
+
+
+    <!-- Splash screen theme. -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/main</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_logo_splash</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.AppCompat.NoActionBar</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+    </style>
+</resources>

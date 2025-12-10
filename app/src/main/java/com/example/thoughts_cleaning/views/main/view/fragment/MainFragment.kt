@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel
 import com.example.thoughts_cleaning.databinding.FragmentMainBinding
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.game.vm.activity.container.GameActivityViewModel
 import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel.MainFlow
+import com.example.thoughts_cleaning.views.record_problem.view.activity.container.RecordProblemActivity
+
 //import com.example.thoughts_cleaning.views.game.vm.fragment.GameViewModel.MainFlow
 
 class MainFragment : Fragment() {
@@ -48,13 +51,8 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-
-
-
         return binding.root
-        //return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,6 +65,9 @@ class MainFragment : Fragment() {
 
 
         viewModel._currentMainFlow.postValue(MainFlow.COMMON)
+        viewModel._dustFairyMessageText.postValue(getString(R.string.ex_main_title))
+        //ex_main_title
+
 
         handleNavigationEvent()
 
@@ -236,6 +237,9 @@ class MainFragment : Fragment() {
                 MainFlow.ENTER_GAME -> {
                     enter_game()
                 }
+                MainFlow.RECORD_PROBLEM -> {
+                    enter_game()
+                }
             }
 //            viewModel.MainFlow
 
@@ -257,7 +261,7 @@ class MainFragment : Fragment() {
     fun enter_game(){
 //        Log.d("ScreenSize", "화면 높이: ENTER_GAME")
 
-        val intent = Intent(requireActivity(), GameActivity::class.java)
+        val intent = Intent(requireActivity(), RecordProblemActivity::class.java)
 
         // 2. Activity 시작
         startActivity(intent)

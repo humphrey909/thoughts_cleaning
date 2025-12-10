@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.example.thoughts_cleaning.views.start.LoginEvent"/>
         <variable
             name="viewModel"
             type="com.example.thoughts_cleaning.views.start.vm.fragment.LoginViewModel" />
@@ -52,6 +53,7 @@
             app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
             app:layout_constraintTop_toBottomOf="@+id/logo_circle_image"
             app:layout_constraintBottom_toTopOf="@+id/img_login_google"
+            android:onClick="@{()-> viewModel.onClick(LoginEvent.KAKAO_LOGIN)}"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <ImageView

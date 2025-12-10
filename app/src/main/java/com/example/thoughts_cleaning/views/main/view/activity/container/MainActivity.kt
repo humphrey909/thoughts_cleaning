@@ -64,13 +64,13 @@ class MainActivity : AppCompatActivity() {
 
             // 4. BottomNavigationView와 NavController 연결
             // R.id.nav_view는 activity_main.xml에 있는 BottomNavigationView의 ID라고 가정합니다.
-            binding.bottomNavInFragment.setupWithNavController(navController)
+//            binding.bottomNavInFragment.setupWithNavController(navController)
         } else {
             // 오류 처리: NavHostFragment를 찾을 수 없을 때의 로직
             // Log.e("MainActivity", "NavHostFragment not found!")
         }
 
-        binding.bottomNavInFragment.itemIconTintList = null
+//        binding.bottomNavInFragment.itemIconTintList = null
     }
 
     override fun onResume() {
