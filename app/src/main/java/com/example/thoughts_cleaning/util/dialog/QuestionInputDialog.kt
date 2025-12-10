@@ -1,4 +1,4 @@
-package com.example.thoughts_cleaning.dialog
+package com.example.thoughts_cleaning.util.dialog
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
-import com.example.thoughts_cleaning.R
 import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.DialogFragment
+import com.example.thoughts_cleaning.R
 
 class QuestionInputDialog : DialogFragment() {
 

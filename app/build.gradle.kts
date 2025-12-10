@@ -26,12 +26,19 @@ android {
     }
 
     buildTypes {
+        debug {
+            resValue("string", "kakao_login_native_key", "aa101db5c64ffa1322eb95b0904196a3")
+            resValue("string", "kakao_login_native_key_MANIFEST", "kakaoaa101db5c64ffa1322eb95b0904196a3")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            resValue("string", "kakao_login_native_key", "aa101db5c64ffa1322eb95b0904196a3")
+            resValue("string", "kakao_login_native_key_MANIFEST", "kakaoaa101db5c64ffa1322eb95b0904196a3")
         }
     }
     compileOptions {
@@ -102,7 +109,6 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.10.0")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
-    implementation(project(":joystick"))
     implementation(project(":joystick2"))
 
     // Navigation Fragment KTX (Kotlin extension)
@@ -140,5 +146,15 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     // 카카오 로그인 API 모듈
-//    implementation("com.kakao.sdk:v2-user:2.23.0")
+    implementation("com.kakao.sdk:v2-user:2.23.0")
+
+// Glide Library
+    val glideVersion = "4.9.0" // 버전을 변수로 관리하는 것을 권장합니다.
+
+    implementation("com.github.bumptech.glide:glide:$glideVersion")
+
+    // Annotation Processor (코틀린 프로젝트에서는 kapt를 사용해야 합니다)
+    kapt("com.github.bumptech.glide:compiler:$glideVersion")
+
+    implementation("com.android.support:support-compat:27.1.1")
 }

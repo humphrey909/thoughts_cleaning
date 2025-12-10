@@ -17,7 +17,7 @@ import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.databinding.FragmentGameBinding
-import com.example.thoughts_cleaning.dialog.QuestionInputDialog
+import com.example.thoughts_cleaning.util.dialog.QuestionInputDialog
 import com.example.thoughts_cleaning.util.GameView
 import com.example.thoughts_cleaning.util.JoystickState
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity

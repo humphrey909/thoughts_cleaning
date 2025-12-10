@@ -50,4 +50,80 @@
     <string name="clean_count_title">청소 횟수</string>
 
 
+
+    <!-- Error -->
+    <string name="error_session_invalid">Invalid session</string>
+    <string name="error_id_empty">Please input ID</string>
+    <string name="error_id_fist_only_word">ID must start with lowercase letters.</string>
+    <string name="error_id_length">ID should at least 4 characters and not more than 20 characters.</string>
+    <string name="error_id_not_selected">Please select an ID to reset your password.</string>
+    <string name="error_password_empty">Enter your password.</string>
+    <string name="error_password_not_equal">The passwords do not match.</string>
+    <string name="error_password_length">Password must be at least 6 digits long.</string>
+    <string name="error_exist_user">This ID is already in use.</string>
+    <string name="error_phone_no_empty">Please enter your mobile phone number.</string>
+    <string name="error_user_type_empty">Please select the user type.</string>
+    <string name="error_name_empty">Please enter a name.</string>
+    <string name="error_gender_empty">Please select a gender.</string>
+    <string name="error_birth_empty">Please enter your birth date.</string>
+    <string name="error_birth_not_adult">TouchCare is a healthcare service for the elderly. Please ensure you entered your birth year correctly.</string>
+    <string name="error_permission_denied">You need to allow TouchCare to access to your location to login as a wearer.</string>
+    <string name="error_privacy_not_agree">If you do not agree to the terms and conditions, you cannot sign up.</string>
+    <string name="error_cert_not_request">Enter your number and send a verification code.</string>
+    <string name="error_cert_empty">Please check the authentication number.</string>
+    <string name="error_future_date">The data after today cannot be viewed.</string>
+    <string name="error_ble_not_support">Not support BLE(Bluetooth 4.0)</string>
+    <string name="error_ble_unavailable">Bluetooth is not enabled.</string>
+    <string name="error_require_connect">Please connect your device first.</string>
+    <string name="error_permission_voice_denied">You can\'t conversate with Suni without recording permission.</string>
+    <string name="error_editable">Please try again in a moment.</string>
+    <string name="error_no_home_address">Please register your address.</string>
+    <string name="dfu_file_download_fail">Please try again in a moment.</string>
+
+
+    <string name="dialog_button_confirm">Confirm</string>
+    <string name="dialog_button_send">Send</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="dialog_network_error_message">No network connection. Please check settings and re-try..</string>
+
+    <string-array name="const_country_code">
+        <item>United States (+1)</item>
+        <item>Canada (+1)</item>
+        <item>Korea (+82)</item>
+        <item>Spain (+34)</item>
+        <item>Japan (+81)</item>
+        <item>Italy (+39)</item>
+        <item>France (+33)</item>
+        <item>Singapore (+65)</item>
+        <item>Portugal (+351)</item>
+        <item>Germany (+49)</item>
+        <item>Estonia (+372)</item>
+        <item>Austria (+43)</item>
+        <item>Chile (+56)</item>
+        <item>Mexico (+52)</item>
+        <item>Australia (+61)</item>
+        <item>Russia (+7)</item>
+        <item>China (+86)</item>
+        <item>Hong Kong (+852)</item>
+        <item>Botswana (+267)</item>
+        <item>Brazil (+55)</item>
+        <item>Czech Republic (+420)</item>
+        <item>Denmark (+45)</item>
+        <item>Finland (+358)</item>
+        <item>Greece (+30)</item>
+        <item>India (+91)</item>
+        <item>Indonesia (+62)</item>
+        <item>Malaysia (+60)</item>
+        <item>Netherlands (+31)</item>
+        <item>New Zealand (+64)</item>
+        <item>Norway (+47)</item>
+        <item>Poland (+48)</item>
+        <item>Sweden (+46)</item>
+        <item>Taiwan (+886)</item>
+        <item>Thailand (+66)</item>
+        <item>Turkey (+90)</item>
+        <item>Vietnam (+84)</item>
+        <item>Belgium (+32)</item>
+        <item>England (+44)</item>
+    </string-array>
 </resources>

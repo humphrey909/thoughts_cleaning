@@ -1,11 +1,12 @@
 package com.example.thoughts_cleaning.api
 
+import com.example.thoughts_cleaning.api.response.ResMasilSocialLogin
+import kr.dnx.ble.android.touchcare.api.request.SocialKakaoLoginRequestData
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.Body
+import retrofit2.http.POST
 
-interface ApiService {
+interface ServerNetworkApi {
     // GET 요청 예시
     // Endpoint: BASE_URL/users/{userId}
 //    @GET("users/{userId}")
@@ -21,4 +22,14 @@ interface ApiService {
 //    ): Call<List<Post>> // Post는 응답 JSON을 매핑할 데이터 클래스 리스트
 
     // POST, PUT, DELETE 등 다른 메서드도 @POST, @PUT, @DELETE 등으로 정의 가능
+
+
+    /**
+     * Created by Humphrey on
+     * 카카오 로그인 진행
+     */
+    @POST("/xouchcare/as600/user/u/social_kakao_login")
+    fun startSocialKakaoLogin(
+        @Body req: SocialKakaoLoginRequestData
+    ): Call<ResMasilSocialLogin>
 }

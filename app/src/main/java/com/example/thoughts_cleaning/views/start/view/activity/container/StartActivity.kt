@@ -1,19 +1,31 @@
 package com.example.thoughts_cleaning.views.start.view.activity.container
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.api.Prefs
+import com.example.thoughts_cleaning.base.BaseNavigationActivity
+import com.example.thoughts_cleaning.common.ErrorCodeApp
 import com.example.thoughts_cleaning.databinding.ActivityMainBinding
 import com.example.thoughts_cleaning.databinding.ActivityStartBinding
+import com.example.thoughts_cleaning.util.base.BaseContract
+import com.example.thoughts_cleaning.util.dialog.CustomDialog
+import com.example.thoughts_cleaning.util.dialog.recent.CommonDialog
 import com.example.thoughts_cleaning.views.main.vm.activity.container.MainActivityViewModel
 import com.example.thoughts_cleaning.views.start.vm.activity.container.StartViewModel
 import kotlin.getValue
 
-class StartActivity : AppCompatActivity() {
+class StartActivity : BaseNavigationActivity(), BaseContract.NavMethod{
+    override val appNameId: Int = R.string.app_name
+    override val appLang: String = ""
+        //Prefs.appLocale
+
     private lateinit var binding: ActivityStartBinding
     private val viewModel: StartViewModel by viewModels()
 
@@ -37,4 +49,6 @@ class StartActivity : AppCompatActivity() {
 //        if (::gameView.isInitialized) gameView.pause()
         super.onPause()
     }
+
+
 }

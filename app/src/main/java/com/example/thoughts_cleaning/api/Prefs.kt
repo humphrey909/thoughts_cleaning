@@ -87,6 +87,9 @@ object Prefs {
 
     var anxietyWriteList by PreferenceDelegate("ANXIETY_WRITE", arrayListOf<String>())
 
+
+    var baseUrl by PreferenceDelegate<String?>("base_url", "")
+
     // 7. 특정 키만 삭제하는 함수
     fun removeKey(key: String) {
         prefs.edit { remove(key) }

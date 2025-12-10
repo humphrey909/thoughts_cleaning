@@ -9,12 +9,12 @@
     <fragment
         android:id="@+id/LoginFragment"
         android:name="com.example.thoughts_cleaning.views.start.view.fragment.LoginFragment"
-        android:label="login"
+        android:label="Login_fragment"
         tools:layout="@layout/fragment_login" />
 
-    <fragment
-        android:id="@+id/SplashFragment"
-        android:name="com.example.thoughts_cleaning.views.start.view.fragment.SplashFragment"
-        android:label="splash"
-        tools:layout="@layout/fragment_splash" />
+<!--    <fragment-->
+<!--        android:id="@+id/SplashFragment"-->
+<!--        android:name="com.example.thoughts_cleaning.views.start.view.fragment.SplashFragment"-->
+<!--        android:label="splash"-->
+<!--        tools:layout="@layout/fragment_splash" />-->
 </navigation>

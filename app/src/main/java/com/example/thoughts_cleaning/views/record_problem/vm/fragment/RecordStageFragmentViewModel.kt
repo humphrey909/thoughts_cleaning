@@ -4,10 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.thoughts_cleaning.MainApplication
 import com.example.thoughts_cleaning.R
-import com.example.thoughts_cleaning.api.RetrofitClient
-import com.example.thoughts_cleaning.api.model.DustFeelingItem
 import com.example.thoughts_cleaning.api.model.DustKindItem
 
 class RecordStageFragmentViewModel(mContext: Context): ViewModel() {

@@ -1,4 +1,6 @@
 package com.example.thoughts_cleaning.views.start.vm.activity.container
 
-class StartViewModel {
+import androidx.lifecycle.ViewModel
+
+class StartViewModel: ViewModel() {
 }

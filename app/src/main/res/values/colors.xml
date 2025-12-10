@@ -22,4 +22,14 @@
     <color name="grey1">#C8C8C8</color>
 
 
+    <color name="black3c">#3C3C3C</color>
+
+    <color name="dialog_date_default_color">#3A4263</color>
+    <color name="dialog_confirm_blue_normal">#62AAE9</color>
+    <color name="dialog_confirm_blue_pressed">#3788CF</color>
+    <color name="dialog_confirm_red_normal">#E86265</color>
+    <color name="dialog_confirm_red_pressed">#CD494C</color>
+    <color name="dialog_cancel_normal">#CECECE</color>
+    <color name="dialog_cancel_pressed">#A0A0A0</color>
+    <color name="dialog_cancel_call">#3473FF</color>
 </resources>
