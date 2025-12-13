@@ -3,12 +3,13 @@ package com.example.thoughts_cleaning.views.start.vm.fragment
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.example.thoughts_cleaning.api.Prefs
+import com.example.thoughts_cleaning.api.request.SocialKakaoLoginRequestData
 import com.example.thoughts_cleaning.base.MoveEvent
 import com.example.thoughts_cleaning.common.extension.call
 import com.example.thoughts_cleaning.common.vm.MasilViewModel
 import com.example.thoughts_cleaning.views.start.LoginEvent
 import kotlinx.coroutines.launch
-import kr.dnx.ble.android.touchcare.api.request.SocialKakaoLoginRequestData
 
 class LoginViewModel(mContext: Context) : MasilViewModel()  {
 
@@ -115,11 +116,25 @@ class LoginViewModel(mContext: Context) : MasilViewModel()  {
 
         response.call() {
             onSuccess = {
-                Log.e(TAG, "getPaidProduct: $response")
-                Log.e(TAG, "getPaidProduct: ${it.nextType}")
-                Log.e(TAG, "getPaidProduct: ${it.profile}")
-                Log.e(TAG, "getPaidProduct: ${it.sessionKey}")
-                Log.e(TAG, "getPaidProduct: ${it.nextMessage}")
+                Log.i(TAG, "getPaidProduct: $response")
+
+                Log.i(TAG, "startKakaoLogin: ${it.accessToken}")
+                Log.i(TAG, "startKakaoLogin: ${it.refreshToken}")
+                Log.i(TAG, "startKakaoLogin: ${it.accessTokenExpiresIn}")
+
+
+                //무조건 로그인 처리
+
+                Prefs.initUserInfo(it)
+
+                _moveEvent.postValue(MoveEvent.Login(LoginEvent.LOGIN_SUCCESS))
+
+//                Prefs.sessionKey = it.sessionKey
+
+//                Log.e(TAG, "getPaidProduct: ${it.nextType}")
+//                Log.e(TAG, "getPaidProduct: ${it.profile}")
+//                Log.e(TAG, "getPaidProduct: ${it.sessionKey}")
+//                Log.e(TAG, "getPaidProduct: ${it.nextMessage}")
 //                Log.e(TAG, "getPaidProduct: ${it.useUsertypeList}")
 
 //                profileInfo = it.profile

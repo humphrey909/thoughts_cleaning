@@ -2,6 +2,7 @@ package com.example.thoughts_cleaning.views.start.view.fragment
 
 import android.accounts.Account
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,11 +12,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.api.request.SocialKakaoLoginRequestData
 import com.example.thoughts_cleaning.base.MasilFragment
 import com.example.thoughts_cleaning.base.MoveEvent
 import com.example.thoughts_cleaning.common.TrulyGenericViewModelFactory
 import com.example.thoughts_cleaning.common.vm.viewModelFactory
 import com.example.thoughts_cleaning.databinding.FragmentLoginBinding
+import com.example.thoughts_cleaning.views.main.view.activity.container.MainActivity
+import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel.MainFlow
+import com.example.thoughts_cleaning.views.record_problem.view.activity.container.RecordProblemActivity
 import com.example.thoughts_cleaning.views.start.LoginEvent
 import com.example.thoughts_cleaning.views.start.vm.fragment.LoginViewModel
 import com.kakao.sdk.auth.model.OAuthToken
@@ -29,7 +34,6 @@ import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 import kr.dnx.ble.android.touchcare.api.request.SocialNaverLoginRequestData
 import com.kakao.sdk.user.UserApiClient
-import kr.dnx.ble.android.touchcare.api.request.SocialKakaoLoginRequestData
 
 
 class LoginFragment : MasilFragment<FragmentLoginBinding, LoginViewModel>(R.layout.fragment_login) {
@@ -104,6 +108,9 @@ class LoginFragment : MasilFragment<FragmentLoginBinding, LoginViewModel>(R.layo
                         goKakaoLogin()
 
                     }
+                    LoginEvent.LOGIN_SUCCESS -> {
+                        enterMain()
+                    }
 //                    LoginEvent.SOCIAL_REGISTER -> goSocialRegister()
 //                    LoginEvent.REGISTER_FAIL -> {
 //                        showAlreadySaveDialog()
@@ -116,6 +123,18 @@ class LoginFragment : MasilFragment<FragmentLoginBinding, LoginViewModel>(R.layo
         }
 
 
+    }
+
+    fun enterMain(){
+//        Log.d("ScreenSize", "화면 높이: ENTER_GAME")
+
+        val intent = Intent(requireActivity(), MainActivity::class.java)
+
+        // 2. Activity 시작
+        startActivity(intent)
+
+        requireActivity().finish()
+//        viewModel._currentMainFlow.postValue(MainFlow.COMMON)
     }
 
     //네이버 로그인 진행
@@ -345,9 +364,15 @@ class LoginFragment : MasilFragment<FragmentLoginBinding, LoginViewModel>(R.layo
 //                                                "\n전화번호: ${user.kakaoAccount?.phoneNumber}")
 
                                         //카카오 정보로 변경할 것.
-                                        val socialKakaoLoginRequestData = SocialKakaoLoginRequestData(token?.accessToken, token?.refreshToken, token?.accessTokenExpiresAt.toString(), token?.refreshTokenExpiresAt.toString(), user.id.toString(),
-                                            user.kakaoAccount
-                                        )
+                                        val socialKakaoLoginRequestData =
+                                            SocialKakaoLoginRequestData(
+                                                token?.accessToken,
+                                                token?.refreshToken,
+                                                token?.accessTokenExpiresAt.toString(),
+                                                token?.refreshTokenExpiresAt.toString(),
+                                                user.id.toString(),
+                                                user.kakaoAccount
+                                            )
 
                                         //성공시 네이버 로그인 시작
                                         viewModel.startKakaoLogin(socialKakaoLoginRequestData)

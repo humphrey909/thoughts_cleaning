@@ -24,12 +24,12 @@ abstract class MasilViewModel: BaseViewModel(), ApiErrorHandler {
     val _moveEvent = SingleLiveEvent<MoveEvent>()
     val moveEvent: LiveData<MoveEvent> get() = _moveEvent
 
-//    protected suspend fun<T : ResBase> callApi(black: suspend () -> T) : T {
-//        if (Prefs.sessionKey.isEmpty()) throw InvalidSessionException("Invalid Session")
-//        if (Prefs.userId == 0) throw InvalidSessionException("Invalid Session")
-//
-//        return checkResult(black())
-//    }
+    protected suspend fun<T : ResBase> callApi(black: suspend () -> T) : T {
+        if (Prefs.accessToken?.isEmpty() == true) throw SuniException.InvalidSessionException("Invalid Session") as Throwable
+        if (Prefs.userId == 0) throw SuniException.InvalidSessionException("Invalid Session") as Throwable
+
+        return checkResult(black())
+    }
 
 //    protected suspend fun<T : ResBase> callNotNeedIdApi(black: suspend () -> T) : T {
 //        if (Prefs.sessionKey.isEmpty()) throw InvalidSessionException("Invalid Session")

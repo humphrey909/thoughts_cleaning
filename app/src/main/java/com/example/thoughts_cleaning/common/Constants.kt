@@ -5,8 +5,8 @@ package com.example.thoughts_cleaning.common
  */
 object Constants {
     const val USER_AGENT = "xouchcare android"
-    const val BASE_URL = "https://api.dnx.kr"
-    const val BASE_URL_TEST = "https://tpi.dnx.kr"
+    const val BASE_URL = "http://thoughtclean.dnx.kr:8910"
+    const val BASE_URL_TEST = "http://thoughtclean.dnx.kr:8910"
     const val PLAY_STORE_URL = "https://play.google.com/store/apps/details"
     const val STORE_URL = "$PLAY_STORE_URL?id="
 

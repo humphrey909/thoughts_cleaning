@@ -15,7 +15,7 @@ enum class PermissionEvent {
 }
 
 enum class LoginEvent {
-    NAVER_LOGIN, KAKAO_LOGIN
+    NAVER_LOGIN, KAKAO_LOGIN, LOGIN_SUCCESS
 
 //    MAIN_WEARER, INTEGRATED_USER, PERMISSION,
 //    MAIN_GUARDIAN,

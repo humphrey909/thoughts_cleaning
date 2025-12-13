@@ -3,6 +3,7 @@ package com.example.thoughts_cleaning.api
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.example.thoughts_cleaning.api.response.TokenDto
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -89,6 +90,30 @@ object Prefs {
 
 
     var baseUrl by PreferenceDelegate<String?>("base_url", "")
+    var accessToken by PreferenceDelegate<String?>("access_token", "")
+    var refreshToken by PreferenceDelegate<String?>("refresh_token", "")
+    var accessTokenExpiresIn by PreferenceDelegate<Long?>("access_token_expires_in", 0L)
+
+    var userId by PreferenceDelegate<Int?>("user_id", 0)
+
+
+
+    fun initUserInfo(tokenDto: TokenDto) {
+        accessToken = tokenDto.accessToken
+        refreshToken = tokenDto.refreshToken
+        accessTokenExpiresIn = tokenDto.accessTokenExpiresIn
+    }
+
+
+    //초기화
+    fun initUserInfo(){
+//        accessToken = ""
+//        refreshToken = ""
+//        accessTokenExpiresIn = null
+
+        prefs.edit { clear() }
+    }
+
 
     // 7. 특정 키만 삭제하는 함수
     fun removeKey(key: String) {
@@ -97,6 +122,6 @@ object Prefs {
 
     // 8. 모든 데이터를 삭제하는 함수
     fun clearAll() {
-        prefs.edit { clear() }
+
     }
 }

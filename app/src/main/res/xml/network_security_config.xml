@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--    android 6.0 이하 버전 letsencrypt ssl 문제로 적용-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+<!--        <domain includeSubdomains="true">192.168.0.101</domain>-->
+        <domain includeSubdomains="true">thoughtclean.dnx.kr</domain>
+    </domain-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="@raw/isrgrootx1" />
+            <certificates src="@raw/isrgrootx2" />
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
+
+    <!--https://gun0912.tistory.com/80-->
+    <!-- kakao map: https://lakue.tistory.com/62 -->
+    <!--    https://stackoverflow.com/questions/78265846/java-security-cert-certpathvalidatorexception-trust-anchor-for-certification-pa-->
+    <!--    https://stackoverflow.com/questions/64844311/certpathvalidatorexception-connecting-to-a-lets-encrypt-host-on-android-m-or-ea/78309587#78309587-->
+

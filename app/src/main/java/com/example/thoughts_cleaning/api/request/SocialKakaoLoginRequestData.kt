@@ -1,5 +1,10 @@
-package kr.dnx.ble.android.touchcare.api.request
+package com.example.thoughts_cleaning.api.request
 
+import android.os.Build
+import android.provider.SyncStateContract
+import com.example.thoughts_cleaning.MainApplication
+import com.example.thoughts_cleaning.common.Constants
+import com.example.thoughts_cleaning.common.util.getDeviceIdNew
 import com.google.gson.annotations.SerializedName
 
 import java.io.Serializable
@@ -26,13 +31,13 @@ data class SocialKakaoLoginRequestData(
     @SerializedName("profile")
     val profile: com.kakao.sdk.user.model.Account?,
 
-//    @SerializedName(Constants.KEY_APP_DEVICE_ID)
-//    var appId: String = TouchApplication.instance.getDeviceIdNew(),
-//
-//    @SerializedName(SyncStateContract.Constants.KEY_MODEL_NAME)
-//    var modelName: String = Build.MODEL,
-//
-//    @SerializedName(Constants.KEY_OS_VERSION)
-//    var phoneOSVersion: String = Build.VERSION.RELEASE,
+    @SerializedName(Constants.KEY_APP_DEVICE_ID)
+    var appId: String = MainApplication.instance.getDeviceIdNew(),
+
+    @SerializedName(Constants.KEY_MODEL_NAME)
+    var modelName: String = Build.MODEL,
+
+    @SerializedName(Constants.KEY_OS_VERSION)
+    var phoneOSVersion: String = Build.VERSION.RELEASE,
 
     ): Serializable {}

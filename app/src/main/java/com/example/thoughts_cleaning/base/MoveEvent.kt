@@ -9,7 +9,7 @@ sealed class MoveEvent {
 //    data class Dialog(val moveType: DialogEvent) : MoveEvent()
 //
 //
-//    data class Splash(val moveType: SplashEvent) : MoveEvent()
+    data class Splash(val moveType: SplashEvent) : MoveEvent()
 //    data class MasilBack(val moveType: MasilBackEvent) : MoveEvent()
 //    data class Wearer(val moveType: WearerEvent) : MoveEvent()
 //
@@ -83,13 +83,14 @@ sealed class MoveEvent {
 //
 //enum class CallPersonalEvent { CALL }
 //
-//enum class SplashEvent {
+enum class SplashEvent {
 //    MAIN_WEARER,
 //    MAIN_GUARDIAN,
-//    LOGIN, PERMISSION,
-//    FINISH
-//}
-//
+                       //PERMISSION,
+    MAIN, LOGIN,
+    FINISH
+}
+
 //enum class MasilBackEvent {
 //    BACK_BUTTON,
 //    RIGHT_BUTTON,

@@ -15,9 +15,5 @@ data class ResMasilSocialLogin(
     var nextType: String,
 
     @SerializedName("next_message")
-    var nextMessage: String,
-
-//    @SerializedName("use_usertype_list")
-//    var useUsertypeList: ArrayList<MSUserTypeVO>,
-
+    var nextMessage: String
     ): ResMainCommon()

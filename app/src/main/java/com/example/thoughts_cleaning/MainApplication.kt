@@ -20,11 +20,13 @@ class MainApplication: Application() {
     override fun onCreate() {
         super.onCreate()
 
+        instance = this
+
         // 앱이 시작될 때 PreferenceManager를 초기화합니다.
         Prefs.init(applicationContext)
         Log.d("PreferenceManager", "초기화 완료")
 
-        Prefs.clearAll()
+//        Prefs.clearAll()
 
         kakaoInit()
     }
