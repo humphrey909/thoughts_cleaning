@@ -126,15 +126,9 @@ class LoginFragment : MasilFragment<FragmentLoginBinding, LoginViewModel>(R.layo
     }
 
     fun enterMain(){
-//        Log.d("ScreenSize", "화면 높이: ENTER_GAME")
-
         val intent = Intent(requireActivity(), MainActivity::class.java)
-
-        // 2. Activity 시작
         startActivity(intent)
-
         requireActivity().finish()
-//        viewModel._currentMainFlow.postValue(MainFlow.COMMON)
     }
 
     //네이버 로그인 진행

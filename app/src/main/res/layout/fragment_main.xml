@@ -82,15 +82,16 @@
                 android:text="0"
                 tools:text="0"
                 />
-            <ImageView
-                android:id="@+id/btn_menu"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/btn_main_menu"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:ignore="ContentDescription" />
+                <ImageView
+                    android:id="@+id/btn_menu"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/btn_main_menu"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:onClick="@{() -> viewModel.onClickSetting()}"
+                    tools:ignore="ContentDescription" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

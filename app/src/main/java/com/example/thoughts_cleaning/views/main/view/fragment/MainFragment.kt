@@ -7,19 +7,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.base.MasilFragment
+import com.example.thoughts_cleaning.common.vm.viewModelFactory
+import com.example.thoughts_cleaning.databinding.FragmentLoginBinding
 import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel
 import com.example.thoughts_cleaning.databinding.FragmentMainBinding
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.game.vm.activity.container.GameActivityViewModel
 import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel.MainFlow
 import com.example.thoughts_cleaning.views.record_problem.view.activity.container.RecordProblemActivity
+import com.example.thoughts_cleaning.views.record_problem.vm.fragment.SelectKindDustViewModel.TypeFlow
+import com.example.thoughts_cleaning.views.start.vm.fragment.LoginViewModel
 
 //import com.example.thoughts_cleaning.views.game.vm.fragment.GameViewModel.MainFlow
 
-class MainFragment : Fragment() {
+class MainFragment : MasilFragment<FragmentMainBinding, MainFragmentViewModel>(R.layout.fragment_main) {
 
-    private val viewModel: MainFragmentViewModel by viewModels()
+    override val viewModel by viewModelFactory { MainFragmentViewModel() }
+
+
+//    private val viewModel: MainFragmentViewModel by viewModels()
 
 //    private lateinit var joystickView: JoystickView
 //    private var isStop = false
@@ -36,10 +45,10 @@ class MainFragment : Fragment() {
 //    private val joystickSimulator = JoystickState()
 
     // 1. View Binding 객체 선언 (null 허용)
-    private var _binding: FragmentMainBinding? = null
-
-    // 2. 뷰가 살아있는 동안에만 접근할 수 있는 Non-null Binding 객체
-    private val binding get() = _binding!!
+//    private var _binding: FragmentMainBinding? = null
+//
+//    // 2. 뷰가 살아있는 동안에만 접근할 수 있는 Non-null Binding 객체
+//    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -240,6 +249,13 @@ class MainFragment : Fragment() {
                 MainFlow.RECORD_PROBLEM -> {
                     enter_game()
                 }
+                MainFlow.SETTING -> {
+                    findNavController().navigate(R.id.setting_fragment)
+
+                    viewModel._currentMainFlow.postValue(MainFlow.COMMON)
+                }
+
+                // findNavController().navigate(R.id.action_write_thought)
             }
 //            viewModel.MainFlow
 

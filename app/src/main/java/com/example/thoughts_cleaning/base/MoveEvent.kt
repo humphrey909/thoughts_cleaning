@@ -1,6 +1,8 @@
 package com.example.thoughts_cleaning.base
 
+import com.example.thoughts_cleaning.views.main.SettingEvent
 import com.example.thoughts_cleaning.views.start.LoginEvent
+
 /**
  * Created by seokang on 2022/09/15.
  */
@@ -61,7 +63,7 @@ sealed class MoveEvent {
 //    data class PhoneInfo(val moveType: PhoneInfoEvent) : MoveEvent()
 //    data class UserBasicInfo(val moveType: UserBasicInfoEvent) : MoveEvent()
 //
-//    data class Setting(val moveType: SettingEvent) : MoveEvent()
+    data class Setting(val moveType: SettingEvent) : MoveEvent()
 //    data class SettingCareGiver(val moveType: SettingCareGiverEvent) : MoveEvent()
 //    data class ServiceManage(val moveType: ServiceManageEvent): MoveEvent()
 //    data class ServiceVolume(val moveType: ServiceVolumeEvent): MoveEvent()

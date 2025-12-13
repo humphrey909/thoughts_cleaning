@@ -11,44 +11,32 @@ import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.databinding.ActivityMainBinding
 import com.example.thoughts_cleaning.util.GameView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.thoughts_cleaning.api.Prefs
+import com.example.thoughts_cleaning.base.BaseOldMainActivity
+import com.example.thoughts_cleaning.common.util.showToast
+import com.example.thoughts_cleaning.util.base.BaseContract
 import com.example.thoughts_cleaning.views.start.view.activity.container.StartActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseOldMainActivity(), BaseContract.NavMethod {
+    override val appNameId: Int = R.string.app_name
+    override val appLang: String = ""
+
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainActivityViewModel by viewModels()
 
     private var isUserLoggedIn = false
+    override fun checkUserId() {
+        if (Prefs.userId == 0) {
+            showToast(getString(R.string.error_editable))
+            goLoginView()
+        }
+    }
+
+    override fun goLoginView() {
+        goView(Intent(this, StartActivity::class.java))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashScreen = installSplashScreen()
-
-//        splashScreen.setKeepOnScreenCondition {
-//            // isUserLoggedIn 상태가 결정될 때까지 true를 반환하여 스플래시 화면을 유지
-//            !isUserLoggedIn
-//        }
-
-        // 3. (비동기) 로그인 상태 확인 로직 시작
-        // 백그라운드에서 빠르게 로그인 여부 또는 초기 데이터를 로딩합니다.
-        checkUserLoginStatus()
-
-        // 4. 스플래시 화면 종료 리스너 (선택 사항)
-        // 스플래시 화면이 사라진 직후에 다음 Activity로 이동하는 로직을 추가합니다.
-        splashScreen.setOnExitAnimationListener {
-            // 로그인 상태에 따라 다음 화면 결정
-            if (isUserLoggedIn) {
-                // 로그인 O: 메인 화면 (예: HomeActivity)
-//                Intent(this, MainActivity::class.java)
-            } else {
-                // 로그인 X: 로그인 화면 (예: LoginActivity)
-                val nextActivity = Intent(this, StartActivity::class.java)
-                startActivity(nextActivity)
-                finish() // MainActivity(Splash 화면 역할) 종료
-            }
-            // 애니메이션 제거 (필수)
-            it.remove()
-        }
-
-
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -69,6 +57,37 @@ class MainActivity : AppCompatActivity() {
             // 오류 처리: NavHostFragment를 찾을 수 없을 때의 로직
             // Log.e("MainActivity", "NavHostFragment not found!")
         }
+
+//        splashScreen.setKeepOnScreenCondition {
+//            // isUserLoggedIn 상태가 결정될 때까지 true를 반환하여 스플래시 화면을 유지
+//            !isUserLoggedIn
+//        }
+
+//        val splashScreen = installSplashScreen()
+//
+//        // 3. (비동기) 로그인 상태 확인 로직 시작
+//        // 백그라운드에서 빠르게 로그인 여부 또는 초기 데이터를 로딩합니다.
+//        checkUserLoginStatus()
+//
+//        // 4. 스플래시 화면 종료 리스너 (선택 사항)
+//        // 스플래시 화면이 사라진 직후에 다음 Activity로 이동하는 로직을 추가합니다.
+//        splashScreen.setOnExitAnimationListener {
+//            // 로그인 상태에 따라 다음 화면 결정
+//            if (isUserLoggedIn) {
+//                // 로그인 O: 메인 화면 (예: HomeActivity)
+////                Intent(this, MainActivity::class.java)
+//            } else {
+//                // 로그인 X: 로그인 화면 (예: LoginActivity)
+//                val nextActivity = Intent(this, StartActivity::class.java)
+//                startActivity(nextActivity)
+//                finish() // MainActivity(Splash 화면 역할) 종료
+//            }
+//            // 애니메이션 제거 (필수)
+//            it.remove()
+//        }
+
+
+
 
 //        binding.bottomNavInFragment.itemIconTintList = null
     }
@@ -99,5 +118,9 @@ class MainActivity : AppCompatActivity() {
 
         // **간단한 예시를 위해 500ms 후 isUserLoggedIn을 true로 설정**
         isUserLoggedIn = true
+    }
+
+    override fun showNetworkDialog(onConfirmListener: (() -> Unit)?) {
+        TODO("Not yet implemented")
     }
 }

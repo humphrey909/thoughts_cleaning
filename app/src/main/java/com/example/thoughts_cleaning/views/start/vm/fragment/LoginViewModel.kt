@@ -28,12 +28,6 @@ class LoginViewModel(mContext: Context) : MasilViewModel()  {
     }
 
     fun onClick(event: LoginEvent) {
-//        when(event) {
-//            LoginEvent.LOGO_IMAGE -> if(isDebugMode()) return
-//            LoginEvent.LOGIN_BUTTON -> checkParams()
-//            else -> { }
-//        }
-
         _moveEvent.postValue(MoveEvent.Login(event))
     }
 

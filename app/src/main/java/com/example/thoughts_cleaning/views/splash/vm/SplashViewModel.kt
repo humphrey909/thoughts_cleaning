@@ -3,6 +3,7 @@ package com.example.thoughts_cleaning.views.splash.vm
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.thoughts_cleaning.api.Prefs
+import com.example.thoughts_cleaning.api.request.RefreshTokenRequestData
 import com.example.thoughts_cleaning.base.MoveEvent
 import com.example.thoughts_cleaning.base.SplashEvent
 import com.example.thoughts_cleaning.common.extension.call
@@ -100,12 +101,22 @@ class SplashViewModel : MasilViewModel() {
         Log.i(TAG, "startNewToken: ${Prefs.accessToken}")
 
 
-        val response = api.startNewToken()
+        val response = api.startNewToken(RefreshTokenRequestData(Prefs.refreshToken))
         response.call() {
             onSuccess = {
                 Log.i(TAG, "startNewToken: $it")
                 Prefs.initUserInfo(it)
                 _moveEvent.postValue(MoveEvent.Splash(SplashEvent.MAIN))
+            }
+            onFailure = {
+                Log.i(TAG, "startNewToken onFailure: $it")
+                Prefs.initUserInfo()
+                _moveEvent.postValue(MoveEvent.Splash(SplashEvent.LOGIN))
+            }
+            onNetWorkError = {
+                Log.i(TAG, "startNewToken onNetWorkError ")
+                Prefs.initUserInfo()
+                _moveEvent.postValue(MoveEvent.Splash(SplashEvent.LOGIN))
             }
         }
     }

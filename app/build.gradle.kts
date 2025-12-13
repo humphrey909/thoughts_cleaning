@@ -84,6 +84,7 @@ dependencies {
     implementation(libs.androidx.compose.material)
     implementation(libs.firebase.crashlytics.buildtools)
     implementation(libs.androidx.tools.core)
+    implementation(libs.androidx.media3.extractor)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

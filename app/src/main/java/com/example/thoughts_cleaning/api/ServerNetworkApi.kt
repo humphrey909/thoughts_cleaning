@@ -1,6 +1,8 @@
 package com.example.thoughts_cleaning.api
 
+import com.example.thoughts_cleaning.api.model.ResBase
 import com.example.thoughts_cleaning.api.request.CheckTokenRequestData
+import com.example.thoughts_cleaning.api.request.RefreshTokenRequestData
 import com.example.thoughts_cleaning.api.request.SocialKakaoLoginRequestData
 import com.example.thoughts_cleaning.api.response.CheckTokenDto
 import com.example.thoughts_cleaning.api.response.ResMasilSocialLogin
@@ -53,5 +55,15 @@ interface ServerNetworkApi {
      */
     @POST("/api/users/refresh")
     fun startNewToken(
+        @Body req: RefreshTokenRequestData
     ): Call<TokenDto>
+
+    /**
+     * Created by Humphrey on
+     * accessToken 데이터 만료 여부 체크
+     * api/users/refresh
+     */
+    @POST("/api/users/logout")
+    fun logout(
+    ): Call<ResBase>
 }

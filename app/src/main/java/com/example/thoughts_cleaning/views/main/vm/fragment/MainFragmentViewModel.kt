@@ -3,8 +3,9 @@ package com.example.thoughts_cleaning.views.main.vm.fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.thoughts_cleaning.common.vm.MasilViewModel
 
-class MainFragmentViewModel: ViewModel() {
+class MainFragmentViewModel: MasilViewModel() {
 
     val _currentMainFlow: MutableLiveData<MainFlow> = MutableLiveData(MainFlow.COMMON)
     val currentMainFlow: LiveData<MainFlow> = _currentMainFlow
@@ -20,9 +21,13 @@ class MainFragmentViewModel: ViewModel() {
         _currentMainFlow.postValue(MainFlow.RECORD_PROBLEM)
     }
 
+    fun onClickSetting(){
+        _currentMainFlow.postValue(MainFlow.SETTING)
+    }
+
 
 
 //    enum class SubscribeState { COMMON, SUBSCRIBE, NO_SUBSCRIBE }
 
-    enum class MainFlow {COMMON, ENTER_GAME, RECORD_PROBLEM}
+    enum class MainFlow {COMMON, ENTER_GAME, RECORD_PROBLEM, SETTING}
 }

@@ -23,6 +23,8 @@
 
 
     <color name="black3c">#3C3C3C</color>
+    <color name="black2">#454545</color>
+    <color name="black3">#979797</color>
 
     <color name="dialog_date_default_color">#3A4263</color>
     <color name="dialog_confirm_blue_normal">#62AAE9</color>

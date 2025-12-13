@@ -5,28 +5,252 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.example.thoughts_cleaning.views.main.SettingEvent"/>
         <variable
             name="viewModel"
             type="com.example.thoughts_cleaning.views.main.vm.fragment.MySettingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#DEDEDE"
-        >
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/basic_background"
+            >
 
-        <TextView
-            android:id="@+id/title"
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_vertical_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_vertical_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_horizontal_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.03" />
+
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_horizontal_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.9" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/top_area"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
+                app:layout_constraintTop_toTopOf="@+id/guide_horizontal_top"
+                app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
+                app:layout_constraintBottom_toTopOf="@+id/content_area"
+                app:layout_constraintHeight_percent="0.1"
+                >
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_back"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/btn_back"
+                    android:scaleType="centerCrop"
+                    android:stateListAnimator="@null"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+            <TextView
+                    android:id="@+id/top_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="설정"
+                    android:gravity="center"
+                    android:textSize="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_back"
+                    />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/content_area"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toTopOf="@+id/bottom_area"
+                    app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
+                    app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
+                    app:layout_constraintTop_toBottomOf="@+id/top_area"
+                    >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/userinfo_menu_area"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintHeight_percent="0.1"
+                        app:layout_constraintBottom_toTopOf="@+id/conditions_menu_area"
+                        >
+
+                    <TextView
+                            android:id="@+id/userinfo_menu_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:text="회원 정보"
+                            android:fontFamily="@font/pretendard_light"
+                            android:textSize="20sp"
+                            android:gravity="start|center"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+                    <ImageView
+                            android:id="@+id/userinfo_men_img"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/ic_arrow"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/conditions_menu_area"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/userinfo_menu_area"
+                        app:layout_constraintBottom_toTopOf="@+id/customer_support_menu_area"
+                        app:layout_constraintHeight_percent="0.1"
+                        >
+
+                    <TextView
+                            android:id="@+id/conditions_menu_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:text="약관 및 정책"
+                            android:fontFamily="@font/pretendard_light"
+                            android:textSize="20sp"
+                            android:gravity="start|center"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+                    <ImageView
+                            android:id="@+id/conditions_menu_img"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/ic_arrow"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/customer_support_menu_area"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/conditions_menu_area"
+                        app:layout_constraintHeight_percent="0.1"
+                        >
+
+                    <TextView
+                            android:id="@+id/customer_support_menu_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:text="고객 센터"
+                            android:fontFamily="@font/pretendard_light"
+                            android:textSize="20sp"
+                            android:gravity="start|center"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+                    <ImageView
+                            android:id="@+id/customer_support_menu_img"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/ic_arrow"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottom_area"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="세팅 페이지"
-            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/content_area"
+            app:layout_constraintHeight_percent="0.15"
+            android:padding="20dp"
+            >
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/logout_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="로그아웃"
+                android:textSize="20dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_setting_selector"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:stateListAnimator="@null"
+                android:onClick="@{()-> viewModel.onClick(SettingEvent.LOGOUT)}"
+                />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+<!--        <TextView-->
+<!--            android:id="@+id/title"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:text="세팅 페이지"-->
+<!--            android:gravity="center"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

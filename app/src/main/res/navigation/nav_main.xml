@@ -8,13 +8,18 @@
     <fragment
         android:id="@+id/MainFragment"
         android:name="com.example.thoughts_cleaning.views.main.view.fragment.MainFragment"
-        android:label="Home"
-        tools:layout="@layout/fragment_main" />
+        android:label="Main"
+            tools:layout="@layout/fragment_main" >
+        <action
+                android:id="@+id/setting_fragment"
+                app:destination="@id/MySettingFragment" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/dashboardFragment"-->
-<!--        android:name="com.example.thoughts_cleaning.views.main.view.fragment.MySettingFragment"-->
-<!--        android:label="Dashboard"-->
-<!--        tools:layout="@layout/fragment_my_setting" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/MySettingFragment"
+        android:name="com.example.thoughts_cleaning.views.main.view.fragment.MySettingFragment"
+        android:label="Setting"
+        tools:layout="@layout/fragment_my_setting" />
 
 </navigation>

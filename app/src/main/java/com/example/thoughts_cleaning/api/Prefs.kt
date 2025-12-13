@@ -99,6 +99,7 @@ object Prefs {
 
 
     fun initUserInfo(tokenDto: TokenDto) {
+        userId = tokenDto.idx
         accessToken = tokenDto.accessToken
         refreshToken = tokenDto.refreshToken
         accessTokenExpiresIn = tokenDto.accessTokenExpiresIn
@@ -107,10 +108,6 @@ object Prefs {
 
     //초기화
     fun initUserInfo(){
-//        accessToken = ""
-//        refreshToken = ""
-//        accessTokenExpiresIn = null
-
         prefs.edit { clear() }
     }
 
