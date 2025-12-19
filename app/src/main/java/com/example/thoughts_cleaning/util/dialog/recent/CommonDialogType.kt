@@ -1,7 +1,7 @@
-package kr.dnx.ble.android.touchcare.library.views.custom.dialog.recent
+package com.example.thoughts_cleaning.util.dialog.recent
 
 /**
- * Created by SeoKang on 2023-02-20.
+ *
  */
 
 enum class CommonDialogType {

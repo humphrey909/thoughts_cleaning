@@ -10,7 +10,7 @@ import com.example.thoughts_cleaning.common.util.showToast
 import com.example.thoughts_cleaning.common.vm.BaseViewModel
 
 /**
- * Created by SeoKang on 2021-05-20.
+ *
  */
 abstract class BaseLeadActivity<T: ViewDataBinding, S: BaseViewModel>(
     @LayoutRes val layoutId: Int,

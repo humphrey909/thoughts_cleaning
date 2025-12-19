@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.common.vm.MasilViewModel
 
-class GameFragmentViewModel: ViewModel() {
+class GameFragmentViewModel: MasilViewModel() {
 
     val wasteCount = 5
 

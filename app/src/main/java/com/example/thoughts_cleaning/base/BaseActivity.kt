@@ -23,7 +23,7 @@ import com.example.thoughts_cleaning.util.dialog.onDismiss
 import com.example.thoughts_cleaning.util.dialog.onShow
 
 /**
- * Created by SeoKang on 2021-05-20.
+ *
  */
 abstract class BaseActivity : AppCompatActivity() {
     protected abstract val appNameId: Int

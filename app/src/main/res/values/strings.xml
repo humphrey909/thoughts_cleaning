@@ -9,11 +9,22 @@
     <string name="dust_kind_thought1"> 마음의 상처 \n "누군가 날 상처 입혔어" </string>
     <string name="dust_kind_thought2"> 불안과 걱정 \n "앞으로가 불안해"  </string>
     <string name="dust_kind_thought3"> 화나는 일 \n "정말 화가 나" </string>
-    <string name="dust_kind_thought4"> 지친 마음 \n "너무 힘들어" </string>
-    <string name="dust_kind_thought5"> 지친 마음2 \n "너무 힘들어2" </string>
-    <string name="dust_kind_thought6"> 지친 마음3 \n "너무 힘들어3" </string>
-    <string name="dust_kind_thought7"> 지친 마음4 \n "너무 힘들어4" </string>
-    <string name="dust_kind_thought8"> 지친 마음5 \n "너무 힘들어5" </string>
+    <string name="dust_kind_thought4"> 깊은 후회 \n "그때 그러지 말 걸 그랬어" </string>
+    <string name="dust_kind_thought5"> 미련과 집착 \n "자꾸만 지난 일이 생각나" </string>
+
+    <string name="dust_kind_thought6"> 자책하는 마음 \n "다 나 때문에 벌어진 일이야" </string>
+    <string name="dust_kind_thought7"> 열등감 \n "난 왜 이것밖에 안 될까" </string>
+    <string name="dust_kind_thought8"> 무력감 \n "아무것도 할 수 없을 것 같아" </string>
+
+    <string name="dust_kind_thought9"> 외로움 \n "세상에 나 혼자 남은 기분이야" </string>
+    <string name="dust_kind_thought10"> 남과의 비교 \n "나만 뒤처지고 불행한 것 같아" </string>
+    <string name="dust_kind_thought11"> 서운함 \n "내 마음을 아무도 몰라줘" </string>
+
+    <string name="dust_kind_thought12"> 무기력증 \n "만사가 귀찮고 하기 싫어" </string>
+    <string name="dust_kind_thought13"> 막연한 우울 \n "이유 없이 눈물이 나고 슬퍼" </string>
+    <string name="dust_kind_thought14"> 짜증과 불만 \n "왜 나한테만 이런 일이 생겨?" </string>
+
+
 
     <string name="word_express_ex1"> 한 단어면 충분해요 </string>
     <string name="word_express_ex2"> 말로 해도 돼요. </string>
@@ -45,9 +56,15 @@
     <string name="dust_complete_emotion_ex"> 😤😓 화나고 지쳤어요</string>
 
 
-    <string name="ex_main_title">여기는 당신만의 비밀 공간이에요. 이 방에서 한 이야기는 절대 밖으로 나가지 않아요.</string>
+    <string name="ex_main_title">여기는 당신만의 비밀 공간이에요.\n\n이 방에서 한 이야기는 절대 밖으로 나가지 않아요.</string>
     <string name="ex_select_kind_dust_title">오늘은 어떤 쓰레기를 버리고 싶으세요?</string>
     <string name="clean_count_title">청소 횟수</string>
+
+
+    <string name="dialog_main_title">생각 청소</string>
+    <string name="dialog_kind_dust_document">자신이 느낀 감정을 선택해주세요.</string>
+
+    <string name="dialog_record_stage_document">겪고있는 생각에 대해서 작성해주세요. </string>
 
 
     <!-- Error -->
@@ -80,9 +97,9 @@
     <string name="dfu_file_download_fail">Please try again in a moment.</string>
 
 
-    <string name="dialog_button_confirm">Confirm</string>
+    <string name="dialog_button_confirm">확인</string>
     <string name="dialog_button_send">Send</string>
-    <string name="dialog_button_cancel">Cancel</string>
+    <string name="dialog_button_cancel">취소</string>
     <string name="dialog_network_error_message">No network connection. Please check settings and re-try..</string>
 
     <string-array name="const_country_code">
@@ -182,4 +199,6 @@
     <string name="const_minutes_before">hace %1$d minutos</string>
     <string name="const_notification_title">Bluetooth y el servicio de ubicacióne están funcionando.</string>
     <string name="const_notification_text">Opera en segundo plano para usar Bluetooth y la función de ubicación. </string>
+
+
 </resources>

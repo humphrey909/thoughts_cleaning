@@ -7,8 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.api.model.DustKindItem
+import com.example.thoughts_cleaning.common.vm.MasilViewModel
 
-class SelectKindDustViewModel(mContext: Context): ViewModel() {
+class SelectKindDustViewModel(mContext: Context): MasilViewModel() {
 
     val _dustFairyMessageText: MutableLiveData<String> = MutableLiveData("")
     val dustFairyMessageText: LiveData<String> = _dustFairyMessageText
@@ -26,11 +27,16 @@ class SelectKindDustViewModel(mContext: Context): ViewModel() {
         dustKindList.add(DustKindItem(1,false, mContext.getString(R.string.dust_kind_thought2)))
         dustKindList.add(DustKindItem(2,false,mContext.getString(R.string.dust_kind_thought3)))
         dustKindList.add(DustKindItem(3,false, mContext.getString(R.string.dust_kind_thought4)))
-        dustKindList.add(DustKindItem(4,false, mContext.getString(R.string.dust_kind_thought4)))
-        dustKindList.add(DustKindItem(5,false, mContext.getString(R.string.dust_kind_thought4)))
-        dustKindList.add(DustKindItem(6,false, mContext.getString(R.string.dust_kind_thought4)))
-        dustKindList.add(DustKindItem(7,false, mContext.getString(R.string.dust_kind_thought4)))
-        dustKindList.add(DustKindItem(8,false, mContext.getString(R.string.dust_kind_thought4)))
+        dustKindList.add(DustKindItem(4,false, mContext.getString(R.string.dust_kind_thought5)))
+        dustKindList.add(DustKindItem(5,false, mContext.getString(R.string.dust_kind_thought6)))
+        dustKindList.add(DustKindItem(6,false, mContext.getString(R.string.dust_kind_thought7)))
+        dustKindList.add(DustKindItem(7,false, mContext.getString(R.string.dust_kind_thought8)))
+        dustKindList.add(DustKindItem(8,false, mContext.getString(R.string.dust_kind_thought9)))
+        dustKindList.add(DustKindItem(8,false, mContext.getString(R.string.dust_kind_thought10)))
+        dustKindList.add(DustKindItem(8,false, mContext.getString(R.string.dust_kind_thought11)))
+        dustKindList.add(DustKindItem(8,false, mContext.getString(R.string.dust_kind_thought12)))
+        dustKindList.add(DustKindItem(8,false, mContext.getString(R.string.dust_kind_thought13)))
+        dustKindList.add(DustKindItem(8,false, mContext.getString(R.string.dust_kind_thought14)))
 
         _dustFairyMessageText.postValue("오늘은 어떤 쓰레기를 버리고 싶으세요?")
     }

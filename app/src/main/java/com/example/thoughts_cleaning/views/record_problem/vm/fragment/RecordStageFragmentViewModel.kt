@@ -6,11 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.api.model.DustKindItem
+import com.example.thoughts_cleaning.common.vm.MasilViewModel
 
-class RecordStageFragmentViewModel(mContext: Context): ViewModel() {
+class RecordStageFragmentViewModel(mContext: Context): MasilViewModel() {
 
-    val _currentMainFlow: MutableLiveData<RecordStageFlow> = MutableLiveData(RecordStageFlow.COMMON)
-    val currentMainFlow: LiveData<RecordStageFlow> = _currentMainFlow
+    val _currentFlow: MutableLiveData<RecordStageFlow> = MutableLiveData(RecordStageFlow.COMMON)
+    val currentFlow: LiveData<RecordStageFlow> = _currentFlow
 
     val _dustFairyMessageText: MutableLiveData<String> = MutableLiveData("")
     val dustFairyMessageText: LiveData<String> = _dustFairyMessageText
@@ -28,11 +29,12 @@ class RecordStageFragmentViewModel(mContext: Context): ViewModel() {
 
 //    var fixDustKind: DustKindItem? = null
 
-    val _fixDustKind: MutableLiveData<DustKindItem> = MutableLiveData(null)
-    val fixDustKind: LiveData<DustKindItem> = _fixDustKind
+//    val _fixDustKind: MutableLiveData<DustKindItem> = MutableLiveData(null)
+//    val fixDustKind: LiveData<DustKindItem> = _fixDustKind
 
 
-    val fixDustOneWord: MutableLiveData<String> = MutableLiveData("")
+//    val fixDustOneWord: MutableLiveData<String> = MutableLiveData("")
+
     val fixDustDetail: MutableLiveData<String> = MutableLiveData("")
 
     init {
@@ -113,13 +115,13 @@ class RecordStageFragmentViewModel(mContext: Context): ViewModel() {
 //        }else if(currentMainFlow.value == RecordStageFlow.STAGE_3) {
 //            _currentMainFlow.postValue(RecordStageFlow.STAGE_4)
 //        }
-        _currentMainFlow.postValue(RecordStageFlow.NEXT_PAGE)
+        _currentFlow.postValue(RecordStageFlow.NEXT_PAGE)
 
     }
 
 
     fun onClickedBack(){
-        _currentMainFlow.postValue(RecordStageFlow.BACK)
+        _currentFlow.postValue(RecordStageFlow.BACK)
 //        if(currentMainFlow.value == RecordStageFlow.STAGE_1){
 //            _currentMainFlow.postValue(RecordStageFlow.COMMON)
 //        }else if(currentMainFlow.value == RecordStageFlow.STAGE_2){

@@ -5,7 +5,7 @@ import android.graphics.Color
 import com.example.thoughts_cleaning.R
 
 /**
- * Created by SeoKang on 2021-05-27.
+ *
  */
 class CustomDialogBuilder(val context: Context, var layoutId: Int = R.layout.dialog_custom_general_layout) {
     var onConfirmListener: (() -> Unit)? = null

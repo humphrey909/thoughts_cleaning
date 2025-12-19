@@ -136,7 +136,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@+id/guide_horizontal_bottom"
-            android:layout_marginBottom="20dp"
             >
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_common"
@@ -146,8 +145,8 @@
                 android:text="생각 청소 시작하기"
                 android:textSize="20dp"
                 android:textColor="@color/main_text"
-                android:paddingHorizontal="30dp"
-                android:paddingVertical="10dp"
+                android:paddingHorizontal="40dp"
+                android:paddingVertical="20dp"
                 android:background="@drawable/btn_main_selector"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_chainStyle="packed"

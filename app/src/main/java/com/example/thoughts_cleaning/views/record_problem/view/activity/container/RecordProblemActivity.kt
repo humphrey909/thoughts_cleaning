@@ -10,11 +10,16 @@ import com.example.thoughts_cleaning.views.main.vm.activity.container.MainActivi
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.databinding.ActivityMainBinding
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.thoughts_cleaning.base.BaseNavigationActivity
 import com.example.thoughts_cleaning.databinding.ActivityRecordProblemBinding
+import com.example.thoughts_cleaning.util.base.BaseContract
 import com.example.thoughts_cleaning.views.record_problem.vm.activity.container.RecordProblemActivityViewModel
 import com.example.thoughts_cleaning.views.start.view.activity.container.StartActivity
 
-class RecordProblemActivity : AppCompatActivity() {
+class RecordProblemActivity : BaseNavigationActivity(), BaseContract.NavMethod{
+    override val appNameId: Int = R.string.app_name
+    override val appLang: String = ""
+
     private lateinit var binding: ActivityRecordProblemBinding
     private val viewModel: RecordProblemActivityViewModel by viewModels()
 

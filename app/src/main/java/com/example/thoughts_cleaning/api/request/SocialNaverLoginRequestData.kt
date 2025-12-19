@@ -1,4 +1,4 @@
-package kr.dnx.ble.android.touchcare.api.request
+package com.example.thoughts_cleaning.api.request
 
 import android.os.Build
 import android.provider.SyncStateContract

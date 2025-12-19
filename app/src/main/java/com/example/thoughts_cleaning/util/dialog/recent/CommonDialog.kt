@@ -11,10 +11,8 @@ import com.example.thoughts_cleaning.databinding.DialogCommonOneButtonBinding
 import com.example.thoughts_cleaning.databinding.DialogCommonSubTitleBinding
 import com.example.thoughts_cleaning.databinding.DialogCommonTwoButtonBinding
 import com.example.thoughts_cleaning.databinding.DialogCommonTwoButtonImageBinding
-import kr.dnx.ble.android.touchcare.library.views.custom.dialog.recent.CommonDialogType
 
 /**
- * Created by SeoKang on 2023-02-20.
  * Created by Humphrey on 2024-07-09.
  */
 

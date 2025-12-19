@@ -93,7 +93,7 @@
         app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
         app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
         app:layout_constraintBottom_toTopOf="@+id/btn_next_stage"
-        app:layout_constraintHeight_percent="0.4"
+        app:layout_constraintHeight_percent="0.45"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/middle_dust_kind_area"

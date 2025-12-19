@@ -16,17 +16,23 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.base.MasilFragment
+import com.example.thoughts_cleaning.common.vm.viewModelFactory
 import com.example.thoughts_cleaning.databinding.FragmentGameBinding
+import com.example.thoughts_cleaning.databinding.FragmentRecordStateBinding
 import com.example.thoughts_cleaning.util.dialog.QuestionInputDialog
 import com.example.thoughts_cleaning.util.GameView
 import com.example.thoughts_cleaning.util.JoystickState
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.game.vm.fragment.GameFragmentViewModel
+import com.example.thoughts_cleaning.views.record_problem.vm.fragment.RecordStageFragmentViewModel
 import com.three.joystick.JoystickView
 
-class GameFragment : Fragment(), GameView.GameActionListener {
+class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R.layout.fragment_game), GameView.GameActionListener {
 
-    private val viewModel: GameFragmentViewModel by viewModels()
+    override val viewModel by viewModelFactory { GameFragmentViewModel() }
+
+//    private val viewModel: GameFragmentViewModel by viewModels()
 
     private var joystickView: JoystickView? = null // 조이스틱 뷰 인스턴스
 //    private var isStop = false
@@ -44,18 +50,18 @@ class GameFragment : Fragment(), GameView.GameActionListener {
     private lateinit var gameView: GameView
     private val joystickSimulator = JoystickState()
 
-    // 1. View Binding 객체 선언 (null 허용)
-    private var _binding: FragmentGameBinding? = null
-
-    // 2. 뷰가 살아있는 동안에만 접근할 수 있는 Non-null Binding 객체
-    private val binding get() = _binding!!
+//    // 1. View Binding 객체 선언 (null 허용)
+//    private var _binding: FragmentGameBinding? = null
+//
+//    // 2. 뷰가 살아있는 동안에만 접근할 수 있는 Non-null Binding 객체
+//    private val binding get() = _binding!!
 
 
     // 터치 다운 시 조이스틱의 중심이 될 초기 위치
     private var initialTouchX = 0f
     private var initialTouchY = 0f
 
-    private lateinit var mContext: Context
+//    private lateinit var mContext: Context
 
 //    private var wasteCount = 0
 
@@ -92,7 +98,7 @@ class GameFragment : Fragment(), GameView.GameActionListener {
 //        }
 
         // 1. Context 가져오기 (Fragment에서는 requireContext()를 사용)
-        mContext = requireContext()
+//        mContext = requireContext()
 
         // 2. 동적으로 FrameLayout 생성
 //        val containerLayout = FrameLayout(mContext)

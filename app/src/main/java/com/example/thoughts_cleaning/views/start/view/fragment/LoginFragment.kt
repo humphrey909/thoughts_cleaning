@@ -1,26 +1,21 @@
 package com.example.thoughts_cleaning.views.start.view.fragment
 
-import android.accounts.Account
-import android.content.Context
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.api.request.SocialKakaoLoginRequestData
+import com.example.thoughts_cleaning.api.request.SocialNaverLoginRequestData
 import com.example.thoughts_cleaning.base.MasilFragment
 import com.example.thoughts_cleaning.base.MoveEvent
-import com.example.thoughts_cleaning.common.TrulyGenericViewModelFactory
 import com.example.thoughts_cleaning.common.vm.viewModelFactory
 import com.example.thoughts_cleaning.databinding.FragmentLoginBinding
 import com.example.thoughts_cleaning.views.main.view.activity.container.MainActivity
-import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel.MainFlow
-import com.example.thoughts_cleaning.views.record_problem.view.activity.container.RecordProblemActivity
 import com.example.thoughts_cleaning.views.start.LoginEvent
 import com.example.thoughts_cleaning.views.start.vm.fragment.LoginViewModel
 import com.kakao.sdk.auth.model.OAuthToken
@@ -32,7 +27,6 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
-import kr.dnx.ble.android.touchcare.api.request.SocialNaverLoginRequestData
 import com.kakao.sdk.user.UserApiClient
 
 

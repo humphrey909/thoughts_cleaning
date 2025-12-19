@@ -13,8 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.base.MasilFragment
 import com.example.thoughts_cleaning.common.TrulyGenericViewModelFactory
+import com.example.thoughts_cleaning.common.vm.viewModelFactory
 import com.example.thoughts_cleaning.databinding.FragmentRecordStateBinding
+import com.example.thoughts_cleaning.databinding.FragmentSelectKindDustBinding
+import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogBuilder
+import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogType
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel.MainFlow
 import com.example.thoughts_cleaning.views.record_problem.adapter.DustFeelingItemClickListener
@@ -24,24 +29,29 @@ import com.example.thoughts_cleaning.views.record_problem.adapter.DustKindListVi
 import com.example.thoughts_cleaning.views.record_problem.adapter.PeopleExItemClickListener
 import com.example.thoughts_cleaning.views.record_problem.adapter.PeopleExViewPagerAdapter
 import com.example.thoughts_cleaning.views.record_problem.vm.fragment.RecordStageFragmentViewModel
+import com.example.thoughts_cleaning.views.record_problem.vm.fragment.RecordStageFragmentViewModel.RecordStageFlow
+import com.example.thoughts_cleaning.views.record_problem.vm.fragment.SelectKindDustViewModel
 import com.example.thoughts_cleaning.views.record_problem.vm.fragment.SelectKindDustViewModel.TypeFlow
 
 
-class RecordStageFragment : Fragment() {
-    lateinit var mContext: Context
-    private lateinit var viewModel: RecordStageFragmentViewModel
+class RecordStageFragment : MasilFragment<FragmentRecordStateBinding, RecordStageFragmentViewModel>(R.layout.fragment_record_state) {
+//    lateinit var mContext: Context
+//    private lateinit var viewModel: RecordStageFragmentViewModel
+
+    override val viewModel by viewModelFactory { RecordStageFragmentViewModel(mContext) }
+
 
     private var peopleExViewadapter: PeopleExViewPagerAdapter? = null
     private var dustKindListadapter: DustKindListViewPagerAdapter? = null
 //    private var dustFeelingListadapter: DustFeelingListViewPagerAdapter? = null
 
-    private lateinit var viewModelFactory: TrulyGenericViewModelFactory
+//    private lateinit var viewModelFactory: TrulyGenericViewModelFactory
 
     // 1. View Binding 객체 선언 (null 허용)
-    private var _binding: FragmentRecordStateBinding? = null
-
-    // 2. 뷰가 살아있는 동안에만 접근할 수 있는 Non-null Binding 객체
-    private val binding get() = _binding!!
+//    private var _binding: FragmentRecordStateBinding? = null
+//
+//    // 2. 뷰가 살아있는 동안에만 접근할 수 있는 Non-null Binding 객체
+//    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,14 +64,13 @@ class RecordStageFragment : Fragment() {
     ): View? {
         _binding = FragmentRecordStateBinding.inflate(inflater, container, false)
         return binding.root
-        //return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModelFactory = TrulyGenericViewModelFactory(mContext = mContext)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(RecordStageFragmentViewModel::class.java)
+//        viewModelFactory = TrulyGenericViewModelFactory(mContext = mContext)
+//        viewModel = ViewModelProvider(this, viewModelFactory).get(RecordStageFragmentViewModel::class.java)
 
         peopleExViewadapter = PeopleExViewPagerAdapter(viewModel.reviewOtherPeople, peopleExItemClickListener)
         dustKindListadapter = DustKindListViewPagerAdapter(viewModel.dustKindList, dustKindItemClickListener)
@@ -77,7 +86,7 @@ class RecordStageFragment : Fragment() {
 //        binding.dustKindRecycler.adapter = dustKindListadapter
 //        binding.dustFeelingRecycler.adapter = dustFeelingListadapter
 
-        viewModel._currentMainFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
+        viewModel._currentFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
 
 
 
@@ -238,7 +247,7 @@ class RecordStageFragment : Fragment() {
 
     // ViewModel의 이벤트에 따라 실제 화면 전환(Intent)을 처리하는 함수
     private fun handleNavigationEvent() {
-        viewModel.currentMainFlow.observe(viewLifecycleOwner) { flow ->
+        viewModel.currentFlow.observe(viewLifecycleOwner) { flow ->
 
 //            Log.d("currentMainFlow", "ENTER_GAME: ENTER_GAME")
 //            Log.d("currentMainFlow", "ENTER_GAME: $flow")
@@ -251,7 +260,17 @@ class RecordStageFragment : Fragment() {
                 }
 
                 RecordStageFragmentViewModel.RecordStageFlow.NEXT_PAGE -> {
-                    enter_game()
+                    //예외처리 진행
+//                    viewModel.fixDustDetail.value
+                    Log.d("currentMainFlow", "NEXT_PAGE: NEXT_PAGE"+ viewModel.fixDustDetail.value)
+                    Log.d("currentMainFlow", "NEXT_PAGE: NEXT_PAGE"+ viewModel.fixDustDetail.value?.length)
+
+                    if(viewModel.fixDustDetail.value?.length == 0){
+                        showDialog()
+                    }else{
+                        enterGame()
+                        viewModel._currentFlow.postValue(RecordStageFlow.COMMON)
+                    }
                 }
                 RecordStageFragmentViewModel.RecordStageFlow.BACK -> {
                     requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -345,19 +364,19 @@ class RecordStageFragment : Fragment() {
                 viewModel._dustFairyMessageText.postValue("잘하고 있어요. 더 털어 놓고 싶은 게 있나요?")
             }
 
-            val currentLength = flow.length
-            val maxLength = 100f // 최대 글자 수 (기준)
-
-            var alphaRatio = (currentLength / maxLength).coerceIn(0.0f, 1.0f)
-            Log.d("alphaRatio", " - " + alphaRatio)
-            val alphaRatio2 = Math.pow(alphaRatio.toDouble(), 2.0).toFloat()
+//            val currentLength = flow.length
+//            val maxLength = 100f // 최대 글자 수 (기준)
+//
+//            var alphaRatio = (currentLength / maxLength).coerceIn(0.0f, 1.0f)
+//            Log.d("alphaRatio", " - " + alphaRatio)
+//            val alphaRatio2 = Math.pow(alphaRatio.toDouble(), 2.0).toFloat()
 
             // 계산된 비율을 alpha 값으로 적용
 //            binding.smudgeTextureImg.alpha = alphaRatio2
         }
 
 
-        viewModel._currentMainFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
+        viewModel._currentFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
 
 //        adapter?.setItems(it.messageList)
 
@@ -391,7 +410,7 @@ class RecordStageFragment : Fragment() {
 //        Log.i("dustKindItemClickListener", ": item clicked $position")
 
 
-        viewModel._fixDustKind.postValue(state)
+//        viewModel._fixDustKind.postValue(state)
 //        viewModel.fixDustKind = state
     }
     private val dustFeelingItemClickListener = DustFeelingItemClickListener { state, position ->
@@ -402,23 +421,11 @@ class RecordStageFragment : Fragment() {
 //        viewModel.fixDustKind = state
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        mContext = context
-    }
-
-    fun enter_game(){
-//        Log.d("ScreenSize", "화면 높이: ENTER_GAME")
-
+    fun enterGame(){
         val intent = Intent(requireActivity(), GameActivity::class.java)
-//        intent.putExtra("waste_count", 5)
-
         // 2. Activity 시작
         startActivity(intent)
         requireActivity().finish()
-
-//        viewModel._currentMainFlow.postValue(MainFlow.COMMON)
     }
 
 
@@ -435,4 +442,21 @@ class RecordStageFragment : Fragment() {
 //        // NavController가 처리하지 못했을 때만 Activity 기본 동작 실행
 //        super.onBackPressed()
 //    }
+
+
+    private fun showDialog(){
+        val dialog = context?.let {
+            CommonDialogBuilder(it, CommonDialogType.ONE_BUTTON)
+                .title(getString(R.string.dialog_main_title))
+                .main(getString(R.string.dialog_record_stage_document))
+                .onConfirmListener {
+
+                }
+                .build()
+        }
+        if (dialog != null) {
+            showDialog(dialog)
+        }
+    }
+
 }

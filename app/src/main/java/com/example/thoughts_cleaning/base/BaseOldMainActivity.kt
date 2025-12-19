@@ -10,8 +10,6 @@ import com.example.thoughts_cleaning.common.Constants
 import com.example.thoughts_cleaning.event.EventMessage
 import com.example.thoughts_cleaning.util.dialog.CustomDialogBuilder
 import com.example.thoughts_cleaning.util.dialog.DialogColorType
-import kotlinx.coroutines.launch
-import kr.dnx.ble.android.touchcare.library.views.custom.dialog.recent.CommonDialogType
 
 /**
  * Created by SeoKang on 2021-05-28.

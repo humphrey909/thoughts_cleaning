@@ -3,7 +3,6 @@ package com.example.thoughts_cleaning.util.dialog.recent
 import android.content.Context
 import android.util.Log
 import com.example.thoughts_cleaning.R
-import kr.dnx.ble.android.touchcare.library.views.custom.dialog.recent.CommonDialogType
 
 /**
  * Created by SeoKang on 2023-02-20.

@@ -24,7 +24,7 @@ import com.example.thoughts_cleaning.util.dialog.onDismiss
 import com.example.thoughts_cleaning.util.dialog.onShow
 import com.example.thoughts_cleaning.util.dialog.recent.CommonDialog
 import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogBuilder
-import kr.dnx.ble.android.touchcare.library.views.custom.dialog.recent.CommonDialogType
+import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogType
 
 
 /**

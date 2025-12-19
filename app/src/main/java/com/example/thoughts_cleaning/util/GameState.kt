@@ -18,11 +18,13 @@ class GameState(width: Int, height: Int) {
 //     var charX: Float = 0f
 //     var charY: Float = 0f
 
+
+
     // 플레이어 객체
     val player = Player(
         x = (width / 2).toFloat(),
         y = (height / 2).toFloat(),
-        radius = 50f
+        radius = 100f
     )
 
     var playerLastX = 0f

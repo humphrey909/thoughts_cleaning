@@ -105,7 +105,7 @@
             app:layout_constraintTop_toBottomOf="@id/dialog_common_sub_title_main_text"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/dialog_common_sub_title_bottom_cancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -130,7 +130,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/dialog_common_sub_title_bottom_confirm"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
