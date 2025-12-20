@@ -19,7 +19,8 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
 
     // 1. 페이지 이동 요청을 위한 인터페이스 정의
     interface GameActionListener {
-        fun onGameOver()
+        fun onSelectItem(type: ItemType)
+        fun onNotSelectItem(type: ItemType)
         fun onLevelCleared()
     }
 
@@ -148,14 +149,20 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
         this.listener = listener
     }
 
-    // 4. 게임 스레드 내부에서 이벤트 발생 시 콜백 호출
-    fun checkGameOverCondition() {
-//        if (isGameOver) {
-            // UI 작업을 위해 메인 스레드에서 실행하도록 요청
-            handler.post {
-                listener?.onGameOver()
-            }
-//        }
+    // 청소 버튼 활성화
+    fun startWorkCleanBtn(type: ItemType) {
+        // UI 작업을 위해 메인 스레드에서 실행하도록 요청
+        handler.post {
+            listener?.onSelectItem(type)
+        }
+    }
+
+    // 청소 버튼 비활성화
+    fun stopWorkCleanBtn(type: ItemType) {
+        // UI 작업을 위해 메인 스레드에서 실행하도록 요청
+        handler.post {
+            listener?.onNotSelectItem(type)
+        }
     }
 
     //페이지 이동

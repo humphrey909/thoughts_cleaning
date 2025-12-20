@@ -1,5 +1,6 @@
 package com.example.thoughts_cleaning.base
 
+import com.example.thoughts_cleaning.views.game.GameEvent
 import com.example.thoughts_cleaning.views.main.SettingEvent
 import com.example.thoughts_cleaning.views.start.LoginEvent
 
@@ -64,6 +65,11 @@ sealed class MoveEvent {
 //    data class UserBasicInfo(val moveType: UserBasicInfoEvent) : MoveEvent()
 //
     data class Setting(val moveType: SettingEvent) : MoveEvent()
+
+    data class Game(val moveType: GameEvent) : MoveEvent()
+
+
+
 //    data class SettingCareGiver(val moveType: SettingCareGiverEvent) : MoveEvent()
 //    data class ServiceManage(val moveType: ServiceManageEvent): MoveEvent()
 //    data class ServiceVolume(val moveType: ServiceVolumeEvent): MoveEvent()

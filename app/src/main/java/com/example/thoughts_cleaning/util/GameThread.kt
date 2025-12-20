@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import android.util.Log
@@ -79,6 +80,26 @@ class GameThread(
     private val wardrobeBitmap: Bitmap =
         BitmapFactory.decodeResource(context.resources, R.drawable.room_structure_wardrobe2)
     private lateinit var wardrobeRect:RectF
+
+    private val bedCleanBtnBitmap: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.btn_clean_start)
+
+    private lateinit var bedCleanBtnRect:RectF
+
+    private val windowCleanBtnBitmap: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.btn_clean_start)
+
+    private lateinit var windowCleanBtnRect:RectF
+
+    private val deskCleanBtnBitmap: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.btn_clean_start)
+
+    private lateinit var deskCleanBtnRect:RectF
+
+    private val wardrobeCleanBtnBitmap: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.btn_clean_start)
+
+    private lateinit var wardrobeCleanBtnRect:RectF
 
     private val MOVE_SPEED = 5f // 초당 60프레임 기준 5픽셀씩 이동
 
@@ -187,6 +208,55 @@ class GameThread(
 
 
 
+        //침대 청소 좌표
+        aspectRatio = bedCleanBtnBitmap.width.toFloat() / bedCleanBtnBitmap.height.toFloat()
+        x = screenWidth - 700f // 원하는 x 위치 (왼쪽)
+        y = 1500f // 원하는 y 위치 (위쪽)
+        newWidth = gameState.itemRadius*2
+        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+
+        bedCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
+//        gameState.pointsList.add(PointF(x, y))
+        gameState.addItem(x, y, ItemType.CLEAN_BED)
+
+        //창문 청소 좌표
+        aspectRatio = windowCleanBtnBitmap.width.toFloat() / windowCleanBtnBitmap.height.toFloat()
+        x = screenWidth - 700f // 원하는 x 위치 (왼쪽)
+        y = 300f // 원하는 y 위치 (위쪽)
+        newWidth = gameState.itemRadius*2
+        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+
+        windowCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
+//        gameState.pointsList.add(PointF(x, y))
+        gameState.addItem(x, y, ItemType.CLEAN_WINDOW)
+
+        //책상 청소 좌표
+        aspectRatio = deskCleanBtnBitmap.width.toFloat() / deskCleanBtnBitmap.height.toFloat()
+        x = screenWidth - 350f // 원하는 x 위치 (왼쪽)
+        y = 500f // 원하는 y 위치 (위쪽)
+        newWidth = gameState.itemRadius*2
+        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+
+        deskCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
+//        gameState.pointsList.add(PointF(x, y))
+        gameState.addItem(x, y, ItemType.CLEAN_DESK)
+
+        //옷장 청소 좌표
+        aspectRatio = wardrobeCleanBtnBitmap.width.toFloat() / wardrobeCleanBtnBitmap.height.toFloat()
+        x = screenWidth - 350f // 원하는 x 위치 (왼쪽)
+        y = 900f // 원하는 y 위치 (위쪽)
+        newWidth = gameState.itemRadius*2
+        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+
+        wardrobeCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
+//        gameState.pointsList.add(PointF(x, y))
+        gameState.addItem(x, y, ItemType.CLEAN_WARDROBE)
+
+
+//        gameState.pointsList.add(PointF(x, y))
+//        floatArrayOf(screenWidth-200f, 200f)
+
+
 //        var pain = Color.argb(255, 173, 255, 47)
 //        var pain = Color.argb(0, 0, 0, 0)
 //        // 벽 생성
@@ -233,7 +303,7 @@ class GameThread(
                         drawGame(canvas!!)
                         drawWallItems(canvas!!)
                         drawFurnitureItems(canvas!!)
-                        drawItems(canvas!!)
+//                        drawItems(canvas!!)
                     }
                 }
             } catch (e: Exception) {
@@ -261,10 +331,10 @@ class GameThread(
 //            Log.d("canvas", "각도 2: ${accessItemMake} px")
 
             //한번 돌았을 때 아이템 갯수대로 아이템 만들기
-            if(accessItemMake){
-                gameState.fixSpawnItems(screenWidth, screenHeight)
-                accessItemMake = !accessItemMake
-            }
+//            if(accessItemMake){
+//                gameState.fixSpawnItems(screenWidth, screenHeight)
+//                accessItemMake = !accessItemMake
+//            }
 
             if(gameState.items.size == spawnIntervalUntil){
                 spawnIntervalSwitch = false
@@ -481,7 +551,7 @@ class GameThread(
             val isColliding = distanceSquared <= combinedRadiusSquared
 
             if (isColliding) {
-                Log.d("Joystick", "item get : ${item.x} , ${item.y}")
+                Log.d("Joystick", "item get in : ${item.x} , ${item.y}")
 //                Log.d("Joystick", "combinedRadius: ${combinedRadius}")
 
 
@@ -512,8 +582,11 @@ class GameThread(
 
 
                 //페이지 이동 해봐
-                gameView.checkGameOverCondition()
+                gameView.startWorkCleanBtn(item.type)
 
+            }else{
+//                Log.d("Joystick", "item get out : ${item.x} , ${item.y}")
+//                gameView.stopWorkCleanBtn(item.type)
             }
 
             // isColliding이 true이면 해당 아이템을 리스트에서 제거합니다.
@@ -522,8 +595,8 @@ class GameThread(
     }
 
     private fun checkWallItemCollisions(canvas: Canvas){
-        Log.d(TAG, "checkWallItem!")
-        Log.d(TAG, "checkWallItem!" + gameState.walls?.size)
+//        Log.d(TAG, "checkWallItem!")
+//        Log.d(TAG, "checkWallItem!" + gameState.walls?.size)
 
 
         characterRect = RectF(gameState.player.x, gameState.player.y, gameState.player.x + newWidthCharacter, gameState.player.y + newHeightCharacter)
@@ -618,41 +691,41 @@ class GameThread(
     /**
      * 아이템 종류에 따라 플레이어에게 효과를 적용합니다.
      */
-    private fun applyItemEffect(item: Item) {
-        when (item.type) {
-            ItemType.DEFAULT -> {
-                // Log.d(TAG, "일반 아이템 획득!")
-                gameState.player.health += 10 // 예: 점수 획득 또는 체력 약간 회복
-            }
-            ItemType.SPEED_BOOST -> {
-                // Log.d(TAG, "스피드 부스트 획득!")
-                // 예: 플레이어 이동 속도를 잠시 증가시키는 로직
-            }
-            ItemType.HEALTH_PACK -> {
-                // Log.d(TAG, "체력 팩 획득!")
-                gameState.player.health = minOf(100, gameState.player.health + 50)
-            }
-        }
-    }
+//    private fun applyItemEffect(item: Item) {
+//        when (item.type) {
+//            ItemType.DEFAULT -> {
+//                // Log.d(TAG, "일반 아이템 획득!")
+//                gameState.player.health += 10 // 예: 점수 획득 또는 체력 약간 회복
+//            }
+//            ItemType.SPEED_BOOST -> {
+//                // Log.d(TAG, "스피드 부스트 획득!")
+//                // 예: 플레이어 이동 속도를 잠시 증가시키는 로직
+//            }
+//            ItemType.HEALTH_PACK -> {
+//                // Log.d(TAG, "체력 팩 획득!")
+//                gameState.player.health = minOf(100, gameState.player.health + 50)
+//            }
+//        }
+//    }
 
     /**
      * 아이템 리스트를 순회하며 각 아이템을 Canvas에 그립니다.
      */
-    private fun drawItems(canvas: Canvas) {
-        if (gameView.gameStateDirection == GameState.GameStateFlow.COMMON) {
-            for (item in gameState.items) {
-                val paint = when (item.type) {
-                    ItemType.DEFAULT -> defaultItemPaint
-                    ItemType.SPEED_BOOST -> speedBoostItemPaint
-                    ItemType.HEALTH_PACK -> healthPackItemPaint
-                }
-
-                // 아이템을 원형으로 그립니다.
-//                canvas.drawBitmap(windowCleanerToolBitmap, item.x, item.y, null)
-
-            }
-        }
-    }
+//    private fun drawItems(canvas: Canvas) {
+//        if (gameView.gameStateDirection == GameState.GameStateFlow.COMMON) {
+//            for (item in gameState.items) {
+//                val paint = when (item.type) {
+//                    ItemType.DEFAULT -> defaultItemPaint
+//                    ItemType.SPEED_BOOST -> speedBoostItemPaint
+//                    ItemType.HEALTH_PACK -> healthPackItemPaint
+//                }
+//
+//                // 아이템을 원형으로 그립니다.
+////                canvas.drawBitmap(windowCleanerToolBitmap, item.x, item.y, null)
+//
+//            }
+//        }
+//    }
 
     private fun drawWallItems(canvas: Canvas) {
         if (gameView.gameStateDirection == GameState.GameStateFlow.COMMON) {
@@ -699,6 +772,12 @@ class GameThread(
         makeDesk()
 
         makeWardrobe()
+
+        //특정 가구 청소 버튼
+        canvas.drawBitmap(bedCleanBtnBitmap, null, bedCleanBtnRect, null)
+        canvas.drawBitmap(windowCleanBtnBitmap, null, windowCleanBtnRect, null)
+        canvas.drawBitmap(deskCleanBtnBitmap, null, deskCleanBtnRect, null)
+        canvas.drawBitmap(wardrobeCleanBtnBitmap, null, wardrobeCleanBtnRect, null)
     }
 
     fun makeBed(){

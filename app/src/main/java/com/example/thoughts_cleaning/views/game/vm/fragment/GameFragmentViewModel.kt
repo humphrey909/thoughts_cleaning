@@ -46,5 +46,5 @@ class GameFragmentViewModel: MasilViewModel() {
 
 
 
-    enum class GameFlow {COMMON, STAGE_1}
+
 }

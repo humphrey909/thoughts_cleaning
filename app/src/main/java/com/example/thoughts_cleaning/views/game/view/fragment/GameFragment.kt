@@ -1,7 +1,6 @@
 package com.example.thoughts_cleaning.views.game.view.fragment
 
-import android.content.Context
-import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -9,23 +8,25 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LiveData
-import androidx.navigation.fragment.findNavController
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.base.MasilFragment
+import com.example.thoughts_cleaning.base.MoveEvent
 import com.example.thoughts_cleaning.common.vm.viewModelFactory
 import com.example.thoughts_cleaning.databinding.FragmentGameBinding
-import com.example.thoughts_cleaning.databinding.FragmentRecordStateBinding
 import com.example.thoughts_cleaning.util.dialog.QuestionInputDialog
 import com.example.thoughts_cleaning.util.GameView
+import com.example.thoughts_cleaning.util.ItemType
 import com.example.thoughts_cleaning.util.JoystickState
+import com.example.thoughts_cleaning.views.game.GameEvent
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.game.vm.fragment.GameFragmentViewModel
-import com.example.thoughts_cleaning.views.record_problem.vm.fragment.RecordStageFragmentViewModel
+import com.example.thoughts_cleaning.views.start.LoginEvent
 import com.three.joystick.JoystickView
 
 class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R.layout.fragment_game), GameView.GameActionListener {
@@ -45,7 +46,7 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
 //    private var JOYSTICK_SIZE_PX = 300
 //
 //    private var prevAngle = 0
-    private lateinit var prevImageResource: LiveData<Int>
+//    private lateinit var prevImageResource: LiveData<Int>
 
     private lateinit var gameView: GameView
     private val joystickSimulator = JoystickState()
@@ -64,6 +65,8 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
 //    private lateinit var mContext: Context
 
 //    private var wasteCount = 0
+
+    private var uiLayer: ConstraintLayout? = null
 
     companion object {
         // 이 부분이 있어야 외부에서 BFragment.newInstance(...) 로 호출 가능합니다.
@@ -125,6 +128,41 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
         }
 
         gameView.setGameActionListener(this)
+
+
+
+        handleNavigationEvent()
+    }
+
+    private fun handleNavigationEvent() {
+
+        viewModel.moveEvent.observe(this.viewLifecycleOwner) {
+            if (it is MoveEvent.Game) {
+                when(it.moveType) {
+                    GameEvent.COMMON -> {
+
+                    }
+                    GameEvent.CLEAN_BED -> {
+                        createCleanBtn(GameEvent.CLEAN_BED)
+                    }
+                    GameEvent.CLEAN_WINDOW -> {
+                        createCleanBtn(GameEvent.CLEAN_WINDOW)
+                    }
+                    GameEvent.CLEAN_DESK -> {
+                        createCleanBtn(GameEvent.CLEAN_DESK)
+                    }
+                    GameEvent.CLEAN_WARDROBE -> {
+                        createCleanBtn(GameEvent.CLEAN_WARDROBE)
+                    }
+
+                    GameEvent.DISABLE_CLEAN_BTN -> {
+                        deleteCleanBtn()
+                    }
+                }
+            }
+        }
+
+
     }
 
     override fun onResume() {
@@ -260,29 +298,190 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
         (binding.root as? FrameLayout)?.addView(joystickView)
     }
 
-    override fun onGameOver() {
-        // 이 코드는 이제 메인 스레드에서 안전하게 실행됩니다.
-//        val nextFragment = GameOverFragment()
-//        parentFragmentManager.beginTransaction()
-//            .replace(R.id.fragment_container, nextFragment)
-//            .addToBackStack(null)
-//            .commit()
+    /**
+     * 추가 버튼 개발
+     */
+    private fun createCleanBtn(flow: GameEvent){
 
-//        action_window_clean_page
+        var imgLeft: ImageView? = null
+        var imgRight: ImageView? = null
+        when(flow){
+            GameEvent.COMMON -> TODO()
+            GameEvent.CLEAN_BED -> {
+                imgLeft = ImageView(mContext).apply {
+                    id = View.generateViewId() // ★ ID 생성 필수
+                    setImageResource(R.drawable.clean_bed1) // 이미지 리소스 (변경 필요)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
 
-//        val intent = Intent(requireActivity(), WindowFragment::class.java)
-////        intent.putExtra("waste_count", 5)
-//
-//        // 2. Activity 시작
-//        startActivity(intent)
-//        requireActivity().finish()
+                    // 클릭 이벤트 예시
+                    setOnClickListener { Log.d("Game", "왼쪽 이미지 클릭") }
+                }
 
-//        val action = WindowFragment.actionHomeFragmentToDetailFragment(itemIdToSend)
-//
-//        // 2. Action 객체로 이동
-//        findNavController().navigate(action)
-//        val navController = findNavController()
-        findNavController().navigate(R.id.WindowFragment)
+                imgRight = ImageView(mContext).apply {
+                    id = View.generateViewId() // ★ ID 생성 필수
+                    setImageResource(R.drawable.clean_bed2) // 이미지 리소스 (변경 필요)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+
+                    setOnClickListener { Log.d("Game", "오른쪽 이미지 클릭") }
+                }
+            }
+            GameEvent.CLEAN_WINDOW -> {
+                imgLeft = ImageView(mContext).apply {
+                    id = View.generateViewId() // ★ ID 생성 필수
+                    setImageResource(R.drawable.clean_window1) // 이미지 리소스 (변경 필요)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+
+                    // 클릭 이벤트 예시
+                    setOnClickListener { Log.d("Game", "왼쪽 이미지 클릭") }
+                }
+
+                imgRight = ImageView(mContext).apply {
+                    id = View.generateViewId() // ★ ID 생성 필수
+                    setImageResource(R.drawable.clean_window2) // 이미지 리소스 (변경 필요)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+
+                    setOnClickListener { Log.d("Game", "오른쪽 이미지 클릭") }
+                }
+            }
+            GameEvent.CLEAN_DESK -> {
+                imgLeft = ImageView(mContext).apply {
+                    id = View.generateViewId() // ★ ID 생성 필수
+                    setImageResource(R.drawable.clean_desk1) // 이미지 리소스 (변경 필요)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+
+                    // 클릭 이벤트 예시
+                    setOnClickListener { Log.d("Game", "왼쪽 이미지 클릭") }
+                }
+
+                imgRight = ImageView(mContext).apply {
+                    id = View.generateViewId() // ★ ID 생성 필수
+                    setImageResource(R.drawable.clean_desk2) // 이미지 리소스 (변경 필요)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+
+                    setOnClickListener { Log.d("Game", "오른쪽 이미지 클릭") }
+                }
+            }
+            GameEvent.CLEAN_WARDROBE -> {
+                imgLeft = ImageView(mContext).apply {
+                    id = View.generateViewId() // ★ ID 생성 필수
+                    setImageResource(R.drawable.clean_wardrobe1) // 이미지 리소스 (변경 필요)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+
+                    // 클릭 이벤트 예시
+                    setOnClickListener { Log.d("Game", "왼쪽 이미지 클릭") }
+                }
+
+                imgRight = ImageView(mContext).apply {
+                    id = View.generateViewId() // ★ ID 생성 필수
+                    setImageResource(R.drawable.clean_wardrobe2) // 이미지 리소스 (변경 필요)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+
+                    setOnClickListener { Log.d("Game", "오른쪽 이미지 클릭") }
+                }
+            }
+
+            GameEvent.DISABLE_CLEAN_BTN -> TODO()
+        }
+
+
+        uiLayer = ConstraintLayout(mContext).apply {
+            // 부모(FrameLayout)를 가득 채우도록 설정
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+            // 배경은 투명 (기본값이 투명이지만 명시적으로)
+            setBackgroundColor(Color.TRANSPARENT)
+        }
+
+
+
+        val paramsLeft = ConstraintLayout.LayoutParams(
+            200, // 너비
+            200  // 높이
+        ).apply {
+            // [세로 위치 - paramsMiddle의 로직 계승]
+            topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+            verticalBias = 0.8f // 70% 지점
+
+            // [가로 위치 - 체인 시작]
+            startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            endToStart = imgRight!!.id // ★오른쪽 이미지의 '왼쪽'과 연결
+
+            // [체인 스타일 & 간격]
+            horizontalChainStyle = ConstraintLayout.LayoutParams.CHAIN_PACKED // 중앙 밀집형
+            rightMargin = 10 // 두 이미지 사이 간격
+        }
+
+        val paramsRight = ConstraintLayout.LayoutParams(
+            200, // 너비
+            200  // 높이
+        ).apply {
+            // [세로 위치 - paramsLeft와 높이를 맞춤]
+            topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+            verticalBias = 0.8f // 동일하게 70%
+
+            // [가로 위치 - 체인 끝]
+            startToEnd = imgLeft!!.id // ★왼쪽 이미지의 '오른쪽'과 연결
+            endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+
+            leftMargin = 10 // 두 이미지 사이 간격
+        }
+
+        uiLayer?.addView(imgLeft, paramsLeft)
+        uiLayer?.addView(imgRight, paramsRight)
+
+        (binding.root as? FrameLayout)?.addView(uiLayer)
+
+    }
+
+    private fun deleteCleanBtn(){
+        (uiLayer?.parent as? ViewGroup)?.removeView(uiLayer)
+    }
+
+
+
+
+    override fun onSelectItem(type: ItemType) {
+        when (type) {
+            ItemType.DEFAULT -> TODO()
+            ItemType.CLEAN_BED -> {
+                viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.CLEAN_BED))
+            }
+            ItemType.CLEAN_WINDOW -> {
+                viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.CLEAN_WINDOW))
+            }
+            ItemType.CLEAN_DESK -> {
+                viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.CLEAN_DESK))
+            }
+            ItemType.CLEAN_WARDROBE -> {
+                viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.CLEAN_WARDROBE))
+            }
+        }
+//        findNavController().navigate(R.id.WindowFragment)
+
+    }
+
+    override fun onNotSelectItem(type: ItemType) {
+        viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.DISABLE_CLEAN_BTN))
+
+//        when (type) {
+//            ItemType.DEFAULT -> TODO()
+//            ItemType.CLEAN_BED -> {
+//                viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.CLEAN_BED))
+//            }
+//            ItemType.CLEAN_WINDOW -> {
+//                viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.CLEAN_WINDOW))
+//            }
+//            ItemType.CLEAN_DESK -> {
+//                viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.CLEAN_DESK))
+//            }
+//            ItemType.CLEAN_WARDROBE -> {
+//                viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.CLEAN_WARDROBE))
+//            }
+//        }
     }
 
     override fun onLevelCleared() {

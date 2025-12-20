@@ -1,6 +1,7 @@
 package com.example.thoughts_cleaning.util
 
 import android.graphics.Matrix
+import android.graphics.PointF
 import android.graphics.RectF
 import android.util.Log
 import com.example.thoughts_cleaning.api.model.GameWall
@@ -10,6 +11,7 @@ class GameState(width: Int, height: Int) {
     // 💡 여러 스레드에서 접근할 수 있으므로 CopyOnWriteArrayList를 사용하여 안전하게 관리합니다.
 //    val items = CopyOnWriteArrayList<Item>()
     val items = ArrayList<Item>()
+    val pointsList = ArrayList<PointF>()
 
     val walls: MutableList<GameWall>? = mutableListOf() //사물이 있는 공간
     val wallsNot: MutableList<GameWall>? = mutableListOf() //사물이 없는 공간
@@ -109,58 +111,82 @@ class GameState(width: Int, height: Int) {
         items.addAll(newItemsList)
     }
 
+    //추가될 아이템을 추가한다.
+    fun addItem(x:Float, y:Float, type:ItemType){
+        items.add(Item(
+            x = x,
+            y = y,
+            radius = itemRadius,
+            type = type
+        ))
+    }
+
+
     fun fixSpawnItems(screenWidth: Int, screenHeight: Int) {
 
 
         // a. 원본 좌표 배열 (float[2] = [X, Y])
-        val originalCoords = floatArrayOf(screenWidth-200f, 200f)
+//        val originalCoords = floatArrayOf(screenWidth-200f, 200f)
+
 
         // b. 변환된 최종 캔버스 좌표를 저장할 배열
-        val finalCoords = floatArrayOf(0f, 0f)
+//        val finalCoords = floatArrayOf(0f, 0f)
 
-        transformationMatrix.mapPoints(finalCoords, originalCoords)
+//        transformationMatrix.mapPoints(finalCoords, originalCoords)
 
-        val newItemsList = buildList {
-//            repeat(itemTotalCount) {
-//                Log.d("canvas", "itemCount: ${itemCount}") // 5
+        val newItemsList = ArrayList<Item>()
+        for(point in pointsList){
 
-//                var randomX = 0f
-//                var randomY = 0f
-//                var wall: GameWall
+            val type = ItemType.DEFAULT
+            newItemsList.add(Item(
+                x = point.x,
+                y = point.y,
+                radius = itemRadius,
+                type = type
+            ))
 
-//                if(walls!!.size > itemCount){
-//                    wall = walls.get(itemCount)
-//                }else{
-//                    wall = wallsNot!!.get(itemCount-walls.size)
-//                }
+//            newItemsList = buildList {
+//    //            repeat(itemTotalCount) {
+//    //                Log.d("canvas", "itemCount: ${itemCount}") // 5
 //
-//                //반지름을 적용하여 좌표를 재 조정한다.
-//                // 1. X축 허용 범위 계산: 벽의 좌우 경계를 반지름만큼 안쪽으로 축소
-//                val minSafeX = wall.left + itemRadius
-//                val maxSafeX = wall.right - itemRadius
+//    //                var randomX = 0f
+//    //                var randomY = 0f
+//    //                var wall: GameWall
 //
-//                // 2. Y축 허용 범위 계산: 벽의 상하 경계를 반지름만큼 안쪽으로 축소
-//                val minSafeY = wall.top + itemRadius
-//                val maxSafeY = wall.bottom - itemRadius
+//    //                if(walls!!.size > itemCount){
+//    //                    wall = walls.get(itemCount)
+//    //                }else{
+//    //                    wall = wallsNot!!.get(itemCount-walls.size)
+//    //                }
+//    //
+//    //                //반지름을 적용하여 좌표를 재 조정한다.
+//    //                // 1. X축 허용 범위 계산: 벽의 좌우 경계를 반지름만큼 안쪽으로 축소
+//    //                val minSafeX = wall.left + itemRadius
+//    //                val maxSafeX = wall.right - itemRadius
+//    //
+//    //                // 2. Y축 허용 범위 계산: 벽의 상하 경계를 반지름만큼 안쪽으로 축소
+//    //                val minSafeY = wall.top + itemRadius
+//    //                val maxSafeY = wall.bottom - itemRadius
+//    //
+//    //                // 3. X 좌표 랜덤 생성: minSafeX와 maxSafeX 사이에서 랜덤 선택
+//    //                // 공식: min + (range) * randomFloat
+//    //                val rangeX = maxSafeX - minSafeX
+//    //                randomX = minSafeX + rangeX * Random.nextFloat()
+//    //
+//    //                // 4. Y 좌표 랜덤 생성: minSafeY와 maxSafeY 사이에서 랜덤 선택
+//    //                val rangeY = maxSafeY - minSafeY
+//    //                randomY = minSafeY + rangeY * Random.nextFloat()
+//    //
+//                    val type = ItemType.DEFAULT
 //
-//                // 3. X 좌표 랜덤 생성: minSafeX와 maxSafeX 사이에서 랜덤 선택
-//                // 공식: min + (range) * randomFloat
-//                val rangeX = maxSafeX - minSafeX
-//                randomX = minSafeX + rangeX * Random.nextFloat()
-//
-//                // 4. Y 좌표 랜덤 생성: minSafeY와 maxSafeY 사이에서 랜덤 선택
-//                val rangeY = maxSafeY - minSafeY
-//                randomY = minSafeY + rangeY * Random.nextFloat()
-//
-                val type = ItemType.DEFAULT
-
-                // Item 객체를 생성하여 buildList의 내부 리스트에 추가합니다.
-                add(Item(
-                    x = finalCoords[0],
-                    y = finalCoords[1],
-                    radius = itemRadius,
-                    type = type
-                ))
+//                    // Item 객체를 생성하여 buildList의 내부 리스트에 추가합니다.
+//                    add(Item(
+//                        x = point.x,
+//                        y = point.y,
+//                        radius = itemRadius,
+//                        type = type
+//                    ))
+//            }
         }
 
         items.addAll(newItemsList)

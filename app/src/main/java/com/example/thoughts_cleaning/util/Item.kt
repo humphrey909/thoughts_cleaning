@@ -21,5 +21,5 @@ data class Item(
 
 // 아이템 종류를 정의하는 enum
 enum class ItemType {
-    DEFAULT, SPEED_BOOST, HEALTH_PACK
+    DEFAULT, CLEAN_BED, CLEAN_WINDOW, CLEAN_DESK, CLEAN_WARDROBE
 }

@@ -1,0 +1,189 @@
+kotlin version: 2.1.0
+error message: org.jetbrains.kotlin.backend.common.BackendException: Backend Internal error: Exception during IR lowering
+File being compiled: /Users/dnx/AndroidStudioProjects/thoughts_cleaning/app/src/main/java/com/example/thoughts_cleaning/views/game/view/fragment/GameFragment.kt
+The root cause java.lang.RuntimeException was thrown at: org.jetbrains.kotlin.backend.jvm.codegen.FunctionCodegen.generate(FunctionCodegen.kt:48)
+	at org.jetbrains.kotlin.backend.common.CodegenUtil.reportBackendException(CodegenUtil.kt:253)
+	at org.jetbrains.kotlin.backend.common.CodegenUtil.reportBackendException$default(CodegenUtil.kt:236)
+	at org.jetbrains.kotlin.backend.common.phaser.PerformByIrFilePhase.invokeSequential(performByIrFile.kt:55)
+	at org.jetbrains.kotlin.backend.common.phaser.PerformByIrFilePhase.invoke(performByIrFile.kt:42)
+	at org.jetbrains.kotlin.backend.common.phaser.PerformByIrFilePhase.invoke(performByIrFile.kt:28)
+	at org.jetbrains.kotlin.backend.common.phaser.NamedCompilerPhase.phaseBody(CompilerPhase.kt:166)
+	at org.jetbrains.kotlin.backend.common.phaser.AbstractNamedCompilerPhase.invoke(CompilerPhase.kt:113)
+	at org.jetbrains.kotlin.backend.common.phaser.CompositePhase.invoke(PhaseBuilders.kt:27)
+	at org.jetbrains.kotlin.backend.common.phaser.CompositePhase.invoke(PhaseBuilders.kt:14)
+	at org.jetbrains.kotlin.backend.common.phaser.NamedCompilerPhase.phaseBody(CompilerPhase.kt:166)
+	at org.jetbrains.kotlin.backend.common.phaser.AbstractNamedCompilerPhase.invoke(CompilerPhase.kt:113)
+	at org.jetbrains.kotlin.backend.common.phaser.CompilerPhaseKt.invokeToplevel(CompilerPhase.kt:62)
+	at org.jetbrains.kotlin.backend.jvm.JvmIrCodegenFactory.invokeCodegen(JvmIrCodegenFactory.kt:371)
+	at org.jetbrains.kotlin.codegen.CodegenFactory.generateModule(CodegenFactory.kt:47)
+	at org.jetbrains.kotlin.backend.jvm.JvmIrCodegenFactory.generateModuleInFrontendIRMode(JvmIrCodegenFactory.kt:433)
+	at org.jetbrains.kotlin.cli.jvm.compiler.pipeline.JvmCompilerPipelineKt.generateCodeFromIr(jvmCompilerPipeline.kt:192)
+	at org.jetbrains.kotlin.cli.jvm.compiler.pipeline.JvmCompilerPipelineKt.runBackend(jvmCompilerPipeline.kt:80)
+	at org.jetbrains.kotlin.cli.jvm.compiler.pipeline.JvmCompilerPipelineLightTreeKt.compileModule(jvmCompilerPipelineLightTree.kt:264)
+	at org.jetbrains.kotlin.cli.jvm.compiler.pipeline.JvmCompilerPipelineLightTreeKt.compileSingleModuleUsingFrontendIrAndLightTree(jvmCompilerPipelineLightTree.kt:231)
+	at org.jetbrains.kotlin.cli.jvm.compiler.pipeline.JvmCompilerPipelineLightTreeKt.compileModulesUsingFrontendIrAndLightTree(jvmCompilerPipelineLightTree.kt:86)
+	at org.jetbrains.kotlin.cli.jvm.K2JVMCompiler.doExecute(K2JVMCompiler.kt:146)
+	at org.jetbrains.kotlin.cli.jvm.K2JVMCompiler.doExecute(K2JVMCompiler.kt:43)
+	at org.jetbrains.kotlin.cli.common.CLICompiler.execImpl(CLICompiler.kt:102)
+	at org.jetbrains.kotlin.cli.common.CLICompiler.exec(CLICompiler.kt:316)
+	at org.jetbrains.kotlin.incremental.IncrementalJvmCompilerRunner.runCompiler(IncrementalJvmCompilerRunner.kt:464)
+	at org.jetbrains.kotlin.incremental.IncrementalJvmCompilerRunner.runCompiler(IncrementalJvmCompilerRunner.kt:73)
+	at org.jetbrains.kotlin.incremental.IncrementalCompilerRunner.doCompile(IncrementalCompilerRunner.kt:506)
+	at org.jetbrains.kotlin.incremental.IncrementalCompilerRunner.compileImpl(IncrementalCompilerRunner.kt:423)
+	at org.jetbrains.kotlin.incremental.IncrementalCompilerRunner.compileNonIncrementally(IncrementalCompilerRunner.kt:301)
+	at org.jetbrains.kotlin.incremental.IncrementalCompilerRunner.compile(IncrementalCompilerRunner.kt:129)
+	at org.jetbrains.kotlin.daemon.CompileServiceImplBase.execIncrementalCompiler(CompileServiceImpl.kt:674)
+	at org.jetbrains.kotlin.daemon.CompileServiceImplBase.access$execIncrementalCompiler(CompileServiceImpl.kt:91)
+	at org.jetbrains.kotlin.daemon.CompileServiceImpl.compile(CompileServiceImpl.kt:1659)
+	at jdk.internal.reflect.GeneratedMethodAccessor20.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/java.lang.reflect.Method.invoke(Unknown Source)
+	at java.rmi/sun.rmi.server.UnicastServerRef.dispatch(Unknown Source)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Unknown Source)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Unknown Source)
+	at java.base/java.security.AccessController.doPrivileged(Unknown Source)
+	at java.rmi/sun.rmi.transport.Transport.serviceCall(Unknown Source)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport.handleMessages(Unknown Source)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0(Unknown Source)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.lambda$run$0(Unknown Source)
+	at java.base/java.security.AccessController.doPrivileged(Unknown Source)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.RuntimeException: Exception while generating code for:
+FUN name:createCleanBtn visibility:private modality:FINAL <> ($this:com.example.thoughts_cleaning.views.game.view.fragment.GameFragment) returnType:kotlin.Unit
+  $this: VALUE_PARAMETER name:<this> type:com.example.thoughts_cleaning.views.game.view.fragment.GameFragment
+  BLOCK_BODY
+    VAR name:parentLayout type:androidx.constraintlayout.widget.ConstraintLayout? [val]
+      BLOCK type=androidx.constraintlayout.widget.ConstraintLayout? origin=SAFE_CALL
+        VAR IR_TEMPORARY_VARIABLE name:tmp0 type:kotlin.Any? [val]
+          CALL 'public open fun getRoot (): @[EnhancedNullability] android.view.View [fake_override] declared in com.example.thoughts_cleaning.databinding.FragmentGameBinding' type=@[EnhancedNullability] android.view.View origin=GET_PROPERTY
+            $this: CALL 'public open fun <get-binding> (): com.example.thoughts_cleaning.databinding.FragmentGameBinding [fake_override] declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment' type=com.example.thoughts_cleaning.databinding.FragmentGameBinding origin=GET_PROPERTY
+              $this: GET_VAR '<this>: com.example.thoughts_cleaning.views.game.view.fragment.GameFragment declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn' type=com.example.thoughts_cleaning.views.game.view.fragment.GameFragment origin=null
+        WHEN type=androidx.constraintlayout.widget.ConstraintLayout? origin=null
+          BRANCH
+            if: TYPE_OP type=kotlin.Boolean origin=INSTANCEOF typeOperand=androidx.constraintlayout.widget.ConstraintLayout
+              GET_VAR 'val tmp0: kotlin.Any? [val] declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn' type=kotlin.Any? origin=null
+            then: GET_VAR 'val tmp0: kotlin.Any? [val] declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn' type=kotlin.Any? origin=null
+          BRANCH
+            if: CONST Boolean type=kotlin.Boolean value=true
+            then: CONST Null type=androidx.constraintlayout.widget.ConstraintLayout? value=null
+    VAR name:attackButton type:android.widget.Button [val]
+      BLOCK type=android.widget.Button origin=null
+        VAR IR_TEMPORARY_VARIABLE name:tmp2 type:kotlin.Any? [val]
+          CALL 'public open fun inflate (p0: kotlin.Int, p1: @[EnhancedNullability] android.view.ViewGroup?, p2: kotlin.Boolean): @[FlexibleNullability] android.view.View? declared in android.view.LayoutInflater' type=@[FlexibleNullability] android.view.View? origin=null
+            $this: CALL 'public open fun from (p0: @[FlexibleNullability] android.content.Context?): @[FlexibleNullability] android.view.LayoutInflater? declared in android.view.LayoutInflater' type=@[FlexibleNullability] android.view.LayoutInflater? origin=null
+              p0: CALL 'public final fun <get-mContext> (): android.content.Context [fake_override] declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment' type=android.content.Context origin=GET_PROPERTY
+                $this: GET_VAR '<this>: com.example.thoughts_cleaning.views.game.view.fragment.GameFragment declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn' type=com.example.thoughts_cleaning.views.game.view.fragment.GameFragment origin=null
+            p0: GET_FIELD 'FIELD IR_EXTERNAL_JAVA_DECLARATION_STUB name:view_clean_start_btn type:kotlin.Int visibility:public [static] declared in com.example.thoughts_cleaning.R.layout' type=kotlin.Int superQualifierSymbol=com.example.thoughts_cleaning.R.layout origin=null
+            p1: BLOCK type=android.view.ViewGroup origin=null
+              VAR IR_TEMPORARY_VARIABLE name:tmp1 type:kotlin.Any? [val]
+                CALL 'public open fun getRoot (): @[EnhancedNullability] android.view.View [fake_override] declared in com.example.thoughts_cleaning.databinding.FragmentGameBinding' type=@[EnhancedNullability] android.view.View origin=GET_PROPERTY
+                  $this: CALL 'public open fun <get-binding> (): com.example.thoughts_cleaning.databinding.FragmentGameBinding [fake_override] declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment' type=com.example.thoughts_cleaning.databinding.FragmentGameBinding origin=GET_PROPERTY
+                    $this: GET_VAR '<this>: com.example.thoughts_cleaning.views.game.view.fragment.GameFragment declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn' type=com.example.thoughts_cleaning.views.game.view.fragment.GameFragment origin=null
+              CALL 'public final fun checkNotNull (object: kotlin.Any?, message: kotlin.String): kotlin.Unit declared in kotlin.jvm.internal.Intrinsics' type=kotlin.Unit origin=null
+                object: GET_VAR 'val tmp1: kotlin.Any? [val] declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn' type=kotlin.Any? origin=null
+                message: CONST String type=kotlin.String value="null cannot be cast to non-null type android.view.ViewGroup"
+              TYPE_OP type=android.view.ViewGroup? origin=CAST typeOperand=android.view.ViewGroup?
+                GET_VAR 'val tmp1: kotlin.Any? [val] declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn' type=kotlin.Any? origin=null
+            p2: CONST Boolean type=kotlin.Boolean value=false
+        CALL 'public final fun checkNotNull (object: kotlin.Any?, message: kotlin.String): kotlin.Unit declared in kotlin.jvm.internal.Intrinsics' type=kotlin.Unit origin=null
+          object: GET_VAR 'val tmp2: kotlin.Any? [val] declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn' type=kotlin.Any? origin=null
+          message: CONST String type=kotlin.String value="null cannot be cast to non-null type android.widget.Button"
+        TYPE_OP type=android.widget.Button? origin=CAST typeOperand=android.widget.Button?
+          GET_VAR 'val tmp2: kotlin.Any? [val] declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn' type=kotlin.Any? origin=null
+    VAR name:btnParams type:androidx.constraintlayout.widget.ConstraintLayout.LayoutParams [val]
+      CALL 'public final fun apply <T> (block: @[ExtensionFunctionType] kotlin.Function1<T of kotlin.StandardKt.apply, kotlin.Unit>): T of kotlin.StandardKt.apply [inline] declared in kotlin.StandardKt' type=androidx.constraintlayout.widget.ConstraintLayout.LayoutParams origin=null
+        <T>: androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+        $receiver: CONSTRUCTOR_CALL 'public constructor <init> (width: kotlin.Int, height: kotlin.Int) declared in androidx.constraintlayout.widget.ConstraintLayout.LayoutParams' type=androidx.constraintlayout.widget.ConstraintLayout.LayoutParams origin=null
+          width: CONST Int type=kotlin.Int value=100
+          height: CONST Int type=kotlin.Int value=100
+        block: BLOCK type=@[ExtensionFunctionType] kotlin.Function1<androidx.constraintlayout.widget.ConstraintLayout.LayoutParams, kotlin.Unit> origin=LAMBDA
+          COMPOSITE type=kotlin.Unit origin=null
+          FUNCTION_REFERENCE 'private final fun createCleanBtn$lambda$4 (): kotlin.Unit declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment' type=@[ExtensionFunctionType] kotlin.Function1<androidx.constraintlayout.widget.ConstraintLayout.LayoutParams, kotlin.Unit> origin=INLINE_LAMBDA reflectionTarget=null
+    COMPOSITE type=kotlin.Unit origin=null
+      BLOCK type=kotlin.Unit? origin=FOLDED_SAFE_CALL
+        WHEN type=kotlin.Unit? origin=FOLDED_SAFE_CALL
+          BRANCH
+            if: COMPOSITE type=kotlin.Boolean origin=null
+              CALL 'public final fun not (): kotlin.Boolean [operator] declared in kotlin.Boolean' type=kotlin.Boolean origin=null
+                $this: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=null
+                  arg0: GET_VAR 'val parentLayout: androidx.constraintlayout.widget.ConstraintLayout? [val] declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn' type=androidx.constraintlayout.widget.ConstraintLayout? origin=null
+                  arg1: CONST Null type=kotlin.Nothing? value=null
+            then: CALL 'public open fun addView (p0: @[FlexibleNullability] android.view.View?, p1: @[FlexibleNullability] android.view.ViewGroup.LayoutParams?): kotlin.Unit [fake_override] declared in androidx.constraintlayout.widget.ConstraintLayout' type=kotlin.Unit origin=null
+              $this: GET_VAR 'val parentLayout: androidx.constraintlayout.widget.ConstraintLayout? [val] declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn' type=androidx.constraintlayout.widget.ConstraintLayout? origin=null
+              p0: GET_VAR 'val attackButton: android.widget.Button [val] declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn' type=android.widget.Button origin=null
+              p1: GET_VAR 'val btnParams: androidx.constraintlayout.widget.ConstraintLayout.LayoutParams [val] declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn' type=androidx.constraintlayout.widget.ConstraintLayout.LayoutParams origin=null
+          BRANCH
+            if: CONST Boolean type=kotlin.Boolean value=true
+            then: CONST Null type=kotlin.Nothing? value=null
+
+	at org.jetbrains.kotlin.backend.jvm.codegen.FunctionCodegen.generate(FunctionCodegen.kt:48)
+	at org.jetbrains.kotlin.backend.jvm.codegen.FunctionCodegen.generate$default(FunctionCodegen.kt:41)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ClassCodegen.generateMethodNode(ClassCodegen.kt:407)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ClassCodegen.generateMethod(ClassCodegen.kt:424)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ClassCodegen.generate(ClassCodegen.kt:169)
+	at org.jetbrains.kotlin.backend.jvm.FileCodegen.lower(JvmPhases.kt:39)
+	at org.jetbrains.kotlin.backend.common.phaser.PhaseFactoriesKt.createFilePhase$lambda$4(PhaseFactories.kt:71)
+	at org.jetbrains.kotlin.backend.common.phaser.PhaseBuildersKt$createSimpleNamedCompilerPhase$1.phaseBody(PhaseBuilders.kt:69)
+	at org.jetbrains.kotlin.backend.common.phaser.SimpleNamedCompilerPhase.phaseBody(CompilerPhase.kt:226)
+	at org.jetbrains.kotlin.backend.common.phaser.AbstractNamedCompilerPhase.invoke(CompilerPhase.kt:113)
+	at org.jetbrains.kotlin.backend.common.phaser.PerformByIrFilePhase.invokeSequential(performByIrFile.kt:52)
+	... 46 more
+Caused by: java.lang.RuntimeException: Exception while generating code for:
+FUN INLINE_LAMBDA name:createCleanBtn$lambda$4 visibility:private modality:FINAL <> ($receiver:androidx.constraintlayout.widget.ConstraintLayout.LayoutParams) returnType:kotlin.Unit
+  $receiver: VALUE_PARAMETER name:$this$apply type:androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+  BLOCK_BODY
+    VAR name:$i$a$-apply-GameFragment$createCleanBtn$btnParams$1 type:kotlin.Int [val]
+      CONST Int type=kotlin.Int value=0
+    SET_FIELD 'FIELD IR_EXTERNAL_JAVA_DECLARATION_STUB name:gravity type:kotlin.Int visibility:public [final,static] declared in android.R.attr' type=kotlin.Unit superQualifierSymbol=android.R.attr origin=EQ
+      value: CONST Int type=kotlin.Int value=81
+    SET_FIELD 'FIELD IR_EXTERNAL_JAVA_DECLARATION_STUB name:startToStart type:kotlin.Int visibility:public declared in androidx.constraintlayout.widget.ConstraintLayout.LayoutParams' type=kotlin.Unit superQualifierSymbol=androidx.constraintlayout.widget.ConstraintLayout.LayoutParams origin=EQ
+      receiver: GET_VAR '$this$apply: androidx.constraintlayout.widget.ConstraintLayout.LayoutParams declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn$lambda$4' type=androidx.constraintlayout.widget.ConstraintLayout.LayoutParams origin=null
+      value: CONST Int type=kotlin.Int value=0
+    SET_FIELD 'FIELD IR_EXTERNAL_JAVA_DECLARATION_STUB name:endToEnd type:kotlin.Int visibility:public declared in androidx.constraintlayout.widget.ConstraintLayout.LayoutParams' type=kotlin.Unit superQualifierSymbol=androidx.constraintlayout.widget.ConstraintLayout.LayoutParams origin=EQ
+      receiver: GET_VAR '$this$apply: androidx.constraintlayout.widget.ConstraintLayout.LayoutParams declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn$lambda$4' type=androidx.constraintlayout.widget.ConstraintLayout.LayoutParams origin=null
+      value: CONST Int type=kotlin.Int value=0
+    SET_FIELD 'FIELD IR_EXTERNAL_JAVA_DECLARATION_STUB name:bottomToBottom type:kotlin.Int visibility:public declared in androidx.constraintlayout.widget.ConstraintLayout.LayoutParams' type=kotlin.Unit superQualifierSymbol=androidx.constraintlayout.widget.ConstraintLayout.LayoutParams origin=EQ
+      receiver: GET_VAR '$this$apply: androidx.constraintlayout.widget.ConstraintLayout.LayoutParams declared in com.example.thoughts_cleaning.views.game.view.fragment.GameFragment.createCleanBtn$lambda$4' type=androidx.constraintlayout.widget.ConstraintLayout.LayoutParams origin=null
+      value: CONST Int type=kotlin.Int value=0
+
+	at org.jetbrains.kotlin.backend.jvm.codegen.FunctionCodegen.generate(FunctionCodegen.kt:48)
+	at org.jetbrains.kotlin.backend.jvm.codegen.IrSourceCompilerForInline.generateLambdaBody(IrSourceCompilerForInline.kt:67)
+	at org.jetbrains.kotlin.codegen.inline.ExpressionLambda.generateLambdaBody(LambdaInfo.kt:72)
+	at org.jetbrains.kotlin.backend.jvm.codegen.IrInlineCodegen.genValueAndPut(IrInlineCodegen.kt:100)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitCall$handleParameter(ExpressionCodegen.kt:561)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitCall(ExpressionCodegen.kt:589)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitCall(ExpressionCodegen.kt:134)
+	at org.jetbrains.kotlin.ir.expressions.IrCall.accept(IrCall.kt:24)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitVariable(ExpressionCodegen.kt:735)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitVariable(ExpressionCodegen.kt:134)
+	at org.jetbrains.kotlin.ir.declarations.IrVariable.accept(IrVariable.kt:36)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitStatementContainer(ExpressionCodegen.kt:524)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitBlockBody(ExpressionCodegen.kt:529)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitBlockBody(ExpressionCodegen.kt:134)
+	at org.jetbrains.kotlin.ir.expressions.IrBlockBody.accept(IrBlockBody.kt:20)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.generate(ExpressionCodegen.kt:236)
+	at org.jetbrains.kotlin.backend.jvm.codegen.FunctionCodegen.doGenerate(FunctionCodegen.kt:124)
+	at org.jetbrains.kotlin.backend.jvm.codegen.FunctionCodegen.generate(FunctionCodegen.kt:45)
+	... 56 more
+Caused by: java.lang.AssertionError: access of const val: SET_FIELD 'FIELD IR_EXTERNAL_JAVA_DECLARATION_STUB name:gravity type:kotlin.Int visibility:public [final,static] declared in android.R.attr' type=kotlin.Unit superQualifierSymbol=android.R.attr origin=EQ
+  value: CONST Int type=kotlin.Int value=81
+
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitFieldAccess(ExpressionCodegen.kt:813)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitFieldAccess(ExpressionCodegen.kt:134)
+	at org.jetbrains.kotlin.ir.visitors.IrElementVisitor$DefaultImpls.visitSetField(IrElementVisitor.kt:210)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitSetField(ExpressionCodegen.kt:860)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitSetField(ExpressionCodegen.kt:134)
+	at org.jetbrains.kotlin.ir.expressions.IrSetField.accept(IrSetField.kt:21)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitStatementContainer(ExpressionCodegen.kt:524)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitBlockBody(ExpressionCodegen.kt:529)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.visitBlockBody(ExpressionCodegen.kt:134)
+	at org.jetbrains.kotlin.ir.expressions.IrBlockBody.accept(IrBlockBody.kt:20)
+	at org.jetbrains.kotlin.backend.jvm.codegen.ExpressionCodegen.generate(ExpressionCodegen.kt:236)
+	at org.jetbrains.kotlin.backend.jvm.codegen.FunctionCodegen.doGenerate(FunctionCodegen.kt:124)
+	at org.jetbrains.kotlin.backend.jvm.codegen.FunctionCodegen.generate(FunctionCodegen.kt:45)
+	... 73 more
+
+
