@@ -20,7 +20,7 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
     // 1. 페이지 이동 요청을 위한 인터페이스 정의
     interface GameActionListener {
         fun onSelectItem(type: ItemType)
-        fun onNotSelectItem(type: ItemType)
+        fun onNotSelectItem()
         fun onLevelCleared()
     }
 
@@ -158,10 +158,10 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
     }
 
     // 청소 버튼 비활성화
-    fun stopWorkCleanBtn(type: ItemType) {
+    fun stopWorkCleanBtn() {
         // UI 작업을 위해 메인 스레드에서 실행하도록 요청
         handler.post {
-            listener?.onNotSelectItem(type)
+            listener?.onNotSelectItem()
         }
     }
 

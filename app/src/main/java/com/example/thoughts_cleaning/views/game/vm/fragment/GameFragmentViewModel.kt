@@ -44,7 +44,7 @@ class GameFragmentViewModel: MasilViewModel() {
     // 이미 사용된 질문을 저장하는 Set
     val askedQuestions = mutableSetOf<String>()
 
-
+    var countSelectItem = true
 
 
 }

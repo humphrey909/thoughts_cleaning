@@ -60,6 +60,7 @@ class GameThread(
     var newWidthCharacter = 0f
     var newHeightCharacter = 0f
 
+    val hitBoxScale = 0.6f
 
     //침대
     private val bedBitmap: Bitmap =
@@ -538,60 +539,95 @@ class GameThread(
     private fun checkItemCollisions() {
 
         val player = gameState.player // Player 객체에 직접 접근
-        gameState.items.removeIf { item ->
-            // 1. 충돌 감지 로직 (원형 충돌, 거리 제곱 사용으로 성능 최적화)
+        var collidedItemType: ItemType? = null // 또는 Item 객체 자체
+
+        for (item in gameState.items) {
             val dx = player.x - item.x
             val dy = player.y - item.y
             val distanceSquared = dx * dx + dy * dy
 
             // player와 item 클래스에 radius 속성(size / 2)이 추가되었다고 가정
-            val combinedRadius = player.radius + item.radius
+            val combinedRadius = (player.radius + item.radius)*hitBoxScale
             val combinedRadiusSquared = combinedRadius * combinedRadius
 
-            val isColliding = distanceSquared <= combinedRadiusSquared
-
-            if (isColliding) {
-                Log.d("Joystick", "item get in : ${item.x} , ${item.y}")
-//                Log.d("Joystick", "combinedRadius: ${combinedRadius}")
-
-
-                //가까운 벽 체크
-//                var minDistanceSq = Float.MAX_VALUE
-//                for (wall in gameState.walls!!) {
-//                    // 거리의 제곱 계산 (성능 최적화)
-//                    val dx = wall.right - item.x
-//                    val dy = wall.bottom - item.y
-//                    val distanceSq = dx * dx + dy * dy
-//
-//                    if (distanceSq < minDistanceSq) {
-//                        minDistanceSq = distanceSq
-//                        nearestWall = wall
-//                    }
-//                }
-//
-//                gameView.post {
-//                    gameView.startZoomInAnimation(
-//                        item.x,
-//                        item.y,
-//                        screenWidth,
-//                        screenHeight
-//                    )
-//                }
-
-//                gameView.gameStateDirection = GameState.GameStateFlow.ZOOMING
-
-
-                //페이지 이동 해봐
-                gameView.startWorkCleanBtn(item.type)
-
-            }else{
-//                Log.d("Joystick", "item get out : ${item.x} , ${item.y}")
-//                gameView.stopWorkCleanBtn(item.type)
+            if (distanceSquared <= combinedRadiusSquared) {
+                // 충돌 발견!
+                // 1. 누군지 기록해둠
+                collidedItemType = item.type
+                // 2. 하나라도 찾았으면 더 이상 검사할 필요 없음 (성능 최적화)
+                break
             }
-
-            // isColliding이 true이면 해당 아이템을 리스트에서 제거합니다.
-            isColliding
         }
+
+// 3. 반복문이 끝난 후, 기록된 결과에 따라 딱 한 번만 행동합니다.
+        if (collidedItemType != null) {
+            // 부딪힌 녀석이 있음 -> 버튼 켜기
+            Log.d("Joystick", "Item Detected! in Type: $collidedItemType")
+            gameView.startWorkCleanBtn(collidedItemType)
+        } else {
+            Log.d("Joystick", "Item Detected! out Type: $collidedItemType")
+
+            // 아무하고도 안 부딪힘 -> 버튼 끄기
+            // (기존에 켜져 있었다면 꺼짐)
+            gameView.stopWorkCleanBtn()
+        }
+
+
+
+//        gameState.items.removeIf { item ->
+//            // 1. 충돌 감지 로직 (원형 충돌, 거리 제곱 사용으로 성능 최적화)
+//            val dx = player.x - item.x
+//            val dy = player.y - item.y
+//            val distanceSquared = dx * dx + dy * dy
+//
+//            // player와 item 클래스에 radius 속성(size / 2)이 추가되었다고 가정
+//            val combinedRadius = player.radius + item.radius
+//            val combinedRadiusSquared = combinedRadius * combinedRadius
+//
+//            val isColliding = distanceSquared <= combinedRadiusSquared
+//
+//            if (isColliding) {
+//                Log.d("Joystick", "item get in : ${item.x} , ${item.y}")
+////                Log.d("Joystick", "combinedRadius: ${combinedRadius}")
+//
+//
+//                //가까운 벽 체크
+////                var minDistanceSq = Float.MAX_VALUE
+////                for (wall in gameState.walls!!) {
+////                    // 거리의 제곱 계산 (성능 최적화)
+////                    val dx = wall.right - item.x
+////                    val dy = wall.bottom - item.y
+////                    val distanceSq = dx * dx + dy * dy
+////
+////                    if (distanceSq < minDistanceSq) {
+////                        minDistanceSq = distanceSq
+////                        nearestWall = wall
+////                    }
+////                }
+////
+////                gameView.post {
+////                    gameView.startZoomInAnimation(
+////                        item.x,
+////                        item.y,
+////                        screenWidth,
+////                        screenHeight
+////                    )
+////                }
+//
+////                gameView.gameStateDirection = GameState.GameStateFlow.ZOOMING
+//
+//
+//                //페이지 이동 해봐
+//                gameView.startWorkCleanBtn(item.type)
+//
+//            }else{
+////                Log.d("Joystick", "item get out : ${item.x} , ${item.y}")
+////                gameView.stopWorkCleanBtn(item.type)
+//            }
+//
+//            // isColliding이 true이면 해당 아이템을 리스트에서 제거합니다.
+//            isColliding
+//        }
     }
 
     private fun checkWallItemCollisions(canvas: Canvas){
