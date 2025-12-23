@@ -8,7 +8,7 @@ import com.example.thoughts_cleaning.common.vm.MasilViewModel
 
 class GameFragmentViewModel: MasilViewModel() {
 
-    val wasteCount = 5
+//    val wasteCount = 5
 
     val _dustFairyMessageText: MutableLiveData<String> = MutableLiveData("")
     val dustFairyMessageText: LiveData<String> = _dustFairyMessageText

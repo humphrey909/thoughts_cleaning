@@ -2,7 +2,6 @@ package com.example.thoughts_cleaning.util
 
 import android.animation.Animator
 import android.animation.ValueAnimator
-import android.app.Activity
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -10,12 +9,11 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
-import com.example.thoughts_cleaning.views.main.view.activity.container.MainActivity
 import com.example.thoughts_cleaning.views.game.view.fragment.GameFragment
-import com.example.thoughts_cleaning.views.main.view.fragment.MainFragment
 import android.animation.AnimatorListenerAdapter
+import com.example.thoughts_cleaning.R
 
-class GameView(context: Context, val activity: GameActivity, var fragment: GameFragment, private val joystickState: JoystickState, private val wasteCount:Int) : SurfaceView(context), SurfaceHolder.Callback {
+class GameView(context: Context, val activity: GameActivity, var fragment: GameFragment, private val joystickState: JoystickState) : SurfaceView(context), SurfaceHolder.Callback {
 
     // 1. 페이지 이동 요청을 위한 인터페이스 정의
     interface GameActionListener {
@@ -25,6 +23,10 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
     }
 
     private var listener: GameActionListener? = null
+    var onFirstFrameDrawn: (() -> Unit)? = null
+
+    @Volatile
+    var isFrameAlreadyDrawn = false
 
     private lateinit var gameThread: GameThread
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -44,16 +46,23 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
 
     var gameStateDirection: GameState.GameStateFlow = GameState.GameStateFlow.COMMON // RUNNING, ZOOMING, CLEANING_MODE
 
-
     init {
         holder.addCallback(this)
         // 화면이 포커스를 받을 수 있도록 설정
         isFocusable = true
     }
 
+    fun setOnFirstFrameDrawnListener(listener: () -> Unit) {
+        this.onFirstFrameDrawn = listener
+
+        if (isFrameAlreadyDrawn) {
+            listener()
+        }
+    }
+
     override fun surfaceCreated(holder: SurfaceHolder) {
         // Surface가 생성되면 스레드를 시작합니다.
-        gameThread = GameThread(holder, context, activity, fragment, joystickState, wasteCount, this)
+        gameThread = GameThread(holder, context, activity, fragment, joystickState, this)
         gameThread.start()
     }
 
@@ -162,6 +171,40 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
         // UI 작업을 위해 메인 스레드에서 실행하도록 요청
         handler.post {
             listener?.onNotSelectItem()
+        }
+    }
+
+    fun changeCleanFurniture(furniture: String, type: Int) {
+        when(furniture){
+            "CLEAN_BED" -> {
+                if(type == 1){ // 첫번째 버튼
+                    //침대 이미지 변경
+                    gameThread.fixBedLocation(R.drawable.room_structure_bed_dirty_stage1)
+                }else{ // 두번째 버튼
+                    gameThread.fixBedLocation(R.drawable.room_structure_bed_clean)
+                }
+            }
+            "CLEAN_DESK" -> {
+                if(type == 1){ // 첫번째 버튼
+                    gameThread.fixDeskLocation(R.drawable.room_structure_desk_dirty_stage1)
+                }else{ // 두번째 버튼
+                    gameThread.fixDeskLocation(R.drawable.room_structure_desk_clean)
+                }
+            }
+            "CLEAN_WARDROBE" -> {
+                if(type == 1){ // 첫번째 버튼
+                    gameThread.fixWardrobeLocation(R.drawable.room_structure_wardrobe_dirty_stage1)
+                }else{ // 두번째 버튼
+                    gameThread.fixWardrobeLocation(R.drawable.room_structure_wardrobe_clean)
+                }
+            }
+            "CLEAN_WINDOW" -> {
+                if(type == 1){ // 첫번째 버튼
+                    gameThread.fixSmallWindowLocation(R.drawable.room_structure_small_window_dirty_stage1)
+                }else{ // 두번째 버튼
+                    gameThread.fixSmallWindowLocation(R.drawable.room_structure_small_window_clean)
+                }
+            }
         }
     }
 

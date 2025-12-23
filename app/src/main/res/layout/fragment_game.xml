@@ -26,8 +26,27 @@
 <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="match_parent"-->
-<!--            android:background="@drawable/room_background"-->
+<!--            android:background="@drawable/room_background3"-->
 <!--            >-->
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--        <FrameLayout-->
+<!--                android:id="@+id/placeholderView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="#FFFFFF"-->
+<!--                android:visibility="visible">-->
+
+<!--            <ProgressBar-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"/>-->
+<!--        </FrameLayout>-->
+
+
+
+
 
 
 <!--            <androidx.constraintlayout.widget.Guideline-->

@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import android.util.Log
@@ -16,8 +15,6 @@ import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.api.model.GameWall
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.game.view.fragment.GameFragment
-import androidx.core.graphics.withSave
-import com.example.thoughts_cleaning.MainApplication.Companion.TAG
 
 
 class GameThread(
@@ -26,7 +23,6 @@ class GameThread(
     val activity: GameActivity,
     val fragment: GameFragment,
     private val joystickState: JoystickState,
-    private val wasteCount : Int,
     val gameView: GameView
 ) : Thread() {
 
@@ -62,24 +58,55 @@ class GameThread(
 
     val hitBoxScale = 0.6f
 
+
+    // 가구 좌표 비율 변수
+    var aspectRatio: Float = 0f
+    var x: Float = 0f
+    var y: Float = 0f
+    var newWidth: Float = 0f
+    var newHeight: Float = 0f
+//    val pain = Color.argb(255, 173, 255, 47)
+    var pain = Color.argb(0, 0, 0, 0)
+
+    //캐릭터 총 이미지를 총괄한다.
+    // 2차원 배열: [8방향][4프레임]
+    val characterSprites = Array(8) { arrayOfNulls<Bitmap>(4) }
+
+    fun loadImages() {
+        // 예시: 리소스 이름 규칙이 char_dir0_frame0.png, char_dir0_frame1.png ... 라고 가정
+        for (dir in 0 until 8) {
+            for (frame in 0 until 4) {
+                // 리소스 로딩 로직 (BitmapFactory 등 사용)
+//                characterSprites[dir][frame] = loadBitmapFromResource(dir, frame)
+            }
+        }
+    }
+
     //침대
-    private val bedBitmap: Bitmap =
-        BitmapFactory.decodeResource(context.resources, R.drawable.room_structure_bed3)
+    private var bedBitmap: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.room_structure_bed_dirty_stage2)
+
     private lateinit var bedRect:RectF
 
     //창문
-    private val smallWindowBitmap: Bitmap =
-        BitmapFactory.decodeResource(context.resources, R.drawable.room_structure_small_window2)
+    private var smallWindowBitmap: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.room_structure_small_window_dirty_stage2)
+//    private var smallWindowBitmap: Bitmap? = null
+
     private lateinit var smallWindowRect:RectF
 
     //책상
-    private val deskBitmap: Bitmap =
-        BitmapFactory.decodeResource(context.resources, R.drawable.room_structure_desk2)
+    private var deskBitmap: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.room_structure_desk_dirty_stage2)
+//    private lateinit var deskBitmap: Bitmap
+
     private lateinit var deskRect:RectF
 
     //옷장
-    private val wardrobeBitmap: Bitmap =
-        BitmapFactory.decodeResource(context.resources, R.drawable.room_structure_wardrobe2)
+    private var wardrobeBitmap: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.room_structure_wardrobe_dirty_stage2)
+//    private lateinit var wardrobeBitmap: Bitmap
+
     private lateinit var wardrobeRect:RectF
 
     private val bedCleanBtnBitmap: Bitmap =
@@ -167,91 +194,94 @@ class GameThread(
         characterRect = RectF(gameState.player.x, gameState.player.y, gameState.player.x + newWidthCharacter, gameState.player.y + newHeightCharacter)
 
 
+        fixBedLocation(R.drawable.room_structure_bed_dirty_stage2)
+        fixDeskLocation(R.drawable.room_structure_desk_dirty_stage2)
+        fixSmallWindowLocation(R.drawable.room_structure_small_window_dirty_stage2)
+        fixWardrobeLocation(R.drawable.room_structure_wardrobe_dirty_stage2)
 
-
-        //침대 위치
-        var aspectRatio = bedBitmap.width.toFloat() / bedBitmap.height.toFloat()
-        var x = screenWidth - 900f
-        var y = 900f
-        var newWidth = 500f
-        var newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
-        val pain = Color.argb(255, 173, 255, 47)
-//        var pain = Color.argb(0, 0, 0, 0)
-        gameState.walls?.add(GameWall(x, y, x + newWidth, y + newHeight, pain))
-        bedRect = RectF(x, y, x + newWidth, y + newHeight)
-
-        //창문
-        aspectRatio = smallWindowBitmap.width.toFloat() / smallWindowBitmap.height.toFloat()
-        x = screenWidth - 800f
-        y = 150f
-        newWidth = 300f
-        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
-        gameState.walls?.add(GameWall(x, y, x + newWidth, y + newHeight, pain))
-        smallWindowRect = RectF(x, y, x + newWidth, y + newHeight)
-
-        //책상
-        aspectRatio = deskBitmap.width.toFloat() / deskBitmap.height.toFloat()
-        x = screenWidth - 270f
-        y = 300f
-        newWidth = 250f
-        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
-        gameState.walls?.add(GameWall(x, y, x + newWidth, y + newHeight, pain))
-        deskRect = RectF(x, y, x + newWidth, y + newHeight)
-
-        //옷장
-        aspectRatio = wardrobeBitmap.width.toFloat() / wardrobeBitmap.height.toFloat()
-        x = screenWidth - 230f
-        y = 520f
-        newWidth = 280f
-        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
-        gameState.walls?.add(GameWall(x, y, x + newWidth, y + newHeight, pain))
-        wardrobeRect = RectF(x, y, x + newWidth, y + newHeight)
-
-
-
-        //침대 청소 좌표
-        aspectRatio = bedCleanBtnBitmap.width.toFloat() / bedCleanBtnBitmap.height.toFloat()
-        x = screenWidth - 700f // 원하는 x 위치 (왼쪽)
-        y = 1500f // 원하는 y 위치 (위쪽)
-        newWidth = gameState.itemRadius*2
-        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
-
-        bedCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
-//        gameState.pointsList.add(PointF(x, y))
-        gameState.addItem(x, y, ItemType.CLEAN_BED)
-
-        //창문 청소 좌표
-        aspectRatio = windowCleanBtnBitmap.width.toFloat() / windowCleanBtnBitmap.height.toFloat()
-        x = screenWidth - 700f // 원하는 x 위치 (왼쪽)
-        y = 300f // 원하는 y 위치 (위쪽)
-        newWidth = gameState.itemRadius*2
-        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
-
-        windowCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
-//        gameState.pointsList.add(PointF(x, y))
-        gameState.addItem(x, y, ItemType.CLEAN_WINDOW)
-
-        //책상 청소 좌표
-        aspectRatio = deskCleanBtnBitmap.width.toFloat() / deskCleanBtnBitmap.height.toFloat()
-        x = screenWidth - 350f // 원하는 x 위치 (왼쪽)
-        y = 500f // 원하는 y 위치 (위쪽)
-        newWidth = gameState.itemRadius*2
-        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
-
-        deskCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
-//        gameState.pointsList.add(PointF(x, y))
-        gameState.addItem(x, y, ItemType.CLEAN_DESK)
-
-        //옷장 청소 좌표
-        aspectRatio = wardrobeCleanBtnBitmap.width.toFloat() / wardrobeCleanBtnBitmap.height.toFloat()
-        x = screenWidth - 350f // 원하는 x 위치 (왼쪽)
-        y = 900f // 원하는 y 위치 (위쪽)
-        newWidth = gameState.itemRadius*2
-        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
-
-        wardrobeCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
-//        gameState.pointsList.add(PointF(x, y))
-        gameState.addItem(x, y, ItemType.CLEAN_WARDROBE)
+//        //침대 위치
+//        var aspectRatio = bedBitmap.width.toFloat() / bedBitmap.height.toFloat()
+//        var x = screenWidth - 900f
+//        var y = 900f
+//        var newWidth = 500f
+//        var newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+//        val pain = Color.argb(255, 173, 255, 47)
+////        var pain = Color.argb(0, 0, 0, 0)
+//        gameState.walls?.add(GameWall(x, y, x + newWidth, y + newHeight, pain))
+//        bedRect = RectF(x, y, x + newWidth, y + newHeight)
+//
+//        //창문
+//        aspectRatio = smallWindowBitmap.width.toFloat() / smallWindowBitmap.height.toFloat()
+//        x = screenWidth - 800f
+//        y = 150f
+//        newWidth = 300f
+//        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+//        gameState.walls?.add(GameWall(x, y, x + newWidth, y + newHeight, pain))
+//        smallWindowRect = RectF(x, y, x + newWidth, y + newHeight)
+//
+//        //책상
+//        aspectRatio = deskBitmap.width.toFloat() / deskBitmap.height.toFloat()
+//        x = screenWidth - 270f
+//        y = 300f
+//        newWidth = 250f
+//        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+//        gameState.walls?.add(GameWall(x, y, x + newWidth, y + newHeight, pain))
+//        deskRect = RectF(x, y, x + newWidth, y + newHeight)
+//
+//        //옷장
+//        aspectRatio = wardrobeBitmap.width.toFloat() / wardrobeBitmap.height.toFloat()
+//        x = screenWidth - 230f
+//        y = 520f
+//        newWidth = 280f
+//        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+//        gameState.walls?.add(GameWall(x, y, x + newWidth, y + newHeight, pain))
+//        wardrobeRect = RectF(x, y, x + newWidth, y + newHeight)
+//
+//
+//
+//        //침대 청소 좌표
+//        aspectRatio = bedCleanBtnBitmap.width.toFloat() / bedCleanBtnBitmap.height.toFloat()
+//        x = screenWidth - 700f // 원하는 x 위치 (왼쪽)
+//        y = 1500f // 원하는 y 위치 (위쪽)
+//        newWidth = gameState.itemRadius*2
+//        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+//
+//        bedCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
+////        gameState.pointsList.add(PointF(x, y))
+//        gameState.addItem(x, y, ItemType.CLEAN_BED)
+//
+//        //창문 청소 좌표
+//        aspectRatio = windowCleanBtnBitmap.width.toFloat() / windowCleanBtnBitmap.height.toFloat()
+//        x = screenWidth - 700f // 원하는 x 위치 (왼쪽)
+//        y = 300f // 원하는 y 위치 (위쪽)
+//        newWidth = gameState.itemRadius*2
+//        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+//
+//        windowCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
+////        gameState.pointsList.add(PointF(x, y))
+//        gameState.addItem(x, y, ItemType.CLEAN_WINDOW)
+//
+//        //책상 청소 좌표
+//        aspectRatio = deskCleanBtnBitmap.width.toFloat() / deskCleanBtnBitmap.height.toFloat()
+//        x = screenWidth - 350f // 원하는 x 위치 (왼쪽)
+//        y = 500f // 원하는 y 위치 (위쪽)
+//        newWidth = gameState.itemRadius*2
+//        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+//
+//        deskCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
+////        gameState.pointsList.add(PointF(x, y))
+//        gameState.addItem(x, y, ItemType.CLEAN_DESK)
+//
+//        //옷장 청소 좌표
+//        aspectRatio = wardrobeCleanBtnBitmap.width.toFloat() / wardrobeCleanBtnBitmap.height.toFloat()
+//        x = screenWidth - 350f // 원하는 x 위치 (왼쪽)
+//        y = 900f // 원하는 y 위치 (위쪽)
+//        newWidth = gameState.itemRadius*2
+//        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+//
+//        wardrobeCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
+////        gameState.pointsList.add(PointF(x, y))
+//        gameState.addItem(x, y, ItemType.CLEAN_WARDROBE)
 
 
 //        gameState.pointsList.add(PointF(x, y))
@@ -287,6 +317,12 @@ class GameThread(
         initializeBackground(screenWidth,screenHeight)
 
         while (isRunning) {
+
+            if (!gameView.isFrameAlreadyDrawn) {
+                gameView.isFrameAlreadyDrawn = true
+                gameView.onFirstFrameDrawn?.invoke()
+            }
+
 //            Log.d("canvas", "각도 11: ${joystickState.angle} px")
 //            Log.d("canvas", "각도 12: ${joystickState.strength} px")
 
@@ -346,26 +382,11 @@ class GameThread(
 
             // 벽 충돌 로직
             canvas?.let { nonNullCanvas ->
-                checkWallItemCollisions(canvas!!)
+                checkWallItemCollisionsNew(canvas!!)
             }
 
-            //전체 화면 막기
-            val checkScreenIn = isWithinScreenBounds()
-            if(!checkScreenIn){
-                gameState.player.setBounds(gameState.playerLastX, gameState.playerLastY)
-//                canvas?.drawBitmap(characterBitmap!!, gameState.player.x, gameState.player.y, null)
-
-
-                characterRect = RectF(gameState.player.x, gameState.player.y, gameState.player.x + newWidthCharacter, gameState.player.y + newHeightCharacter)
-                canvas?.drawBitmap(originalBitmap, null, characterRect, null)
-
-//                val circlePaint = Paint().apply {
-//                    isAntiAlias = true           // 중요: 테두리를 부드럽게 (계단 현상 제거)
-//                    color = Color.BLUE           // 색상 지정 (Color.RED, Color.BLACK 등)
-//                    style = Paint.Style.FILL     // 원 내부를 가득 채움
-//                }
-//                canvas?.drawOval(characterRect, circlePaint)
-            }
+            //화면 밖으로 나갔는지 검사하고 잡아끄는 함수
+            constrainToScreenBounds()
 
             try {
                 if (waitTime > 0) {
@@ -390,7 +411,7 @@ class GameThread(
         // 4. 이 'backgroundCanvas'에 모든 정적 배경 요소를 그림 (딱 한 번)
         backgroundCanvas.apply {
             drawColor(Color.rgb(231, 228, 180))
-            val image = BitmapFactory.decodeResource(context.resources, R.drawable.room_background2)
+            val image = BitmapFactory.decodeResource(context.resources, R.drawable.room_background3)
 
             if (image != null) {
                 // 1. 원본 비트맵 전체를 지정할 소스 사각형 (srcRect)
@@ -447,35 +468,130 @@ class GameThread(
     /**
      * 조이스틱 입력에 따라 캐릭터 위치를 업데이트합니다.
      */
-    private fun updateGame() {
+//    private fun updateGame() {
+//
+//        //이전 캐릭터 좌표 저장
+//        gameState.playerLastX = gameState.player.x
+//        gameState.playerLastY = gameState.player.y
+//
+//        val strength = joystickState.strength
+//        val angle = joystickState.angle
+//
+//        // 강도가 0보다 클 때만 움직임 처리
+//        if (strength.compareTo(0f) > 0) {
+//            // 조이스틱의 강도를 기반으로 이동 속도를 조절
+//            val speedFactor = strength / 100f
+//            val moveAmount = MOVE_SPEED * speedFactor
+//
+//            // 각도를 라디안으로 변환
+//            val radian = Math.toRadians(angle.toDouble())
+//
+//            // 각도에 따른 X, Y 이동량 계산
+//            // Note: 조이스틱 각도 라이브러리에 따라 Y축 방향이 다를 수 있습니다.
+//            // 표준 수학 좌표계(0도=오른쪽, 90도=위쪽)를 가정합니다.
+//            val moveX = moveAmount * Math.cos(radian).toFloat()
+//            val moveY = moveAmount * Math.sin(radian).toFloat()
+//
+//            // 위치 업데이트
+//            gameState.player.x += moveX
+//            gameState.player.y += moveY
+//
+//            gameState.player.move(gameState.player.x, gameState.player.y)
+//        }
+//    }
 
+    private fun updateGame() {
         //이전 캐릭터 좌표 저장
         gameState.playerLastX = gameState.player.x
         gameState.playerLastY = gameState.player.y
 
         val strength = joystickState.strength
         val angle = joystickState.angle
-
         // 강도가 0보다 클 때만 움직임 처리
         if (strength.compareTo(0f) > 0) {
-            // 조이스틱의 강도를 기반으로 이동 속도를 조절
+        // 조이스틱의 강도를 기반으로 이동 속도를 조절
             val speedFactor = strength / 100f
             val moveAmount = MOVE_SPEED * speedFactor
-
             // 각도를 라디안으로 변환
             val radian = Math.toRadians(angle.toDouble())
-
             // 각도에 따른 X, Y 이동량 계산
             // Note: 조이스틱 각도 라이브러리에 따라 Y축 방향이 다를 수 있습니다.
             // 표준 수학 좌표계(0도=오른쪽, 90도=위쪽)를 가정합니다.
             val moveX = moveAmount * Math.cos(radian).toFloat()
             val moveY = moveAmount * Math.sin(radian).toFloat()
-
             // 위치 업데이트
             gameState.player.x += moveX
             gameState.player.y += moveY
-
             gameState.player.move(gameState.player.x, gameState.player.y)
+        }
+    }
+
+
+
+    private fun updateGameNew() {
+        // 이전 좌표 저장
+        gameState.playerLastX = gameState.player.x
+        gameState.playerLastY = gameState.player.y
+
+        val strength = joystickState.strength
+        var angle = joystickState.angle // var로 변경 (보정 위해)
+
+        // 1. 움직임이 있을 때 (강도가 0보다 큼)
+        if (strength.compareTo(0f) > 0) {
+
+            // --- [A] 이동 로직 (기존 코드 유지) ---
+            val speedFactor = strength / 100f
+            val moveAmount = MOVE_SPEED * speedFactor
+
+            // 각도를 라디안으로 변환 (이동 계산용)
+            val radian = Math.toRadians(angle.toDouble())
+
+            // 안드로이드 좌표계(Y가 아래로 증가)와 조이스틱 각도에 맞춰 보정 필요
+            // 보통 0도=오른쪽, 90도=아래(혹은 위)인데 라이브러리마다 다름.
+            // 일단 표준 삼각함수대로 계산
+            val moveX = moveAmount * Math.cos(radian).toFloat()
+            val moveY = moveAmount * Math.sin(radian).toFloat() // Y축 방향 확인 필요 (+/-)
+
+            gameState.player.x += moveX
+            gameState.player.y += moveY
+
+
+            // --- [B] 애니메이션 로직 (추가된 부분) ---
+
+            // 1) 각도를 0~360 사이 양수로 정규화
+            while (angle < 0) angle += 360
+            angle %= 360
+
+            // 2) 각도를 8방향 인덱스(0~7)로 변환
+            // 0:동, 1:남동, 2:남 ... 7:북동 (45도씩 분할)
+            // (angle + 22.5) / 45 공식을 쓰면 8방향 반올림 처리가 됨
+            val directionIndex = ((angle + 22.5) / 45).toInt() % 8
+            gameState.player.currentDirection = directionIndex
+
+            // 3) 걷는 모션 프레임 계산 (왼발 -> 차렷 -> 오른발 -> 차렷)
+            val currentTime = System.currentTimeMillis()
+
+            // 지정한 시간(WALK_ANIMATION_SPEED)이 지났으면 다음 프레임으로
+            if (currentTime - gameState.player.walkTimer > gameState.WALK_ANIMATION_SPEED) {
+                // 0 -> 1 -> 2 -> 3 -> 0 ... 반복
+                gameState.player.walkFrame = (gameState.player.walkFrame + 1) % 4
+                gameState.player.walkTimer = currentTime
+            }
+
+            // 4) 최종적으로 플레이어의 현재 이미지 교체
+            // characterSprites[방향][프레임]
+//            gameState.player.currentBitmap = characterSprites[directionIndex][gameState.player.walkFrame]
+
+            // 충돌 박스 등 업데이트
+            gameState.player.move(gameState.player.x, gameState.player.y)
+
+        } else {
+            // --- [C] 멈췄을 때 ---
+            // 걷는 모션 멈춤 (차렷 자세인 0번이나 2번 프레임으로 고정)
+            gameState.player.walkFrame = 0
+
+            // 방향은 마지막에 보던 방향(currentDirection) 유지하면서 이미지만 갱신
+//            gameState.player.currentBitmap = characterSprites[gameState.player.currentDirection][0]
         }
     }
 
@@ -630,71 +746,123 @@ class GameThread(
 //        }
     }
 
-    private fun checkWallItemCollisions(canvas: Canvas){
-//        Log.d(TAG, "checkWallItem!")
-//        Log.d(TAG, "checkWallItem!" + gameState.walls?.size)
-
-
-        characterRect = RectF(gameState.player.x, gameState.player.y, gameState.player.x + newWidthCharacter, gameState.player.y + newHeightCharacter)
-
-
-        // 벽(장애물)과의 충돌 감지 및 반응
-        for (wall in gameState.walls!!) {
-            val wallRec = RectF(wall.left, wall.top, wall.right, wall.bottom)
+//    private fun checkWallItemCollisions(canvas: Canvas){
+//        characterRect = RectF(gameState.player.x, gameState.player.y, gameState.player.x + newWidthCharacter, gameState.player.y + newHeightCharacter)
+//
+//        // 벽(장애물)과의 충돌 감지 및 반응
+//        for (wall in gameState.walls!!) {
 //            val wallRec = RectF(wall.left, wall.top, wall.right, wall.bottom)
-//            if (checkCircleRectangleCollision(gameState.player.x, gameState.player.y, gameState.player.radius, wallRec)) {
+//            if (RectF.intersects(characterRect, wallRec)) {
+//                // 충돌 발생!
+//                // 여기서 캐릭터를 멈추거나 튕겨내는 코드를 작성하세요.
+//                Log.d("Game", "벽에 부딪혔습니다!")
 //
-//                Log.d(TAG, "checkWallItem2!")
-//                Log.d(TAG, "checkWallItem2!" + gameState.walls?.size)
-//
-////                gameState.player.setBounds(gameState.playerLastX, gameState.playerLastY)
-//////                canvas.drawBitmap(characterBitmap!!, gameState.player.x, gameState.player.y, null)
-////
-////                characterRect = RectF(gameState.player.x, gameState.player.y, gameState.player.x + newWidthCharacter, gameState.player.y + newHeightCharacter)
-////
-////                canvas.drawBitmap(originalBitmap, null, characterRect, null)
+//                gameState.player.setBounds(gameState.playerLastX, gameState.playerLastY)
+//                characterRect = RectF(gameState.player.x, gameState.player.y, gameState.player.x + newWidthCharacter, gameState.player.y + newHeightCharacter)
+//                canvas.drawBitmap(originalBitmap, null, characterRect, null)
 //                break
 //            }
+//        }
+//    }
 
+    private fun checkWallItemCollisionsNew(canvas: Canvas) {
+        // 1. 현재(이동 후) 위치 기준으로 충돌 박스 생성
+        characterRect = RectF(gameState.player.x, gameState.player.y, gameState.player.x + newWidthCharacter, gameState.player.y + newHeightCharacter)
+
+        for (wall in gameState.walls!!) {
+            val wallRec = RectF(wall.left, wall.top, wall.right, wall.bottom)
+
+            // 2. 일단 충돌이 감지되면 정밀 검사 시작
             if (RectF.intersects(characterRect, wallRec)) {
-                // 충돌 발생!
-                // 여기서 캐릭터를 멈추거나 튕겨내는 코드를 작성하세요.
-                Log.d("Game", "벽에 부딪혔습니다!")
+                Log.d("Game", "벽 충돌 감지! 미끄러짐 계산 시작")
 
-                gameState.player.setBounds(gameState.playerLastX, gameState.playerLastY)
-                characterRect = RectF(gameState.player.x, gameState.player.y, gameState.player.x + newWidthCharacter, gameState.player.y + newHeightCharacter)
-                canvas.drawBitmap(originalBitmap, null, characterRect, null)
+                // [중요] 이동하려던 목표 좌표를 임시 저장
+                val targetX = gameState.player.x
+                val targetY = gameState.player.y
 
-//                val circlePaint = Paint().apply {
-//                    isAntiAlias = true           // 중요: 테두리를 부드럽게 (계단 현상 제거)
-//                    color = Color.BLUE           // 색상 지정 (Color.RED, Color.BLACK 등)
-//                    style = Paint.Style.FILL     // 원 내부를 가득 채움
-//                }
-//                canvas.drawOval(characterRect, circlePaint)
+                // 3. 일단 플레이어를 충돌 전 안전한 위치(Last)로 완전히 되돌림
+                gameState.player.x = gameState.playerLastX
+                gameState.player.y = gameState.playerLastY
 
+                // -------------------------------------------------------
+                // Step 1. X축만 이동했을 때도 부딪히는지 확인 (가로 이동 가능 여부)
+                // -------------------------------------------------------
+                val testRectX = RectF(
+                    targetX,                    // X는 이동해봄
+                    gameState.playerLastY,      // Y는 가만히 둠
+                    targetX + newWidthCharacter,
+                    gameState.playerLastY + newHeightCharacter
+                )
 
+                if (RectF.intersects(testRectX, wallRec)) {
+                    // X축으로 갔더니 벽이다? -> X 이동 취소 (LastX 유지)
+                    gameState.player.x = gameState.playerLastX
+                } else {
+                    // X축은 괜찮다? -> X 이동 적용
+                    gameState.player.x = targetX
+                }
 
-                break
+                // -------------------------------------------------------
+                // Step 2. Y축만 이동했을 때도 부딪히는지 확인 (세로 이동 가능 여부)
+                // -------------------------------------------------------
+                // 주의: X축 이동 결과(Step 1)가 반영된 상태에서 Y를 테스트해야 자연스러움
+                val testRectY = RectF(
+                    gameState.player.x,          // 확정된 X 좌표 사용
+                    targetY,                     // Y는 이동해봄
+                    gameState.player.x + newWidthCharacter,
+                    targetY + newHeightCharacter
+                )
+
+                if (RectF.intersects(testRectY, wallRec)) {
+                    // Y축으로 갔더니 벽이다? -> Y 이동 취소 (LastY 유지)
+                    gameState.player.y = gameState.playerLastY
+                } else {
+                    // Y축은 괜찮다? -> Y 이동 적용
+                    gameState.player.y = targetY
+                }
+
+                // 4. 최종 결정된 좌표로 캐릭터 박스(Rect) 갱신
+                characterRect.set(
+                    gameState.player.x,
+                    gameState.player.y,
+                    gameState.player.x + newWidthCharacter,
+                    gameState.player.y + newHeightCharacter
+                )
+
+                // 한 번 충돌 처리를 했어도,
+                // 겹친 벽이 또 있을 수 있으므로 break를 할지 말지는 게임 특성에 따라 결정.
+                // 보통 미끄러짐 처리를 하면 여기서 break 해도 큰 문제는 없습니다.
+                // break
             }
+        }
+
+        // 최종적으로 그리기
+        canvas.drawBitmap(originalBitmap, null, characterRect, null)
+    }
+
+    fun constrainToScreenBounds() {
+        // 1. 허용 가능한 범위 계산 (기존 로직 유지)
+        val minX = 0f
+        val maxX = screenWidth - newWidthCharacter // 혹은 user's logic: gameState.player.radius
+
+        val minY = 0f
+        val maxY = screenHeight - newHeightCharacter // 혹은 user's logic: gameState.player.radius * 2
+
+        // 2. X축 보정 (Clamp): 최소값보다 작으면 최소값으로, 최대값보다 크면 최대값으로 고정
+        if (gameState.player.x < minX) {
+            gameState.player.x = minX
+        } else if (gameState.player.x > maxX) {
+            gameState.player.x = maxX
+        }
+
+        // 3. Y축 보정 (Clamp): X축과는 '별개로' 동작하므로 미끄러짐 효과 발생
+        if (gameState.player.y < minY) {
+            gameState.player.y = minY
+        } else if (gameState.player.y > maxY) {
+            gameState.player.y = maxY
         }
     }
 
-    //전체 화면 충돌 로직
-    fun isWithinScreenBounds(): Boolean {
-        // 허용 가능한 최소/최대 X 좌표
-        val minX = 0
-        val maxX = screenWidth - gameState.player.radius
-
-        // 허용 가능한 최소/최대 Y 좌표
-        val minY = 0
-        val maxY = screenHeight - gameState.player.radius*2
-
-        // targetX와 targetY가 각 범위 내에 있는지 확인
-        val isXValid = gameState.player.x >= minX && gameState.player.x <= maxX
-        val isYValid = gameState.player.y >= minY && gameState.player.y <= maxY
-
-        return isXValid && isYValid
-    }
 
 //    private fun checkCollision(rect1: RectF, rect2: RectF): Boolean {
 //        // RectF.intersect() 메서드를 사용하여 간편하게 충돌을 확인할 수 있습니다.
@@ -863,6 +1031,136 @@ class GameThread(
 //        val destRect = RectF(x, y, x + newWidth, y + newHeight)
         canvas?.drawBitmap(wardrobeBitmap, null, wardrobeRect, null)
     }
+
+
+
+    fun changeBedImage(resId: Int) {
+//        gameState.walls?.removeAll { it.type == "BED" }
+//        bedBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.room_structure_bed_dirty_stage1)
+//        fixBedLocation()
+
+//        smallWindowBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.room_structure_small_window_dirty_stage1)
+//        deskBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.room_structure_desk_dirty_stage1)
+//
+//
+//        // 1. 새로운 리소스 ID로 비트맵 디코딩
+//        wardrobeBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.room_structure_wardrobe_dirty_stage1)
+
+
+//        val aspectRatio = bedBitmap.width.toFloat() / bedBitmap.height.toFloat()
+//        val x = screenWidth - 900f
+//        val y = 900f
+//        val newWidth = 500f
+//        val newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+//        val pain = Color.argb(255, 173, 255, 47)
+////        var pain = Color.argb(0, 0, 0, 0)
+//        gameState.walls?.add(GameWall(x, y, x + newWidth, y + newHeight, pain, "BED"))
+//        bedRect = RectF(x, y, x + newWidth, y + newHeight)
+    }
+
+
+    fun fixBedLocation(img: Int) {
+        bedBitmap = BitmapFactory.decodeResource(context.resources, img)
+        gameState.walls?.removeAll { it.type == "BED" }
+
+        //침대 위치
+        aspectRatio = bedBitmap.width.toFloat() / bedBitmap.height.toFloat()
+        x = screenWidth - 900f
+        y = 900f
+        newWidth = 500f
+        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+
+//        var pain = Color.argb(0, 0, 0, 0)
+        gameState.walls?.add(GameWall(x, y, x + newWidth, y + newHeight, pain, "BED"))
+        bedRect = RectF(x, y, x + newWidth, y + newHeight)
+
+        //침대 청소 클릭 좌표
+        aspectRatio = bedCleanBtnBitmap.width.toFloat() / bedCleanBtnBitmap.height.toFloat()
+        x = screenWidth - 700f // 원하는 x 위치 (왼쪽)
+        y = 1500f // 원하는 y 위치 (위쪽)
+        newWidth = gameState.itemRadius*2
+        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+
+        bedCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
+//        gameState.pointsList.add(PointF(x, y))
+        gameState.addItem(x, y, ItemType.CLEAN_BED)
+    }
+
+    fun fixDeskLocation(img: Int) {
+        deskBitmap = BitmapFactory.decodeResource(context.resources, img)
+        gameState.walls?.removeAll { it.type == "DESK" }
+
+        //책상
+        aspectRatio = deskBitmap.width.toFloat() / deskBitmap.height.toFloat()
+        x = screenWidth - 270f
+        y = 300f
+        newWidth = 250f
+        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+        gameState.walls?.add(GameWall(x, y, x + newWidth, y + newHeight, pain, "DESK"))
+        deskRect = RectF(x, y, x + newWidth, y + newHeight)
+
+        //책상 청소 클릭 좌표
+        aspectRatio = deskCleanBtnBitmap.width.toFloat() / deskCleanBtnBitmap.height.toFloat()
+        x = screenWidth - 350f // 원하는 x 위치 (왼쪽)
+        y = 500f // 원하는 y 위치 (위쪽)
+        newWidth = gameState.itemRadius*2
+        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+
+        deskCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
+//        gameState.pointsList.add(PointF(x, y))
+        gameState.addItem(x, y, ItemType.CLEAN_DESK)
+    }
+
+    fun fixSmallWindowLocation(img: Int) {
+        smallWindowBitmap = BitmapFactory.decodeResource(context.resources, img)
+        gameState.walls?.removeAll { it.type == "WINDOW" }
+
+        //창문
+        aspectRatio = smallWindowBitmap.width.toFloat() / smallWindowBitmap.height.toFloat()
+        x = screenWidth - 800f
+        y = 150f
+        newWidth = 300f
+        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+        gameState.walls?.add(GameWall(x, y, x + newWidth, y + newHeight, pain, "WINDOW"))
+        smallWindowRect = RectF(x, y, x + newWidth, y + newHeight)
+
+        //창문 청소 클릭 좌표
+        aspectRatio = windowCleanBtnBitmap.width.toFloat() / windowCleanBtnBitmap.height.toFloat()
+        x = screenWidth - 700f // 원하는 x 위치 (왼쪽)
+        y = 300f // 원하는 y 위치 (위쪽)
+        newWidth = gameState.itemRadius*2
+        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+
+        windowCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
+//        gameState.pointsList.add(PointF(x, y))
+        gameState.addItem(x, y, ItemType.CLEAN_WINDOW)
+    }
+
+    fun fixWardrobeLocation(img: Int) {
+        wardrobeBitmap = BitmapFactory.decodeResource(context.resources, img)
+        gameState.walls?.removeAll { it.type == "WARDROBE" }
+
+        //옷장
+        aspectRatio = wardrobeBitmap.width.toFloat() / wardrobeBitmap.height.toFloat()
+        x = screenWidth - 230f
+        y = 520f
+        newWidth = 280f
+        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+        gameState.walls?.add(GameWall(x, y, x + newWidth, y + newHeight, pain, "WARDROBE"))
+        wardrobeRect = RectF(x, y, x + newWidth, y + newHeight)
+
+        //옷장 청소 클릭 좌표
+        aspectRatio = wardrobeCleanBtnBitmap.width.toFloat() / wardrobeCleanBtnBitmap.height.toFloat()
+        x = screenWidth - 350f // 원하는 x 위치 (왼쪽)
+        y = 900f // 원하는 y 위치 (위쪽)
+        newWidth = gameState.itemRadius*2
+        newHeight = newWidth / aspectRatio // 비율에 맞춰 높이 자동 계산
+
+        wardrobeCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
+//        gameState.pointsList.add(PointF(x, y))
+        gameState.addItem(x, y, ItemType.CLEAN_WARDROBE)
+    }
+
 
 //    fun startZoomInAnimation(objectCenterX: Float, objectCenterY: Float) {
 //        targetFocusX = objectCenterX

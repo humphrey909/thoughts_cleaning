@@ -23,5 +23,8 @@ data class GameWall(
     var bottom: Float,
 
     @SerializedName("COLOR")
-    var color: Int
+    var color: Int,
+
+    @SerializedName("TYPE")
+    var type: String,
 )

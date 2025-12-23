@@ -34,7 +34,11 @@ class GameState(width: Int, height: Int) {
 
     var itemRadius = 50f
 
-    private val transformationMatrix = Matrix()
+    val WALK_ANIMATION_SPEED = 150L // 0.15초마다 발 바꿈
+
+
+
+//    private val transformationMatrix = Matrix()
 
     // 아이템을 랜덤한 위치에 생성하는 함수
 //    fun spawnItem(screenWidth: Int, screenHeight: Int) {
@@ -205,6 +209,10 @@ data class Player(
     val radius: Float,
     var health: Int = 100
 ) {
+    var currentDirection: Int = 0 // 0~7 (방향)
+    var walkFrame: Int = 0        // 0~3 (발 동작)
+    var walkTimer: Long = 0       // 애니메이션 속도 조절용 타이머
+
 //    var lastX: Float = 0f
 //    var lastY: Float = 0f
 

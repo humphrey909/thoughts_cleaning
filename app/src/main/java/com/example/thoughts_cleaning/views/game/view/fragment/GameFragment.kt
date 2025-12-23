@@ -17,6 +17,7 @@ import com.example.thoughts_cleaning.base.MasilFragment
 import com.example.thoughts_cleaning.base.MoveEvent
 import com.example.thoughts_cleaning.common.vm.viewModelFactory
 import com.example.thoughts_cleaning.databinding.FragmentGameBinding
+import com.example.thoughts_cleaning.util.CustomLoadingView
 import com.example.thoughts_cleaning.util.dialog.QuestionInputDialog
 import com.example.thoughts_cleaning.util.GameView
 import com.example.thoughts_cleaning.util.ItemType
@@ -111,8 +112,7 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
 
         gameView = GameView(
             mContext, /* GameViewListener: */
-            requireActivity() as GameActivity, this, joystickSimulator,
-            viewModel.wasteCount
+            requireActivity() as GameActivity, this, joystickSimulator
         )
 
         // 4. 레이아웃 파라미터 정의 (MATCH_PARENT)
@@ -125,6 +125,18 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
         binding.root.setOnTouchListener { v, event ->
             handleJoystickTouch(v, event)
             true // 이벤트 소비
+        }
+
+        val loadingView = CustomLoadingView(requireContext())
+        (binding.root as? ViewGroup)?.addView(loadingView)
+
+        gameView.setOnFirstFrameDrawnListener {
+            Log.d("DEBUG_TAG", "리스너: 콜백 받음! 로딩뷰 숨김 시도")
+
+            loadingView.post {
+                loadingView.visibility = View.GONE
+                Log.d("DEBUG_TAG", "리스너: 숨김 처리 완료")
+            }
         }
 
         gameView.setGameActionListener(this)
@@ -355,14 +367,24 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
         buttonGroup.addView(ImageView(mContext).apply {
             setImageResource(imgRes1)
             scaleType = ImageView.ScaleType.FIT_CENTER
-            setOnClickListener { Log.d("Game", "$type 왼쪽 클릭") }
+            setOnClickListener {
+                Log.d("Game", "$type 왼쪽 클릭")
+
+                responseClick(type, 1)
+            }
         }, imgParams)
 
         // 오른쪽 이미지
         buttonGroup.addView(ImageView(mContext).apply {
             setImageResource(imgRes2)
             scaleType = ImageView.ScaleType.FIT_CENTER
-            setOnClickListener { Log.d("Game", "$type 오른쪽 클릭") }
+            setOnClickListener {
+                Log.d("Game", "$type 오른쪽 클릭")
+
+                //type
+                responseClick(type, 2)
+
+            }
         }, imgParams)
 
         // 3. 위치 설정 (중앙 하단)
@@ -375,6 +397,8 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
             topToTop = ConstraintLayout.LayoutParams.PARENT_ID
             bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
             verticalBias = 0.8f // 하단 80% 지점
+
+
         }
 
         // 4. 레이어에 추가하고, 나중에 찾을 수 있게 Map에 저장
@@ -413,5 +437,49 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
 
     override fun onLevelCleared() {
         TODO("Not yet implemented")
+    }
+
+    //특정 가구 청소시 순서에 따라 다른 효과가 나타난다.
+    fun responseClick(type: String, location: Int){
+
+        when(type){
+            "CLEAN_BED" -> {
+                if(location == 1){ // 첫번째 버튼
+                    //침대 이미지 변경
+                    gameView.changeCleanFurniture("CLEAN_BED", 1)
+                }else{ // 두번째 버튼
+                    gameView.changeCleanFurniture("CLEAN_BED", 2)
+                }
+            }
+            "CLEAN_DESK" -> {
+                if(location == 1){ // 첫번째 버튼
+                    gameView.changeCleanFurniture("CLEAN_DESK", 1)
+                }else{ // 두번째 버튼
+                    gameView.changeCleanFurniture("CLEAN_DESK", 2)
+                }
+            }
+            "CLEAN_WARDROBE" -> {
+                if(location == 1){ // 첫번째 버튼
+                    gameView.changeCleanFurniture("CLEAN_WARDROBE", 1)
+                }else{ // 두번째 버튼
+                    gameView.changeCleanFurniture("CLEAN_WARDROBE", 2)
+                }
+            }
+            "CLEAN_WINDOW" -> {
+                if(location == 1){ // 첫번째 버튼
+                    gameView.changeCleanFurniture("CLEAN_WINDOW", 1)
+                }else{ // 두번째 버튼
+                    gameView.changeCleanFurniture("CLEAN_WINDOW", 2)
+                }
+            }
+        }
+
+
+
+//        createAndAddGroup("CLEAN_BED", R.drawable.clean_bed1, R.drawable.clean_bed2)
+//        createAndAddGroup("CLEAN_DESK", R.drawable.clean_desk1, R.drawable.clean_desk2)
+//        createAndAddGroup("CLEAN_WARDROBE", R.drawable.clean_wardrobe1, R.drawable.clean_wardrobe2)
+//        createAndAddGroup("CLEAN_WINDOW", R.drawable.clean_window1, R.drawable.clean_window2)
+
     }
 }
