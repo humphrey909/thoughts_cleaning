@@ -255,11 +255,11 @@ class RecordStageFragment : MasilFragment<FragmentRecordStateBinding, RecordStag
 
 
             when (flow) {
-                RecordStageFragmentViewModel.RecordStageFlow.COMMON -> {
+                RecordStageFlow.COMMON -> {
                     viewModel._dustFairyMessageText.postValue("오늘은 어떤 쓰레기를 버리고 싶으세요?")
                 }
 
-                RecordStageFragmentViewModel.RecordStageFlow.NEXT_PAGE -> {
+                RecordStageFlow.NEXT_PAGE -> {
                     //예외처리 진행
 //                    viewModel.fixDustDetail.value
                     Log.d("currentMainFlow", "NEXT_PAGE: NEXT_PAGE"+ viewModel.fixDustDetail.value)
@@ -272,7 +272,7 @@ class RecordStageFragment : MasilFragment<FragmentRecordStateBinding, RecordStag
                         viewModel._currentFlow.postValue(RecordStageFlow.COMMON)
                     }
                 }
-                RecordStageFragmentViewModel.RecordStageFlow.BACK -> {
+                RecordStageFlow.BACK -> {
                     requireActivity().onBackPressedDispatcher.onBackPressed()
 
 

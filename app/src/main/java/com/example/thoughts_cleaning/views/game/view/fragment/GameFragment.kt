@@ -1,8 +1,11 @@
 package com.example.thoughts_cleaning.views.game.view.fragment
 
+import android.app.Activity
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -10,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.thoughts_cleaning.R
@@ -22,6 +26,8 @@ import com.example.thoughts_cleaning.util.dialog.QuestionInputDialog
 import com.example.thoughts_cleaning.util.GameView
 import com.example.thoughts_cleaning.util.ItemType
 import com.example.thoughts_cleaning.util.JoystickState
+import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogBuilder
+import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogType
 import com.example.thoughts_cleaning.views.game.GameEvent
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.game.vm.fragment.GameFragmentViewModel
@@ -30,8 +36,6 @@ import com.three.joystick.JoystickView
 class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R.layout.fragment_game), GameView.GameActionListener {
 
     override val viewModel by viewModelFactory { GameFragmentViewModel() }
-
-//    private val viewModel: GameFragmentViewModel by viewModels()
 
     private var joystickView: JoystickView? = null // 조이스틱 뷰 인스턴스
 //    private var isStop = false
@@ -65,8 +69,13 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
 //    private var wasteCount = 0
 
     private var uiLayer: ConstraintLayout? = null
-    private var buttonGroup: LinearLayout? = null
-    private val uiGroupMap = mutableMapOf<String, LinearLayout>()
+//    private var buttonGroup: LinearLayout? = null
+    private val uiCleanBtnGroupMap = mutableMapOf<String, LinearLayout>() // 청소 버튼 그룹
+    private var textAlertTextLinear: LinearLayout? = null //알림 텍스트 창
+
+    private var alertThread: Thread? = null
+
+    var gaugeFillView: View? = null
 
     companion object {
         // 이 부분이 있어야 외부에서 BFragment.newInstance(...) 로 호출 가능합니다.
@@ -177,6 +186,10 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
         }
 
         makeCleanBtnNew()
+        makeAlert()
+        timerUIFunction()
+
+        makeCleanGauge()
     }
 
     override fun onResume() {
@@ -314,7 +327,7 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
 
     private fun disVisibleCleanBtnNew(){
         uiLayer?.post {
-            uiGroupMap.values.forEach { it.visibility = View.GONE }
+            uiCleanBtnGroupMap.values.forEach { it.visibility = View.GONE }
         }
     }
 
@@ -341,10 +354,10 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
         // UI 스레드 안전장치
         uiLayer?.post {
             // 1. 일단 모든 그룹을 다 숨김 (초기화)
-            uiGroupMap.values.forEach { it.visibility = View.GONE }
+            uiCleanBtnGroupMap.values.forEach { it.visibility = View.GONE }
 
             // 2. 원하는 타입만 찾아서 보여줌
-            uiGroupMap[type.toString()]?.visibility = View.VISIBLE
+            uiCleanBtnGroupMap[type.toString()]?.visibility = View.VISIBLE
         }
     }
 
@@ -403,7 +416,7 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
 
         // 4. 레이어에 추가하고, 나중에 찾을 수 있게 Map에 저장
         uiLayer?.addView(buttonGroup, groupParams)
-        uiGroupMap[type] = buttonGroup
+        uiCleanBtnGroupMap[type] = buttonGroup
     }
 
 
@@ -473,13 +486,331 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
                 }
             }
         }
-
-
-
-//        createAndAddGroup("CLEAN_BED", R.drawable.clean_bed1, R.drawable.clean_bed2)
-//        createAndAddGroup("CLEAN_DESK", R.drawable.clean_desk1, R.drawable.clean_desk2)
-//        createAndAddGroup("CLEAN_WARDROBE", R.drawable.clean_wardrobe1, R.drawable.clean_wardrobe2)
-//        createAndAddGroup("CLEAN_WINDOW", R.drawable.clean_window1, R.drawable.clean_window2)
-
     }
+
+    private fun makeAlert(){
+
+        uiLayer = ConstraintLayout(mContext).apply {
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+            setBackgroundColor(Color.TRANSPARENT)
+        }
+
+        createAlertText()
+
+        // 8. (필요하다면) 화면에 UI 레이어 붙이기
+        (binding.root as? FrameLayout)?.addView(uiLayer)
+    }
+
+    private fun createAlertText() {
+
+        // 1. LinearLayout(그룹) 생성 (기존과 동일)
+        textAlertTextLinear = LinearLayout(mContext).apply {
+            id = View.generateViewId()
+            orientation = LinearLayout.HORIZONTAL
+            visibility = View.GONE
+            // 자식 뷰(텍스트뷰)들 사이의 정렬을 위해 gravity 설정 (선택사항)
+            gravity = Gravity.CENTER
+        }
+
+        // 2. 텍스트뷰를 위한 LayoutParams 설정
+        val textParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT, // 텍스트 길이에 맞게 늘어남 (고정 크기를 원하면 200, 200 입력)
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            leftMargin = 10
+            rightMargin = 10
+        }
+
+        // 텍스트 내용
+        textAlertTextLinear?.addView(TextView(mContext).apply {
+            // [텍스트 설정]
+            text = mContext.getString(R.string.dialog_game_text1)
+            textSize = 16f
+            setTextColor(Color.BLACK)
+            typeface = Typeface.DEFAULT
+
+            // [정렬 설정]
+            gravity = Gravity.CENTER
+
+            tag = "GAME_ALERT_TEXT"
+
+            // [배경 설정]
+            // 1. 단순 색상인 경우:
+            // setBackgroundColor(Color.BLUE)
+            // 2. 드로어블(둥근 모서리 등)인 경우:
+            setBackgroundResource(R.drawable.bg_game_alert_text)
+
+            // [패딩 설정] - 배경과 글자 사이의 여백
+            setPadding(30, 20, 30, 20)
+
+//            // [클릭 리스너]
+//            setOnClickListener {
+//                Log.d("Game", "$type 텍스트 클릭")
+//                responseClick(type, 1)
+//            }
+        }, textParams)
+
+        // 3. 위치 설정 (중앙 하단) - (기존과 동일)
+        val groupParams = ConstraintLayout.LayoutParams(
+            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+            topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+            verticalBias = 0.8f
+        }
+
+        // 4. 레이어에 추가
+        uiLayer?.addView(textAlertTextLinear, groupParams)
+    }
+
+    private fun timerUIFunction() {
+        alertThread = Thread {
+            try {
+                updateAlertText(mContext.getString(R.string.dialog_game_text1))
+                visibleAlertText(true)
+                // 1. 3초간 대기 (백그라운드 쓰레드에서 실행)
+                Thread.sleep(3000)
+
+                visibleAlertText(false)
+
+                //
+                Thread.sleep(1000)
+                //
+
+                updateAlertText(mContext.getString(R.string.dialog_game_text2))
+                visibleAlertText(true)
+                // 1. 3초간 대기 (백그라운드 쓰레드에서 실행)
+                Thread.sleep(3000)
+
+                visibleAlertText(false)
+
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            }
+        }
+        alertThread?.start()
+    }
+
+
+
+    private fun visibleAlertText(type: Boolean) {
+        // UI 스레드 안전장치
+        uiLayer?.post {
+            if(type){
+                textAlertTextLinear?.visibility = View.VISIBLE
+            }else{
+                textAlertTextLinear?.visibility = View.GONE
+            }
+        }
+    }
+
+    fun updateAlertText(newMessage: String) {
+        val targetTextView = textAlertTextLinear?.findViewWithTag<TextView>("GAME_ALERT_TEXT")
+        (mContext as? Activity)?.runOnUiThread {
+            targetTextView?.text = newMessage
+        }
+    }
+
+    //청소 게이지 생성
+    private fun makeCleanGauge(){
+
+        uiLayer = ConstraintLayout(mContext).apply {
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+            setBackgroundColor(Color.TRANSPARENT)
+        }
+
+        createCleanGauge()
+
+        // 8. (필요하다면) 화면에 UI 레이어 붙이기
+        (binding.root as? FrameLayout)?.addView(uiLayer)
+    }
+
+    private fun createCleanGauge() {
+
+        var CleanGaugeConstraint = ConstraintLayout(mContext).apply {
+            id = View.generateViewId()
+//            orientation = LinearLayout.HORIZONTAL
+            visibility = View.VISIBLE
+//            setBackgroundColor(Color.parseColor("#80FFFFFF"))
+            setPadding(25, 50, 50, 20)
+        }
+
+        val CleanGaugeConstraintParams = ConstraintLayout.LayoutParams(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            0
+        ).apply {
+            topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+            startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+
+            matchConstraintPercentHeight = 0.1f
+            verticalBias = 0.0f
+        }
+
+
+        //내부 오른쪽 공간
+        val CleanGaugeConstraintInParams = ConstraintLayout.LayoutParams(
+            0,
+            0
+        ).apply {
+            topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+            startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+
+            matchConstraintPercentWidth = 0.5f
+            horizontalBias = 1.0f
+        }
+
+        var CleanGaugeConstraintIn = ConstraintLayout(mContext).apply {
+            id = View.generateViewId()
+//            orientation = LinearLayout.HORIZONTAL
+            visibility = View.VISIBLE
+//            setBackgroundColor(Color.parseColor("#80FFFFFF"))
+        }
+        CleanGaugeConstraint.addView(CleanGaugeConstraintIn, CleanGaugeConstraintInParams)
+
+
+        // ---------------------------------------------------------
+        // 게이지 틀 이미지 추가
+        // ---------------------------------------------------------
+        val imageParams = ConstraintLayout.LayoutParams(
+            0, 30
+        ).apply {
+            bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+            startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+
+//            horizontalBias = 0.0f
+//            matchConstraintPercentWidth = 1.0f
+        }
+
+        val gaugeImgId = View.generateViewId()
+        CleanGaugeConstraintIn?.addView(ImageView(mContext).apply {
+            id = gaugeImgId
+            setImageResource(R.drawable.bg_clean_gauge)
+            scaleType = ImageView.ScaleType.FIT_CENTER
+        }, imageParams)
+
+
+
+        // ---------------------------------------------------------------
+        // 실제 차오르는 게이지 색상 (Fill View)
+        // ---------------------------------------------------------------
+        val fillParams = ConstraintLayout.LayoutParams(
+            0,
+            16
+        ).apply {
+            topToTop = gaugeImgId
+            bottomToBottom = gaugeImgId
+            startToStart = gaugeImgId
+            endToEnd = gaugeImgId
+
+            matchConstraintPercentWidth = 0.1f
+            horizontalBias = 0.0f
+
+            marginStart = 7
+        }
+
+        gaugeFillView = View(mContext).apply {
+            id = View.generateViewId()
+            // 위에서 만든 녹색 채움 xml 적용
+            setBackgroundResource(R.drawable.bg_clean_gauge_fill)
+        }
+        CleanGaugeConstraintIn.addView(gaugeFillView, fillParams)
+
+
+
+
+        // ---------------------------------------------------------
+        // 게이지 위의 제목
+        // ---------------------------------------------------------
+        val textParams = ConstraintLayout.LayoutParams(
+            0, ConstraintLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            bottomToTop = gaugeImgId
+            startToStart = gaugeImgId
+            bottomMargin = 5
+        }
+
+        CleanGaugeConstraintIn?.addView(TextView(mContext).apply {
+            text = mContext.getString(R.string.title_clean_gauge)
+            textSize = 14f
+            setTextColor(Color.BLACK)
+            typeface = Typeface.DEFAULT
+            tag = "TITLE_CLEAN_GAUGE"
+        }, textParams)
+
+
+        // ---------------------------------------------------------
+        // 닫기 버튼
+        // ---------------------------------------------------------
+        val btnCloseParams = ConstraintLayout.LayoutParams(
+            60, 60
+        ).apply {
+            topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+            topMargin = 40
+        }
+
+        val btnCloseId = View.generateViewId()
+        CleanGaugeConstraint?.addView(ImageView(mContext).apply {
+            id = btnCloseId
+            setImageResource(R.drawable.btn_close)
+            scaleType = ImageView.ScaleType.FIT_CENTER
+
+            setOnClickListener {
+                showDialog()
+            }
+        }, btnCloseParams)
+
+
+        // 4. 레이어에 추가
+        uiLayer?.addView(CleanGaugeConstraint, CleanGaugeConstraintParams)
+    }
+
+
+    private fun showDialog(){
+        val dialog = context?.let {
+            CommonDialogBuilder(it, CommonDialogType.TWO_BUTTON)
+                .title(getString(R.string.dialog_game_title))
+                .main(getString(R.string.dialog_game_document))
+                .onConfirmListener {
+                    requireActivity().onBackPressedDispatcher.onBackPressed()
+                }
+                .onCancelListener{
+
+                }
+                .build()
+        }
+        if (dialog != null) {
+            showDialog(dialog)
+        }
+    }
+
+
+//    fun updateGaugePercent(percent: Float) {
+//        // percent는 0.0 ~ 1.0 사이 (예: 50% -> 0.5f)
+//        // 범위를 벗어나지 않게 안전장치
+//        val safePercent = percent.coerceIn(0f, 1f)
+//
+//        (mContext as? Activity)?.runOnUiThread {
+//            val params = gaugeFillView?.layoutParams as? ConstraintLayout.LayoutParams
+//            params?.let {
+//                it.matchConstraintPercentWidth = safePercent
+//                gaugeFillView?.layoutParams = it // 변경사항 적용
+//            }
+//        }
+//    }
 }

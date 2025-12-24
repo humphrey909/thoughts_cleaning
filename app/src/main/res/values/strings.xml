@@ -67,6 +67,16 @@
     <string name="dialog_record_stage_document">겪고있는 생각에 대해서 작성해주세요. </string>
 
 
+    <!-- game ui 적용 -->
+    <string name="dialog_game_text1">방을 청소할 때 마다 내 생각들이 사라집니다. </string>
+    <string name="dialog_game_text2">청소할 공간을 찾아 청소를 진행하세요. </string>
+    <string name="title_clean_gauge">생각 게이지</string>
+
+
+    <string name="dialog_game_title">생각 청소가 돼었나요?</string>
+    <string name="dialog_game_document">이제 행동해 봅시다!</string>
+
+
     <!-- Error -->
     <string name="error_session_invalid">Invalid session</string>
     <string name="error_id_empty">Please input ID</string>
