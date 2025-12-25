@@ -867,6 +867,8 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
                 .title(getString(R.string.dialog_game_title))
                 .main(getString(R.string.dialog_game_document))
                 .onConfirmListener {
+                    backPressedCallback!!.isEnabled = false
+
                     requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
                 .build()

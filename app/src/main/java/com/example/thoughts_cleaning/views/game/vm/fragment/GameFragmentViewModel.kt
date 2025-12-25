@@ -62,8 +62,6 @@ class GameFragmentViewModel: MasilViewModel() {
         cleanImgBtnMap["CLEAN_DESK"] = CleanStateBtnItem(1,R.drawable.clean_desk1, R.drawable.clean_desk2, R.drawable.ic_clean_end)
         cleanImgBtnMap["CLEAN_WINDOW"] = CleanStateBtnItem(1,R.drawable.clean_window1, R.drawable.clean_window2, R.drawable.ic_clean_end)
         cleanImgBtnMap["CLEAN_WARDROBE"] = CleanStateBtnItem(1,R.drawable.clean_wardrobe1, R.drawable.clean_wardrobe2, R.drawable.ic_clean_end)
-
-//        _moveEvent.postValue(MoveEvent.Game(GameEvent.GAME_FINISH))
     }
 
 
