@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.api.model.CleanStateBtnItem
@@ -80,6 +81,8 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
     var gaugeFillView: View? = null
 
     var cleanIconView: ImageView? = null
+
+    var backPressedCallback: OnBackPressedCallback? = null
 
     companion object {
         // 이 부분이 있어야 외부에서 BFragment.newInstance(...) 로 호출 가능합니다.
@@ -188,6 +191,16 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
                 }
             }
         }
+
+        backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showDialogFinishTwoButton()
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,backPressedCallback!!
+        )
 
         makeCleanBtnNew()
         makeAlert()
@@ -835,6 +848,8 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
                 .title(getString(R.string.dialog_game_title))
                 .main(getString(R.string.dialog_game_document))
                 .onConfirmListener {
+                    backPressedCallback!!.isEnabled = false
+
                     requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
                 .onCancelListener{
@@ -898,4 +913,5 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
             }
         }
     }
+
 }

@@ -6,9 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.thoughts_cleaning.api.Prefs
 import com.example.thoughts_cleaning.api.request.SocialKakaoLoginRequestData
 import com.example.thoughts_cleaning.base.MoveEvent
+import com.example.thoughts_cleaning.base.MoveEvent.*
 import com.example.thoughts_cleaning.common.extension.call
 import com.example.thoughts_cleaning.common.vm.MasilViewModel
 import com.example.thoughts_cleaning.views.main.SettingEvent
+import com.example.thoughts_cleaning.views.record_problem.vm.fragment.RecordStageFragmentViewModel.RecordStageFlow
 import kotlinx.coroutines.launch
 
 class MySettingViewModel: MasilViewModel() {
@@ -20,13 +22,17 @@ class MySettingViewModel: MasilViewModel() {
     fun onClick(event: SettingEvent) {
         when (event) {
             SettingEvent.COMMON -> {
-                _moveEvent.postValue(MoveEvent.Setting(event))
+                _moveEvent.postValue(Setting(event))
             }
             SettingEvent.USER_INFO -> {
-                _moveEvent.postValue(MoveEvent.Setting(event))
+                _moveEvent.postValue(Setting(event))
             }
             SettingEvent.LOGOUT -> {
-                logout(event)
+                _moveEvent.postValue(Setting(event))
+            }
+            SettingEvent.GO_LOGIN -> TODO()
+            SettingEvent.BACK -> {
+                _moveEvent.postValue(Setting(event))
             }
         }
     }

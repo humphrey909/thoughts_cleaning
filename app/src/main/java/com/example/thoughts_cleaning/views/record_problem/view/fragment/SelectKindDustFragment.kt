@@ -62,13 +62,19 @@ class SelectKindDustFragment : MasilFragment<FragmentSelectKindDustBinding, Sele
         viewModel.currentFlow.observe(viewLifecycleOwner) { flow ->
             when (flow) {
                 TypeFlow.COMMON -> {
-                    viewModel._dustFairyMessageText.postValue("오늘은 어떤 쓰레기를 버리고 싶으세요?")
+
                 }
                 TypeFlow.NEXT_PAGE -> {
 
                     //예외처리 진행
                     if(viewModel.fixDustKind.value != null){
-                        findNavController().navigate(R.id.action_write_thought)
+//                        findNavController().navigate(R.id.action_write_thought)
+
+                        val action = SelectKindDustFragmentDirections.actionWriteThought(
+                            kindThoughtIdx = viewModel.fixDustKind.value!!.index.toInt()
+                        )
+                        findNavController().navigate(action)
+
                         viewModel._currentFlow.postValue(TypeFlow.COMMON)
                     }else{
                         showDialog()
@@ -80,9 +86,17 @@ class SelectKindDustFragment : MasilFragment<FragmentSelectKindDustBinding, Sele
             }
         }
 
+        viewModel.dustKindListTotal.observe(viewLifecycleOwner) { flow ->
+            if(flow != null){
+                dustKindListadapter!!.updateData(viewModel.dustKindList)
+            }
+        }
+
         viewModel._dustFairyMessageText.postValue("오늘은 어떤 쓰레기를 버리고 싶으세요?")
 
         viewModel._currentFlow.postValue(TypeFlow.COMMON)
+
+        viewModel.thoughtsKindList()
     }
 
     private fun showDialog(){

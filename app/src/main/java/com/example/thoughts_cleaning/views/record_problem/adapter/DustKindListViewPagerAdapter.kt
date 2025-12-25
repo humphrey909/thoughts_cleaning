@@ -1,5 +1,6 @@
 package com.example.thoughts_cleaning.views.record_problem.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.api.model.DustKindItem
+import com.example.thoughts_cleaning.api.model.KindThoughtList
 import com.example.thoughts_cleaning.databinding.DustKindItemViewPageBinding
 import com.example.thoughts_cleaning.databinding.PeopleExItemViewPageBinding
 
@@ -14,6 +16,12 @@ class DustKindListViewPagerAdapter(private var items: ArrayList<DustKindItem>, p
     RecyclerView.Adapter<DustKindListViewPagerAdapter.PagerViewHolder>() {
 
         var prePosition = -1
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: ArrayList<DustKindItem>) {
+        this.items = newItems // 리스트 교체
+        notifyDataSetChanged() // [중요] 화면 갱신 신호 보내기
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerViewHolder {
         val binding = DataBindingUtil.inflate<DustKindItemViewPageBinding>(

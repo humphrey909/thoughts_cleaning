@@ -23,6 +23,11 @@
         tools:layout="@layout/fragment_record_state"
         >
 
+        <argument
+                android:name="kindThoughtIdx"
+                app:argType="integer"
+                android:defaultValue="0" />
+
     </fragment>
 
 

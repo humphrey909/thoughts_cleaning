@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.base.MasilFragment
 import com.example.thoughts_cleaning.common.TrulyGenericViewModelFactory
@@ -40,9 +41,10 @@ class RecordStageFragment : MasilFragment<FragmentRecordStateBinding, RecordStag
 
     override val viewModel by viewModelFactory { RecordStageFragmentViewModel(mContext) }
 
+    private val args: RecordStageFragmentArgs by navArgs()
 
-    private var peopleExViewadapter: PeopleExViewPagerAdapter? = null
-    private var dustKindListadapter: DustKindListViewPagerAdapter? = null
+//    private var peopleExViewadapter: PeopleExViewPagerAdapter? = null
+//    private var dustKindListadapter: DustKindListViewPagerAdapter? = null
 //    private var dustFeelingListadapter: DustFeelingListViewPagerAdapter? = null
 
 //    private lateinit var viewModelFactory: TrulyGenericViewModelFactory
@@ -69,123 +71,16 @@ class RecordStageFragment : MasilFragment<FragmentRecordStateBinding, RecordStag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        viewModelFactory = TrulyGenericViewModelFactory(mContext = mContext)
-//        viewModel = ViewModelProvider(this, viewModelFactory).get(RecordStageFragmentViewModel::class.java)
-
-        peopleExViewadapter = PeopleExViewPagerAdapter(viewModel.reviewOtherPeople, peopleExItemClickListener)
-        dustKindListadapter = DustKindListViewPagerAdapter(viewModel.dustKindList, dustKindItemClickListener)
-//        dustFeelingListadapter = DustFeelingListViewPagerAdapter(viewModel.dustFeelingList, dustFeelingItemClickListener)
-
         //이부분 없으면 onclick이 동작하지 않음
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-//        binding.pagerOtherPeopleReview.adapter = peopleExViewadapter
-//        binding.indicatorOtherPeopleReview.setViewPager(binding.pagerOtherPeopleReview)
-//
-//        binding.dustKindRecycler.adapter = dustKindListadapter
-//        binding.dustFeelingRecycler.adapter = dustFeelingListadapter
+//        viewModel._currentFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
 
-        viewModel._currentFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
-
-
-
+        //선택한 생각 종류 데이터
+        viewModel.kindThoughtIdx = args.kindThoughtIdx
 
         handleNavigationEvent()
-
-
-//        initNavigation()
-
-//        val navHostFragment = childFragmentManager
-//            .findFragmentById(R.id.)
-//        val navHostFragment = binding.mainContentNavHost
-//
-//
-//        if (navHostFragment is NavHostFragment) {
-//            // 3. 찾은 객체가 NavHostFragment 타입인 것이 확인되면 처리
-//            val navController = navHostFragment.navController
-//
-//            // Binding 객체를 사용하여 BottomNavigationView에 접근
-//            binding.bottomNavInFragment.setupWithNavController(navController)
-//
-//        } else {
-//            // 디버깅을 위한 로그 출력 (객체를 찾지 못했거나 타입이 틀린 경우)
-////            Log.e("MainFragment", "NavHostFragment를 찾지 못했거나 타입이 올바르지 않습니다. ID 확인 필수!")
-//        }
-
-
-
-
-//        val navView: BottomNavigationView = binding.bottomNavInFragment
-////        val mainFragmentContentNav: FragmentContainerView = binding.mainContentNavHost
-//
-////        val navView: BottomNavigationView = view.findViewById(R.id.bottom_nav_in_fragment)
-//
-//        // **자식 Fragment Manager 사용**
-//        val navHostFragment = childFragmentManager
-//            .findFragmentById(R.id.main_content_nav_host) as NavHostFragment
-//        val navController = navHostFragment.navController
-//
-//        // BottomNavigationView와 NavController를 연결
-////        navView.setupWithNavController(navController)
-//
-//        binding.bottomNavInFragment.setupWithNavController(navController)
-
-//        // 1. Context 가져오기 (Fragment에서는 requireContext()를 사용)
-//        val context = requireContext()
-//
-//        // 2. 동적으로 FrameLayout 생성
-//        val containerLayout = FrameLayout(context)
-//
-//        // 3. GameView 인스턴스 생성
-//        // Fragment를 리스너로 사용하려면 'this'를 인수로 전달합니다.
-//        // joystickSimulator는 미리 초기화되어 있어야 합니다.
-//        gameView = GameView(
-//            context, /* GameViewListener: */
-//            requireActivity() as MainActivity, this, joystickSimulator
-//        )
-//
-//        // 4. 레이아웃 파라미터 정의 (MATCH_PARENT)
-//        val params = FrameLayout.LayoutParams(
-//            FrameLayout.LayoutParams.MATCH_PARENT,
-//            FrameLayout.LayoutParams.MATCH_PARENT
-//        )
-//
-//        // 5. containerLayout(FrameLayout)에 gameView 추가
-////        containerLayout.addView(gameView, params)
-//
-//        (binding.root as? ViewGroup)?.addView(gameView, params)
-//
-//
-//
-//        // 1. 조이스틱 인스턴스 생성 및 레이아웃 설정
-//        // Activity Context(this) 대신 Fragment Context(requireContext())를 사용합니다.
-//        val joystickView = JoystickView(context, null).apply {
-//            layoutParams = FrameLayout.LayoutParams(300, 300).apply {
-//                // dpToPx 함수는 아래에 정의되어 있습니다.
-//                gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
-//                setMargins(50, 50, 50, 50)
-//            }
-//        }
-//
-//        // 2. 컨테이너 레이아웃에 조이스틱 뷰 추가
-//        // Activity의 containerLayout 대신 binding.root (Fragment의 루트 뷰)를 사용합니다.
-//        // 주의: binding.root는 ViewGroup 타입이므로 addView()를 사용할 수 있습니다.
-//        (binding.root as? FrameLayout)?.addView(joystickView)
-////        binding.root.addView(joystickView)
-//
-//        // 3. 조이스틱 움직임 감지 리스너 설정
-//        joystickView.setOnMoveListener(
-//            object : JoystickView.OnMoveListener {
-//                override fun onMove(angle: Float, strength: Float) {
-//                    // (기존 로직 유지)
-//                    joystickSimulator.update(angle, strength)
-//                }
-//            },
-//            // JoystickView.DEFAULT_UPDATE_INTERVAL는 상수라고 가정
-//            JoystickView.Companion.DEFAULT_UPDATE_INTERVAL
-//        )
-
     }
 
     override fun onResume() {
@@ -249,11 +144,6 @@ class RecordStageFragment : MasilFragment<FragmentRecordStateBinding, RecordStag
     private fun handleNavigationEvent() {
         viewModel.currentFlow.observe(viewLifecycleOwner) { flow ->
 
-//            Log.d("currentMainFlow", "ENTER_GAME: ENTER_GAME")
-//            Log.d("currentMainFlow", "ENTER_GAME: $flow")
-
-
-
             when (flow) {
                 RecordStageFlow.COMMON -> {
                     viewModel._dustFairyMessageText.postValue("오늘은 어떤 쓰레기를 버리고 싶으세요?")
@@ -262,11 +152,11 @@ class RecordStageFragment : MasilFragment<FragmentRecordStateBinding, RecordStag
                 RecordStageFlow.NEXT_PAGE -> {
                     //예외처리 진행
 //                    viewModel.fixDustDetail.value
-                    Log.d("currentMainFlow", "NEXT_PAGE: NEXT_PAGE"+ viewModel.fixDustDetail.value)
-                    Log.d("currentMainFlow", "NEXT_PAGE: NEXT_PAGE"+ viewModel.fixDustDetail.value?.length)
+//                    Log.d("currentMainFlow", "NEXT_PAGE: NEXT_PAGE"+ viewModel.fixDustDetail.value)
+//                    Log.d("currentMainFlow", "NEXT_PAGE: NEXT_PAGE"+ viewModel.fixDustDetail.value?.length)
 
                     if(viewModel.fixDustDetail.value?.length == 0){
-                        showDialog()
+                        showCheckDataDialog()
                     }else{
                         enterGame()
                         viewModel._currentFlow.postValue(RecordStageFlow.COMMON)
@@ -274,183 +164,52 @@ class RecordStageFragment : MasilFragment<FragmentRecordStateBinding, RecordStag
                 }
                 RecordStageFlow.BACK -> {
                     requireActivity().onBackPressedDispatcher.onBackPressed()
-
-
-//                    requireActivity().onBackPressedDispatcher.onBackPressed()
-//                    requireActivity().supportFragmentManager.popBackStack()
-//                    requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
-//                    NavController.popBackStack()
-
-//                    val navController = findNavController()
-//
-//                    val initialFragmentId = R.id.SelectKindDustFragment
-//                    navController.popBackStack(initialFragmentId, false)
-
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.fragment_container, FragmentB())
-//                        .commit()
-
-                    // 현재 NavController의 백 스택 항목을 모두 출력해 봅니다.
-//                    val navController = findNavController()
-
-// popBackStack()을 호출하여 뒤로가기 시도
-//                    val isPopped = navController.popBackStack()
-//
-//                    if (isPopped) {
-//                        // 백 스택에서 성공적으로 하나의 Fragment를 제거하고 이전 Fragment로 돌아갔습니다.
-//                        Log.d("NAV_DEBUG", "popBackStack() 성공: 이전 Fragment로 돌아감.")
-//                    } else {
-//                        // 백 스택이 비어있거나, 해당 목적지가 존재하지 않아 실패했습니다.
-//                        Log.d("NAV_DEBUG", "popBackStack() 실패: 백 스택이 비어있거나 NavController가 처리하지 못함.")
-//                        // Activity를 종료해야 할 수도 있습니다.
-//                        requireActivity().finish()
-//                    }
-
-//                    findNavController().popBackStack()
-//                    findNavController().popBackStack(R.id.SelectKindDustFragment, inclusive = false)
                 }
             }
 
-
-//                RecordStageFragmentViewModel.RecordStageFlow.STAGE_2 -> {
-//                    viewModel._dustFairyMessageText.postValue("오늘은 어떤 쓰레기를 버리고 싶으세요?")
-//                }
-//
-//                RecordStageFragmentViewModel.RecordStageFlow.STAGE_3 -> {
-//                    if(viewModel.fixDustKind.value?.index == 0){
-//                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 상처를 받았는지 말해줄래요?")
-//                    }else if(viewModel.fixDustKind.value?.index == 1){
-//                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 불안 했는지 말해줄래요?")
-//                    }else if(viewModel.fixDustKind.value?.index == 2){
-//                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 화가 났는지 말해줄래요?")
-//                    }else if(viewModel.fixDustKind.value?.index == 3){
-//                        viewModel._dustFairyMessageText.postValue("무슨 일 때문에 마음이 힘들었는지 말해줄래요?")
-//                    }
-//                }
-//                RecordStageFragmentViewModel.RecordStageFlow.STAGE_4 -> {
-//                    enter_game()
-//
-////                    viewModel._dustFairyMessageText.postValue(viewModel.fixDustOneWord.value +" 때문이었군요. 한 문장만 더 써줄 수 있을까요?")
-//                }
-//                RecordStageFragmentViewModel.RecordStageFlow.STAGE_5 -> {
-////                    viewModel._dustFairyMessageText.postValue("이 일이 있었을 때 어떤 기분이었어요?")
-//                }
-//                RecordStageFragmentViewModel.RecordStageFlow.STAGE_6 -> {
-////                    viewModel._dustFairyMessageText.postValue("이만큼이나 무거운 걸 혼자 안고 있었네요. 수고했어요.")
-//
-////                    Log.d("fixDustKind", " - " + viewModel.fixDustKind)
-////                    Log.d("fixDustKind", " - " + viewModel.fixDustOneWord.value)
-////                    Log.d("fixDustKind", " - " + viewModel.fixDustDetail.value)
-//                }
-//                RecordStageFragmentViewModel.RecordStageFlow.STAGE_7 -> {
-//                    //게임으로 이동
-////                    enter_game()
-//                }
-//            }
-//            viewModel.MainFlow
-
-//            binding.nameView.text = it
-
-//            if(it == viewModel.MainFlow){
-//
-//            }else{
-//
-//            }
-//
         }
 
         viewModel.fixDustDetail.observe(viewLifecycleOwner) { flow ->
             if(flow.length > 10){
                 viewModel._dustFairyMessageText.postValue("잘하고 있어요. 더 털어 놓고 싶은 게 있나요?")
             }
-
-//            val currentLength = flow.length
-//            val maxLength = 100f // 최대 글자 수 (기준)
-//
-//            var alphaRatio = (currentLength / maxLength).coerceIn(0.0f, 1.0f)
-//            Log.d("alphaRatio", " - " + alphaRatio)
-//            val alphaRatio2 = Math.pow(alphaRatio.toDouble(), 2.0).toFloat()
-
-            // 계산된 비율을 alpha 값으로 적용
-//            binding.smudgeTextureImg.alpha = alphaRatio2
         }
 
-
         viewModel._currentFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
-
-//        adapter?.setItems(it.messageList)
-
-//        binding.recordStateCenterLayout
-//        binding.adapter = ViewPagerAdapter(getIdolList()) // 어댑터 생성
-//        viewPager_idol.orientation = ViewPager2.ORIENTATION_HORIZONTAL // 방향을 가로로
-
-    }
-
-
-//    fun enter_game(){
-////        Log.d("ScreenSize", "화면 높이: ENTER_GAME")
-//
-//        val intent = Intent(requireActivity(), GameActivity::class.java)
-//
-//        // 2. Activity 시작
-//        startActivity(intent)
-//
-//        viewModel._currentMainFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
-//    }
-
-    private val peopleExItemClickListener = PeopleExItemClickListener { view, item ->
-//        Log.i("doctorListFragment", ": view tag = ${view.tag}")
-//        Log.i("doctorListFragment", ": item clicked $item")
-//        Log.i("doctorListFragment", ": item clicked ${item.openCk}")
-    }
-
-    private val dustKindItemClickListener = DustKindItemClickListener { state, position ->
-//        Log.i("dustKindItemClickListener", ": view tag = ${view.tag}")
-//        Log.i("dustKindItemClickListener", ": item clicked $state")
-//        Log.i("dustKindItemClickListener", ": item clicked $position")
-
-
-//        viewModel._fixDustKind.postValue(state)
-//        viewModel.fixDustKind = state
-    }
-    private val dustFeelingItemClickListener = DustFeelingItemClickListener { state, position ->
-//        Log.i("dustKindItemClickListener", ": view tag = ${view.tag}")
-//        Log.i("dustKindItemClickListener", ": item clicked $state")
-//        Log.i("dustKindItemClickListener", ": item clicked $position")
-
-//        viewModel.fixDustKind = state
     }
 
     fun enterGame(){
-        val intent = Intent(requireActivity(), GameActivity::class.java)
-        // 2. Activity 시작
-        startActivity(intent)
-        requireActivity().finish()
+        showStartGameDialog()
     }
 
-
-//    override fun onBackPressed() {
-//        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
-//        val currentFragment = navHostFragment?.childFragmentManager?.fragments?.get(0)
-//
-//        // NavController에 먼저 뒤로가기 처리를 시도합니다.
-//        if (navHostFragment?.navController?.popBackStack() == true) {
-//            // NavController가 처리를 성공했으면 여기서 종료
-//            return
-//        }
-//
-//        // NavController가 처리하지 못했을 때만 Activity 기본 동작 실행
-//        super.onBackPressed()
-//    }
-
-
-    private fun showDialog(){
+    private fun showCheckDataDialog(){
         val dialog = context?.let {
             CommonDialogBuilder(it, CommonDialogType.ONE_BUTTON)
                 .title(getString(R.string.dialog_main_title))
                 .main(getString(R.string.dialog_record_stage_document))
                 .onConfirmListener {
 
+                }
+                .build()
+        }
+        if (dialog != null) {
+            showDialog(dialog)
+        }
+    }
+
+    //게임 시작 알림
+    private fun showStartGameDialog(){
+        val dialog = context?.let {
+            CommonDialogBuilder(it, CommonDialogType.TWO_BUTTON)
+                .title(getString(R.string.dialog_main_title))
+                .main(getString(R.string.dialog_game_start_document))
+                .onConfirmListener {
+                    viewModel.saveThought()
+
+                    val intent = Intent(requireActivity(), GameActivity::class.java)
+                    // 2. Activity 시작
+                    startActivity(intent)
+                    requireActivity().finish()
                 }
                 .build()
         }

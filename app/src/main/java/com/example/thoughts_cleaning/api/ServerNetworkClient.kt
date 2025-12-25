@@ -124,20 +124,20 @@ object ServerNetworkClient:Interceptor {
                 TimeUtils.getCurrentDate("")
             )
 
-        Log.e(BaseViewModel.TAG, "intercept1: ", )
-        Log.e(BaseViewModel.TAG, "intercept1: ", )
-        Log.e(BaseViewModel.TAG, "intercept1: ", )
-        Log.e(BaseViewModel.TAG, "intercept1: ${Prefs.accessToken}", )
+//        Log.e(BaseViewModel.TAG, "intercept1: ", )
+//        Log.e(BaseViewModel.TAG, "intercept1: ", )
+//        Log.e(BaseViewModel.TAG, "intercept1: ", )
+//        Log.e(BaseViewModel.TAG, "intercept1: ${Prefs.accessToken}", )
 //        Log.d("sessionKey_check", Prefs.accessToken)
 
 
 //        if (isNeedSessionKey(Prefs.baseUrl, url)) {
             val sessionKey: String? = Prefs.accessToken
-            Log.e(BaseViewModel.TAG, "intercept: 2", )
+//            Log.e(BaseViewModel.TAG, "intercept: 2", )
 
 
             if(isHaveSessionKey(sessionKey)) {
-                Log.e(BaseViewModel.TAG, "intercept: 3", )
+//                Log.e(BaseViewModel.TAG, "intercept: 3", )
 
                 val authorizationValue = String.format("Bearer %s", sessionKey)
                 builder.addHeader("Authorization", authorizationValue)

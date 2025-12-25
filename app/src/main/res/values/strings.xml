@@ -5,27 +5,6 @@
     <string name="ex_other_thought2"> 먼지 2. 친구가 답장을 안 해. 나한테 질렸나봐.</string>
     <string name="ex_other_thought3"> 먼지 3. 이번 달도 목표를 못 지켰어. 난 의지가 약한가봐.</string>
 
-
-    <string name="dust_kind_thought1"> 마음의 상처 \n "누군가 날 상처 입혔어" </string>
-    <string name="dust_kind_thought2"> 불안과 걱정 \n "앞으로가 불안해"  </string>
-    <string name="dust_kind_thought3"> 화나는 일 \n "정말 화가 나" </string>
-    <string name="dust_kind_thought4"> 깊은 후회 \n "그때 그러지 말 걸 그랬어" </string>
-    <string name="dust_kind_thought5"> 미련과 집착 \n "자꾸만 지난 일이 생각나" </string>
-
-    <string name="dust_kind_thought6"> 자책하는 마음 \n "다 나 때문에 벌어진 일이야" </string>
-    <string name="dust_kind_thought7"> 열등감 \n "난 왜 이것밖에 안 될까" </string>
-    <string name="dust_kind_thought8"> 무력감 \n "아무것도 할 수 없을 것 같아" </string>
-
-    <string name="dust_kind_thought9"> 외로움 \n "세상에 나 혼자 남은 기분이야" </string>
-    <string name="dust_kind_thought10"> 남과의 비교 \n "나만 뒤처지고 불행한 것 같아" </string>
-    <string name="dust_kind_thought11"> 서운함 \n "내 마음을 아무도 몰라줘" </string>
-
-    <string name="dust_kind_thought12"> 무기력증 \n "만사가 귀찮고 하기 싫어" </string>
-    <string name="dust_kind_thought13"> 막연한 우울 \n "이유 없이 눈물이 나고 슬퍼" </string>
-    <string name="dust_kind_thought14"> 짜증과 불만 \n "왜 나한테만 이런 일이 생겨?" </string>
-
-
-
     <string name="word_express_ex1"> 한 단어면 충분해요 </string>
     <string name="word_express_ex2"> 말로 해도 돼요. </string>
 
@@ -64,8 +43,12 @@
     <string name="dialog_main_title">생각 청소</string>
     <string name="dialog_kind_dust_document">자신이 느낀 감정을 선택해주세요.</string>
 
-    <string name="dialog_record_stage_document">겪고있는 생각에 대해서 작성해주세요. </string>
 
+
+
+    <!-- 생각 작성 ui 적용 -->
+    <string name="dialog_record_stage_document">겪고있는 생각에 대해서 작성해주세요. </string>
+    <string name="dialog_game_start_document">게임을 시작할까요?</string>
 
     <!-- game ui 적용 -->
     <string name="dialog_game_text1">방을 청소할 때 마다 내 생각들이 사라집니다. </string>
@@ -75,6 +58,9 @@
 
     <string name="dialog_game_title">생각 청소가 돼었나요?</string>
     <string name="dialog_game_document">이제 행동해 봅시다!</string>
+
+    <string name="dialog_logout_document">로그아웃 하시겠어요?</string>
+
 
 
     <!-- Error -->

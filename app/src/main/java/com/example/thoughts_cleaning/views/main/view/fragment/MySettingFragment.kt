@@ -16,6 +16,8 @@ import com.example.thoughts_cleaning.common.extension.call
 import com.example.thoughts_cleaning.common.vm.viewModelFactory
 import com.example.thoughts_cleaning.databinding.FragmentMainBinding
 import com.example.thoughts_cleaning.databinding.FragmentMySettingBinding
+import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogBuilder
+import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogType
 import com.example.thoughts_cleaning.views.main.SettingEvent
 import com.example.thoughts_cleaning.views.main.view.activity.container.MainActivity
 import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel
@@ -69,17 +71,41 @@ class MySettingFragment :  MasilFragment<FragmentMySettingBinding, MySettingView
                     SettingEvent.USER_INFO -> {
                     }
                     SettingEvent.LOGOUT -> {
-                        //login 페이지로 이동
+                        showDialogFinishTwoButton()
+                    }
+                    SettingEvent.GO_LOGIN -> {
                         enterLogin()
+                    }
+                    SettingEvent.BACK -> {
+                        requireActivity().onBackPressedDispatcher.onBackPressed()
                     }
                 }
             }
         }
     }
 
+    //login 페이지로 이동
     fun enterLogin(){
         val intent = Intent(requireActivity(), StartActivity::class.java)
         startActivity(intent)
         requireActivity().finish()
+    }
+
+    private fun showDialogFinishTwoButton(){
+        val dialog = context?.let {
+            CommonDialogBuilder(it, CommonDialogType.TWO_BUTTON_GAME)
+                .title(getString(R.string.dialog_main_title))
+                .main(getString(R.string.dialog_logout_document))
+                .onConfirmListener {
+                    viewModel.logout(SettingEvent.GO_LOGIN)
+                }
+                .onCancelListener{
+
+                }
+                .build()
+        }
+        if (dialog != null) {
+            showDialog(dialog)
+        }
     }
 }

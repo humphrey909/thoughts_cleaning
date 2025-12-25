@@ -4,9 +4,13 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.api.model.DustKindItem
+import com.example.thoughts_cleaning.api.request.ThoughtSaveRequestData
+import com.example.thoughts_cleaning.common.extension.call
 import com.example.thoughts_cleaning.common.vm.MasilViewModel
+import kotlinx.coroutines.launch
 
 class RecordStageFragmentViewModel(mContext: Context): MasilViewModel() {
 
@@ -19,123 +23,37 @@ class RecordStageFragmentViewModel(mContext: Context): MasilViewModel() {
     val _backBtnStateText: MutableLiveData<Boolean> = MutableLiveData(false)
     val backBtnStateText: LiveData<Boolean> = _backBtnStateText
 
-//    var _reviewOtherPeople = MutableLiveData<Int>()
-//    val reviewOtherPeople: LiveData<Int> get() = _reviewOtherPeople
-
-    val reviewOtherPeople: ArrayList<String> = ArrayList()
-    val dustKindList: ArrayList<DustKindItem> = ArrayList()
-//    val dustFeelingList: ArrayList<DustFeelingItem> = ArrayList()
-
-
-//    var fixDustKind: DustKindItem? = null
-
-//    val _fixDustKind: MutableLiveData<DustKindItem> = MutableLiveData(null)
-//    val fixDustKind: LiveData<DustKindItem> = _fixDustKind
-
-
-//    val fixDustOneWord: MutableLiveData<String> = MutableLiveData("")
-
     val fixDustDetail: MutableLiveData<String> = MutableLiveData("")
 
-    init {
-        reviewOtherPeople.add(mContext.getString(R.string.ex_other_thought1))
-        reviewOtherPeople.add(mContext.getString(R.string.ex_other_thought2))
-        reviewOtherPeople.add(mContext.getString(R.string.ex_other_thought3))
-
-        dustKindList.add(DustKindItem(0,false, mContext.getString(R.string.dust_kind_thought1)))
-        dustKindList.add(DustKindItem(1,false, mContext.getString(R.string.dust_kind_thought2)))
-        dustKindList.add(DustKindItem(2,false,mContext.getString(R.string.dust_kind_thought3)))
-        dustKindList.add(DustKindItem(3,false, mContext.getString(R.string.dust_kind_thought4)))
-        dustKindList.add(DustKindItem(4,false, mContext.getString(R.string.dust_kind_thought4)))
-        dustKindList.add(DustKindItem(5,false, mContext.getString(R.string.dust_kind_thought4)))
-        dustKindList.add(DustKindItem(6,false, mContext.getString(R.string.dust_kind_thought4)))
-        dustKindList.add(DustKindItem(7,false, mContext.getString(R.string.dust_kind_thought4)))
-        dustKindList.add(DustKindItem(8,false, mContext.getString(R.string.dust_kind_thought4)))
-
-
-
-//        dustFeelingList.add(DustFeelingItem(0,false, mContext.getString(R.string.dust_feeling_thought1)))
-//        dustFeelingList.add(DustFeelingItem(1,false, mContext.getString(R.string.dust_feeling_thought2)))
-//        dustFeelingList.add(DustFeelingItem(2,false,mContext.getString(R.string.dust_feeling_thought3)))
-//        dustFeelingList.add(DustFeelingItem(3,false, mContext.getString(R.string.dust_feeling_thought4)))
-//        dustFeelingList.add(DustFeelingItem(4,false, mContext.getString(R.string.dust_feeling_thought5)))
-//        dustFeelingList.add(DustFeelingItem(5,false, mContext.getString(R.string.dust_feeling_thought6)))
-//        dustFeelingList.add(DustFeelingItem(6,false, mContext.getString(R.string.dust_feeling_thought6)))
-//        dustFeelingList.add(DustFeelingItem(7,false, mContext.getString(R.string.dust_feeling_thought7)))
-//        dustFeelingList.add(DustFeelingItem(8,false, mContext.getString(R.string.dust_feeling_thought8)))
-    }
-
+    var kindThoughtIdx = 0
 
     fun onClicked(type:RecordStageFlow){
-//        Log.d("currentMainFlow", "ENTER_GAME2: ENTER_GAME")
-//        Log.d("currentMainFlow", "ENTER_GAME2: ${currentMainFlow.value}")
-
         _backBtnStateText.postValue(false)
-
-//        when (type) {
-//            RecordStageFlow.COMMON -> {
-//                _backBtnStateText.postValue(false)
-//            }
-//            RecordStageFlow.STAGE_1 -> {
-//                _backBtnStateText.postValue(true)
-//                _currentMainFlow.postValue(RecordStageFlow.STAGE_1)
-//            }
-//            RecordStageFlow.STAGE_2 -> {
-//                _backBtnStateText.postValue(true)
-//                _currentMainFlow.postValue(RecordStageFlow.STAGE_2)
-//            }
-//
-//            RecordStageFlow.STAGE_3 -> {
-//                _backBtnStateText.postValue(true)
-//                _currentMainFlow.postValue(RecordStageFlow.STAGE_3)
-//            }
-//            RecordStageFlow.STAGE_4 -> {
-//                _backBtnStateText.postValue(true)
-//                _currentMainFlow.postValue(RecordStageFlow.STAGE_4)
-//            }
-//            RecordStageFlow.STAGE_5 -> {
-//                _backBtnStateText.postValue(true)
-//                _currentMainFlow.postValue(RecordStageFlow.STAGE_5)
-//            }
-//            RecordStageFlow.STAGE_6 -> {
-//                _backBtnStateText.postValue(true)
-//                _currentMainFlow.postValue(RecordStageFlow.STAGE_6)
-//            }
-//            RecordStageFlow.STAGE_7 -> {
-//                _backBtnStateText.postValue(true)
-//            }
-//        }
-
-//        _currentMainFlow.postValue(RecordStageFlow.STAGE_1)
     }
 
     fun onClickedForward(){
-//        if(currentMainFlow.value == RecordStageFlow.STAGE_2){
-//            _currentMainFlow.postValue(RecordStageFlow.NEXT_PAGE)
-//        }else if(currentMainFlow.value == RecordStageFlow.STAGE_3) {
-//            _currentMainFlow.postValue(RecordStageFlow.STAGE_4)
-//        }
         _currentFlow.postValue(RecordStageFlow.NEXT_PAGE)
-
     }
 
 
     fun onClickedBack(){
         _currentFlow.postValue(RecordStageFlow.BACK)
-//        if(currentMainFlow.value == RecordStageFlow.STAGE_1){
-//            _currentMainFlow.postValue(RecordStageFlow.COMMON)
-//        }else if(currentMainFlow.value == RecordStageFlow.STAGE_2){
-//            _currentMainFlow.postValue(RecordStageFlow.STAGE_1)
-//        }else if(currentMainFlow.value == RecordStageFlow.STAGE_3){
-//            _currentMainFlow.postValue(RecordStageFlow.STAGE_2)
-//        }
     }
 
+    fun saveThought() = viewModelScope.launch() {
 
+        val response = api.thoughtsSave(ThoughtSaveRequestData(kindThoughtIdx, fixDustDetail.value))
 
+        response.call() {
+            onSuccess = {
 
-
-//    enum class SubscribeState { COMMON, SUBSCRIBE, NO_SUBSCRIBE }
+//                for (item in it.kindThoughtList) {
+//                    dustKindList.add(DustKindItem(item.idx,false, item.name +System.lineSeparator()+ item.detailText))
+//                }
+//                _dustKindListTotal.postValue(dustKindList)
+            }
+        }
+    }
 
     enum class RecordStageFlow {COMMON, NEXT_PAGE, BACK}
 }

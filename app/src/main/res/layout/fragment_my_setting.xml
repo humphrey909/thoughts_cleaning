@@ -66,6 +66,7 @@
                     android:stateListAnimator="@null"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    android:onClick="@{() -> viewModel.onClick(SettingEvent.BACK)}"
                     />
 
             <TextView
