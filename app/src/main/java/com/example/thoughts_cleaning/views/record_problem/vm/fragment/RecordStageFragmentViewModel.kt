@@ -1,6 +1,7 @@
 package com.example.thoughts_cleaning.views.record_problem.vm.fragment
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,7 +26,11 @@ class RecordStageFragmentViewModel(mContext: Context): MasilViewModel() {
 
     val fixDustDetail: MutableLiveData<String> = MutableLiveData("")
 
-    var kindThoughtIdx = 0
+    var kindThoughtIdx = 0 //전 페이지에서 받아온 생각 종류
+
+    //생각 저장 후 idx
+    val _thoughtSaveIdx: MutableLiveData<Int> = MutableLiveData(0)
+    val thoughtSaveIdx: LiveData<Int> = _thoughtSaveIdx
 
     fun onClicked(type:RecordStageFlow){
         _backBtnStateText.postValue(false)
@@ -46,11 +51,7 @@ class RecordStageFragmentViewModel(mContext: Context): MasilViewModel() {
 
         response.call() {
             onSuccess = {
-
-//                for (item in it.kindThoughtList) {
-//                    dustKindList.add(DustKindItem(item.idx,false, item.name +System.lineSeparator()+ item.detailText))
-//                }
-//                _dustKindListTotal.postValue(dustKindList)
+                _thoughtSaveIdx.postValue(it.idx)
             }
         }
     }

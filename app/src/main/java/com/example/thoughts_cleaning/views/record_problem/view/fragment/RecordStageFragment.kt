@@ -158,8 +158,7 @@ class RecordStageFragment : MasilFragment<FragmentRecordStateBinding, RecordStag
                     if(viewModel.fixDustDetail.value?.length == 0){
                         showCheckDataDialog()
                     }else{
-                        enterGame()
-                        viewModel._currentFlow.postValue(RecordStageFlow.COMMON)
+                        nextPageBtn()
                     }
                 }
                 RecordStageFlow.BACK -> {
@@ -175,10 +174,17 @@ class RecordStageFragment : MasilFragment<FragmentRecordStateBinding, RecordStag
             }
         }
 
+        viewModel.thoughtSaveIdx.observe(viewLifecycleOwner) { idx ->
+            if(idx != 0){
+                enterGame()
+                viewModel._currentFlow.postValue(RecordStageFlow.COMMON)
+            }
+        }
+
         viewModel._currentFlow.postValue(RecordStageFragmentViewModel.RecordStageFlow.COMMON)
     }
 
-    fun enterGame(){
+    fun nextPageBtn(){
         showStartGameDialog()
     }
 
@@ -205,17 +211,21 @@ class RecordStageFragment : MasilFragment<FragmentRecordStateBinding, RecordStag
                 .main(getString(R.string.dialog_game_start_document))
                 .onConfirmListener {
                     viewModel.saveThought()
-
-                    val intent = Intent(requireActivity(), GameActivity::class.java)
-                    // 2. Activity 시작
-                    startActivity(intent)
-                    requireActivity().finish()
                 }
                 .build()
         }
         if (dialog != null) {
             showDialog(dialog)
         }
+    }
+
+    private fun enterGame(){
+        val intent = Intent(requireActivity(), GameActivity::class.java).apply {
+            putExtra("THOUGHT_IDX", viewModel.thoughtSaveIdx.value)
+        }
+
+        startActivity(intent)
+        requireActivity().finish()
     }
 
 }

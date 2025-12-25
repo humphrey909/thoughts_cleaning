@@ -176,7 +176,7 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
 
     fun changeCleanFurniture(furniture: String, type: Int) {
         when(furniture){
-            "CLEAN_BED" -> {
+            "BED" -> {
                 if(type == 1){ // 첫번째 버튼
                     //침대 이미지 변경
                     gameThread.fixBedLocation(R.drawable.room_structure_bed_dirty_stage1)
@@ -184,21 +184,21 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
                     gameThread.fixBedLocation(R.drawable.room_structure_bed_clean)
                 }
             }
-            "CLEAN_DESK" -> {
+            "DESK" -> {
                 if(type == 1){ // 첫번째 버튼
                     gameThread.fixDeskLocation(R.drawable.room_structure_desk_dirty_stage1)
                 }else{ // 두번째 버튼
                     gameThread.fixDeskLocation(R.drawable.room_structure_desk_clean)
                 }
             }
-            "CLEAN_WARDROBE" -> {
+            "WARDROBE" -> {
                 if(type == 1){ // 첫번째 버튼
                     gameThread.fixWardrobeLocation(R.drawable.room_structure_wardrobe_dirty_stage1)
                 }else{ // 두번째 버튼
                     gameThread.fixWardrobeLocation(R.drawable.room_structure_wardrobe_clean)
                 }
             }
-            "CLEAN_WINDOW" -> {
+            "WINDOW" -> {
                 if(type == 1){ // 첫번째 버튼
                     gameThread.fixSmallWindowLocation(R.drawable.room_structure_small_window_dirty_stage1)
                 }else{ // 두번째 버튼
@@ -206,10 +206,5 @@ class GameView(context: Context, val activity: GameActivity, var fragment: GameF
                 }
             }
         }
-    }
-
-    //페이지 이동
-    fun goCleanWindow() {
-
     }
 }

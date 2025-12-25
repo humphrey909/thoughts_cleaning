@@ -1083,7 +1083,7 @@ class GameThread(
 
         bedCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
 //        gameState.pointsList.add(PointF(x, y))
-        gameState.addItem(x, y, ItemType.CLEAN_BED)
+        gameState.addItem(x, y, ItemType.BED)
     }
 
     fun fixDeskLocation(img: Int) {
@@ -1108,7 +1108,7 @@ class GameThread(
 
         deskCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
 //        gameState.pointsList.add(PointF(x, y))
-        gameState.addItem(x, y, ItemType.CLEAN_DESK)
+        gameState.addItem(x, y, ItemType.DESK)
     }
 
     fun fixSmallWindowLocation(img: Int) {
@@ -1133,7 +1133,7 @@ class GameThread(
 
         windowCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
 //        gameState.pointsList.add(PointF(x, y))
-        gameState.addItem(x, y, ItemType.CLEAN_WINDOW)
+        gameState.addItem(x, y, ItemType.WINDOW)
     }
 
     fun fixWardrobeLocation(img: Int) {
@@ -1158,7 +1158,7 @@ class GameThread(
 
         wardrobeCleanBtnRect = RectF(x, y, x + newWidth, y + newHeight)
 //        gameState.pointsList.add(PointF(x, y))
-        gameState.addItem(x, y, ItemType.CLEAN_WARDROBE)
+        gameState.addItem(x, y, ItemType.WARDROBE)
     }
 
 

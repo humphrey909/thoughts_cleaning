@@ -106,25 +106,9 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. Bundle 전체를 가져옵니다.
-//        val bundle = arguments
-
-        // 2. Bundle이 null이 아닌지 확인하고, 보낸 키(Key)를 사용하여 데이터를 추출합니다.
-//        if (bundle != null) {
-//            // 예시: "id_key"라는 키로 Int를 보냈을 경우
-//            wasteCount = bundle.getInt("waste_count", 0) // Int는 기본값(0)을 지정하는 것이 안전합니다.
-//            Log.d("waste_count", "waste_count: ${wasteCount}")
-//        }
-
-        // 1. Context 가져오기 (Fragment에서는 requireContext()를 사용)
-//        mContext = requireContext()
-
-        // 2. 동적으로 FrameLayout 생성
-//        val containerLayout = FrameLayout(mContext)
-
-        // 3. GameView 인스턴스 생성
-        // Fragment를 리스너로 사용하려면 'this'를 인수로 전달합니다.
-        // joystickSimulator는 미리 초기화되어 있어야 합니다.
+        //저장된 생각 idx
+        val idx = requireActivity().intent.getIntExtra("THOUGHT_IDX", -1)
+        viewModel.thoughtIdx = idx
 
         gameView = GameView(
             mContext, /* GameViewListener: */
@@ -168,16 +152,16 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
                     GameEvent.COMMON -> {
 
                     }
-                    GameEvent.CLEAN_BED -> {
+                    GameEvent.BED -> {
                         visibleCleanBtnNew(it.moveType)
                     }
-                    GameEvent.CLEAN_WINDOW -> {
+                    GameEvent.WINDOW -> {
                         visibleCleanBtnNew(it.moveType)
                     }
-                    GameEvent.CLEAN_DESK -> {
+                    GameEvent.DESK -> {
                         visibleCleanBtnNew(it.moveType)
                     }
-                    GameEvent.CLEAN_WARDROBE -> {
+                    GameEvent.WARDROBE -> {
                         visibleCleanBtnNew(it.moveType)
                     }
 
@@ -360,50 +344,50 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
 
         var bedImgUrl: Int = 0
 
-        Log.d("currentScale", "CLEAN_BED count: ${viewModel.cleanImgBtnMap["CLEAN_BED"]?.count}") //null 인 이유
+        Log.d("currentScale", "BED count: ${viewModel.cleanImgBtnMap["BED"]?.count}") //null 인 이유
 
-        if(viewModel.cleanImgBtnMap["CLEAN_BED"]?.count == 1){
-            bedImgUrl = viewModel.cleanImgBtnMap["CLEAN_BED"]!!.img1
-        }else if(viewModel.cleanImgBtnMap["CLEAN_BED"]?.count == 2){
-            bedImgUrl = viewModel.cleanImgBtnMap["CLEAN_BED"]!!.img2
+        if(viewModel.cleanImgBtnMap["BED"]?.count == 1){
+            bedImgUrl = viewModel.cleanImgBtnMap["BED"]!!.img1
+        }else if(viewModel.cleanImgBtnMap["BED"]?.count == 2){
+            bedImgUrl = viewModel.cleanImgBtnMap["BED"]!!.img2
         }else{
-            bedImgUrl = viewModel.cleanImgBtnMap["CLEAN_BED"]!!.img3
+            bedImgUrl = viewModel.cleanImgBtnMap["BED"]!!.img3
         }
 
-        createAndAddGroup("CLEAN_BED", bedImgUrl)
+        createAndAddGroup("BED", bedImgUrl)
 
         var deskImgUrl: Int = 0
 
-        if(viewModel.cleanImgBtnMap["CLEAN_DESK"]?.count == 1){
-            deskImgUrl = viewModel.cleanImgBtnMap["CLEAN_DESK"]!!.img1
-        }else if(viewModel.cleanImgBtnMap["CLEAN_DESK"]?.count == 2){
-            deskImgUrl = viewModel.cleanImgBtnMap["CLEAN_DESK"]!!.img2
+        if(viewModel.cleanImgBtnMap["DESK"]?.count == 1){
+            deskImgUrl = viewModel.cleanImgBtnMap["DESK"]!!.img1
+        }else if(viewModel.cleanImgBtnMap["DESK"]?.count == 2){
+            deskImgUrl = viewModel.cleanImgBtnMap["DESK"]!!.img2
         }else{
-            deskImgUrl = viewModel.cleanImgBtnMap["CLEAN_BED"]!!.img3
+            deskImgUrl = viewModel.cleanImgBtnMap["DESK"]!!.img3
         }
-        createAndAddGroup("CLEAN_DESK", deskImgUrl)
+        createAndAddGroup("DESK", deskImgUrl)
 
         var wardrobeImgUrl: Int = 0
 
-        if(viewModel.cleanImgBtnMap["CLEAN_WARDROBE"]?.count == 1){
-            wardrobeImgUrl = viewModel.cleanImgBtnMap["CLEAN_WARDROBE"]!!.img1
-        }else if(viewModel.cleanImgBtnMap["CLEAN_WARDROBE"]?.count == 2){
-            wardrobeImgUrl = viewModel.cleanImgBtnMap["CLEAN_WARDROBE"]!!.img2
+        if(viewModel.cleanImgBtnMap["WARDROBE"]?.count == 1){
+            wardrobeImgUrl = viewModel.cleanImgBtnMap["WARDROBE"]!!.img1
+        }else if(viewModel.cleanImgBtnMap["WARDROBE"]?.count == 2){
+            wardrobeImgUrl = viewModel.cleanImgBtnMap["WARDROBE"]!!.img2
         }else{
-            wardrobeImgUrl = viewModel.cleanImgBtnMap["CLEAN_BED"]!!.img3
+            wardrobeImgUrl = viewModel.cleanImgBtnMap["WARDROBE"]!!.img3
         }
-        createAndAddGroup("CLEAN_WARDROBE", wardrobeImgUrl)
+        createAndAddGroup("WARDROBE", wardrobeImgUrl)
 
         var windowImgUrl: Int = 0
 
-        if(viewModel.cleanImgBtnMap["CLEAN_WINDOW"]?.count == 1){
-            windowImgUrl = viewModel.cleanImgBtnMap["CLEAN_WINDOW"]!!.img1
-        }else if(viewModel.cleanImgBtnMap["CLEAN_WINDOW"]?.count == 2){
-            windowImgUrl = viewModel.cleanImgBtnMap["CLEAN_WINDOW"]!!.img2
+        if(viewModel.cleanImgBtnMap["WINDOW"]?.count == 1){
+            windowImgUrl = viewModel.cleanImgBtnMap["WINDOW"]!!.img1
+        }else if(viewModel.cleanImgBtnMap["WINDOW"]?.count == 2){
+            windowImgUrl = viewModel.cleanImgBtnMap["WINDOW"]!!.img2
         }else{
-            windowImgUrl = viewModel.cleanImgBtnMap["CLEAN_BED"]!!.img3
+            windowImgUrl = viewModel.cleanImgBtnMap["WINDOW"]!!.img3
         }
-        createAndAddGroup("CLEAN_WINDOW", windowImgUrl)
+        createAndAddGroup("WINDOW", windowImgUrl)
 
         (binding.root as? FrameLayout)?.addView(uiLayer)
     }
@@ -503,17 +487,17 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
         if(viewModel.countSelectItem){
             when (type) {
                 ItemType.DEFAULT -> TODO()
-                ItemType.CLEAN_BED -> {
-                    viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.CLEAN_BED))
+                ItemType.BED -> {
+                    viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.BED))
                 }
-                ItemType.CLEAN_WINDOW -> {
-                    viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.CLEAN_WINDOW))
+                ItemType.WINDOW -> {
+                    viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.WINDOW))
                 }
-                ItemType.CLEAN_DESK -> {
-                    viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.CLEAN_DESK))
+                ItemType.DESK -> {
+                    viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.DESK))
                 }
-                ItemType.CLEAN_WARDROBE -> {
-                    viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.CLEAN_WARDROBE))
+                ItemType.WARDROBE -> {
+                    viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.WARDROBE))
                 }
             }
             viewModel.countSelectItem = false
@@ -538,12 +522,11 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
             //가구 변경
             gameView.changeCleanFurniture(type, viewModel.cleanImgBtnMap[type]!!.count)
 
-
             //청소 버튼 아이콘 변경
             changeCleanIcon(type)
 
             //청소 퍼센트 게이지 변경
-            updateGaugePercent()
+            updateGaugePercent(type, viewModel.cleanImgBtnMap[type]!!.count)
 
             //가구별 청소 카운트 변경
             viewModel.cleanImgBtnMap[type] = viewModel.cleanImgBtnMap[type]!!.copy(count = viewModel.cleanImgBtnMap[type]!!.count+1)
@@ -891,7 +874,7 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
         }
     }
 
-    fun updateGaugePercent() {
+    fun updateGaugePercent(type: String, componentCount:Int) {
         if(viewModel.countClean != viewModel.totalCountClean) {
             viewModel.countClean = viewModel.countClean+1
 
@@ -908,6 +891,11 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
                 }
             }
 
+            //데이터 저장
+            //가구 청소 두번째 부터 저장 하도록.
+            if(componentCount == 2){
+                viewModel.saveThought(type,vPercentOne)
+            }
 
             //종료 시점
             if(viewModel.countClean == viewModel.totalCountClean){
@@ -915,5 +903,4 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
             }
         }
     }
-
 }

@@ -5,4 +5,4 @@ package com.example.thoughts_cleaning.views.game
  */
 
 
-enum class GameEvent {COMMON, GAME_FINISH, DISABLE_CLEAN_BTN, CLEAN_BED, CLEAN_WINDOW, CLEAN_DESK, CLEAN_WARDROBE}
+enum class GameEvent {COMMON, GAME_FINISH, DISABLE_CLEAN_BTN, BED, WINDOW, DESK, WARDROBE}

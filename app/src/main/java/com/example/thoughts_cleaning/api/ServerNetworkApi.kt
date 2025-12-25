@@ -2,12 +2,14 @@ package com.example.thoughts_cleaning.api
 
 import com.example.thoughts_cleaning.api.model.ResBase
 import com.example.thoughts_cleaning.api.request.CheckTokenRequestData
+import com.example.thoughts_cleaning.api.request.GameGaugeSaveRequestData
 import com.example.thoughts_cleaning.api.request.RefreshTokenRequestData
 import com.example.thoughts_cleaning.api.request.SocialKakaoLoginRequestData
 import com.example.thoughts_cleaning.api.request.ThoughtSaveRequestData
 import com.example.thoughts_cleaning.api.response.CheckTokenDto
 import com.example.thoughts_cleaning.api.response.ResKindThoughtListDto
 import com.example.thoughts_cleaning.api.response.ResMasilSocialLogin
+import com.example.thoughts_cleaning.api.response.ThoughtSaveResponseData
 import com.example.thoughts_cleaning.api.response.TokenDto
 import retrofit2.Call
 import retrofit2.http.Body
@@ -79,7 +81,7 @@ interface ServerNetworkApi {
     @POST("/api/thoughts/save")
     fun thoughtsSave(
         @Body req: ThoughtSaveRequestData
-    ): Call<ResBase>
+    ): Call<ThoughtSaveResponseData>
 
     /**
      * Created by Humphrey on
@@ -89,4 +91,15 @@ interface ServerNetworkApi {
     @GET("/api/kind-thought/list")
     fun thoughtsKindList(
     ): Call<ResKindThoughtListDto>
+
+
+    /**
+     * Created by Humphrey on
+     * 생각 저장
+     * api/thoughts/save
+     */
+    @POST("/api/cleaning-gauge/save")
+    fun cleaningGaugeSave(
+        @Body req: GameGaugeSaveRequestData
+    ): Call<ResBase>
 }
