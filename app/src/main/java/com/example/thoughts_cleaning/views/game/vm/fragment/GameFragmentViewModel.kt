@@ -4,7 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.api.model.CleanStateBtnItem
+import com.example.thoughts_cleaning.base.MoveEvent
 import com.example.thoughts_cleaning.common.vm.MasilViewModel
+import com.example.thoughts_cleaning.views.game.GameEvent
 
 class GameFragmentViewModel: MasilViewModel() {
 
@@ -14,6 +17,16 @@ class GameFragmentViewModel: MasilViewModel() {
     private val _characterImageResId = MutableLiveData<Int>(R.drawable.character_default)
     val characterImages: LiveData<Int> = _characterImageResId
 
+    val cleanImgBtnMap = HashMap<String, CleanStateBtnItem>()
+    val countCleanBtn = 3
+
+//    val _countClean: MutableLiveData<Int> = MutableLiveData(0)
+//    val countClean: LiveData<Int> = _countClean
+
+    var countClean = 0
+    var totalCountClean = 8
+
+//    val cleanCompleteImg = R.drawable.ic_clean_end
     // 질문 리스트
     val allQuestions = mutableListOf(
         // ------------------------------------
@@ -43,6 +56,15 @@ class GameFragmentViewModel: MasilViewModel() {
     val askedQuestions = mutableSetOf<String>()
 
     var countSelectItem = true
+
+    init {
+        cleanImgBtnMap["CLEAN_BED"] = CleanStateBtnItem(1,R.drawable.clean_bed1, R.drawable.clean_bed2, R.drawable.ic_clean_end)
+        cleanImgBtnMap["CLEAN_DESK"] = CleanStateBtnItem(1,R.drawable.clean_desk1, R.drawable.clean_desk2, R.drawable.ic_clean_end)
+        cleanImgBtnMap["CLEAN_WINDOW"] = CleanStateBtnItem(1,R.drawable.clean_window1, R.drawable.clean_window2, R.drawable.ic_clean_end)
+        cleanImgBtnMap["CLEAN_WARDROBE"] = CleanStateBtnItem(1,R.drawable.clean_wardrobe1, R.drawable.clean_wardrobe2, R.drawable.ic_clean_end)
+
+//        _moveEvent.postValue(MoveEvent.Game(GameEvent.GAME_FINISH))
+    }
 
 
 }

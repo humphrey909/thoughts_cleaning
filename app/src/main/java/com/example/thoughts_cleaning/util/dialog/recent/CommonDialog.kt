@@ -8,8 +8,10 @@ import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.databinding.DialogCommonOneButtonBinding
+import com.example.thoughts_cleaning.databinding.DialogCommonOneButtonGameBinding
 import com.example.thoughts_cleaning.databinding.DialogCommonSubTitleBinding
 import com.example.thoughts_cleaning.databinding.DialogCommonTwoButtonBinding
+import com.example.thoughts_cleaning.databinding.DialogCommonTwoButtonGameBinding
 import com.example.thoughts_cleaning.databinding.DialogCommonTwoButtonImageBinding
 
 /**
@@ -45,6 +47,8 @@ class CommonDialog constructor(val builder: CommonDialogBuilder) : Dialog(builde
             CommonDialogType.TWO_BUTTON -> setTwoButtonDialogView(DataBindingUtil.inflate(LayoutInflater.from(builder.context), R.layout.dialog_common_two_button, null, false))
             CommonDialogType.SUB_TITLE -> setSubTitleDialogView(DataBindingUtil.inflate(LayoutInflater.from(builder.context), R.layout.dialog_common_sub_title, null, false))
             CommonDialogType.TWO_BUTTON_IMAGE -> setTwoButtonImageDialogView(DataBindingUtil.inflate(LayoutInflater.from(builder.context), R.layout.dialog_common_two_button_image, null, false))
+            CommonDialogType.ONE_BUTTON_GAME -> setOneButtonImageGameDialogView(DataBindingUtil.inflate(LayoutInflater.from(builder.context), R.layout.dialog_common_one_button_game, null, false))
+            CommonDialogType.TWO_BUTTON_GAME -> setTwoButtonImageGameDialogView(DataBindingUtil.inflate(LayoutInflater.from(builder.context), R.layout.dialog_common_two_button_game, null, false))
         }
         setCancelable(false)
     }
@@ -65,6 +69,16 @@ class CommonDialog constructor(val builder: CommonDialogBuilder) : Dialog(builde
     }
 
     private fun setTwoButtonImageDialogView(binding: DialogCommonTwoButtonImageBinding) {
+        setContentView(binding.root)
+        binding.dialog = this
+    }
+
+    private fun setTwoButtonImageGameDialogView(binding: DialogCommonTwoButtonGameBinding) {
+        setContentView(binding.root)
+        binding.dialog = this
+    }
+
+    private fun setOneButtonImageGameDialogView(binding: DialogCommonOneButtonGameBinding) {
         setContentView(binding.root)
         binding.dialog = this
     }

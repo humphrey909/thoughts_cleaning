@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.api.model.CleanStateBtnItem
 import com.example.thoughts_cleaning.base.MasilFragment
 import com.example.thoughts_cleaning.base.MoveEvent
 import com.example.thoughts_cleaning.common.vm.viewModelFactory
@@ -32,6 +33,7 @@ import com.example.thoughts_cleaning.views.game.GameEvent
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.game.vm.fragment.GameFragmentViewModel
 import com.three.joystick.JoystickView
+import kotlin.collections.set
 
 class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R.layout.fragment_game), GameView.GameActionListener {
 
@@ -76,6 +78,8 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
     private var alertThread: Thread? = null
 
     var gaugeFillView: View? = null
+
+    var cleanIconView: ImageView? = null
 
     companion object {
         // 이 부분이 있어야 외부에서 BFragment.newInstance(...) 로 호출 가능합니다.
@@ -162,24 +166,24 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
 
                     }
                     GameEvent.CLEAN_BED -> {
-//                        createCleanBtn(GameEvent.CLEAN_BED)
                         visibleCleanBtnNew(it.moveType)
                     }
                     GameEvent.CLEAN_WINDOW -> {
-//                        createCleanBtn(GameEvent.CLEAN_WINDOW)
                         visibleCleanBtnNew(it.moveType)
                     }
                     GameEvent.CLEAN_DESK -> {
-//                        createCleanBtn(GameEvent.CLEAN_DESK)
                         visibleCleanBtnNew(it.moveType)
                     }
                     GameEvent.CLEAN_WARDROBE -> {
-//                        createCleanBtn(GameEvent.CLEAN_WARDROBE)
                         visibleCleanBtnNew(it.moveType)
                     }
 
                     GameEvent.DISABLE_CLEAN_BTN -> {
                         disVisibleCleanBtnNew()
+                    }
+
+                    GameEvent.GAME_FINISH -> {
+                        showDialogFinishOneButton()
                     }
                 }
             }
@@ -341,12 +345,53 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
             setBackgroundColor(Color.TRANSPARENT)
         }
 
-        createAndAddGroup("CLEAN_BED", R.drawable.clean_bed1, R.drawable.clean_bed2)
-        createAndAddGroup("CLEAN_DESK", R.drawable.clean_desk1, R.drawable.clean_desk2)
-        createAndAddGroup("CLEAN_WARDROBE", R.drawable.clean_wardrobe1, R.drawable.clean_wardrobe2)
-        createAndAddGroup("CLEAN_WINDOW", R.drawable.clean_window1, R.drawable.clean_window2)
+        var bedImgUrl: Int = 0
 
-        // 8. (필요하다면) 화면에 UI 레이어 붙이기
+        Log.d("currentScale", "CLEAN_BED count: ${viewModel.cleanImgBtnMap["CLEAN_BED"]?.count}") //null 인 이유
+
+        if(viewModel.cleanImgBtnMap["CLEAN_BED"]?.count == 1){
+            bedImgUrl = viewModel.cleanImgBtnMap["CLEAN_BED"]!!.img1
+        }else if(viewModel.cleanImgBtnMap["CLEAN_BED"]?.count == 2){
+            bedImgUrl = viewModel.cleanImgBtnMap["CLEAN_BED"]!!.img2
+        }else{
+            bedImgUrl = viewModel.cleanImgBtnMap["CLEAN_BED"]!!.img3
+        }
+
+        createAndAddGroup("CLEAN_BED", bedImgUrl)
+
+        var deskImgUrl: Int = 0
+
+        if(viewModel.cleanImgBtnMap["CLEAN_DESK"]?.count == 1){
+            deskImgUrl = viewModel.cleanImgBtnMap["CLEAN_DESK"]!!.img1
+        }else if(viewModel.cleanImgBtnMap["CLEAN_DESK"]?.count == 2){
+            deskImgUrl = viewModel.cleanImgBtnMap["CLEAN_DESK"]!!.img2
+        }else{
+            deskImgUrl = viewModel.cleanImgBtnMap["CLEAN_BED"]!!.img3
+        }
+        createAndAddGroup("CLEAN_DESK", deskImgUrl)
+
+        var wardrobeImgUrl: Int = 0
+
+        if(viewModel.cleanImgBtnMap["CLEAN_WARDROBE"]?.count == 1){
+            wardrobeImgUrl = viewModel.cleanImgBtnMap["CLEAN_WARDROBE"]!!.img1
+        }else if(viewModel.cleanImgBtnMap["CLEAN_WARDROBE"]?.count == 2){
+            wardrobeImgUrl = viewModel.cleanImgBtnMap["CLEAN_WARDROBE"]!!.img2
+        }else{
+            wardrobeImgUrl = viewModel.cleanImgBtnMap["CLEAN_BED"]!!.img3
+        }
+        createAndAddGroup("CLEAN_WARDROBE", wardrobeImgUrl)
+
+        var windowImgUrl: Int = 0
+
+        if(viewModel.cleanImgBtnMap["CLEAN_WINDOW"]?.count == 1){
+            windowImgUrl = viewModel.cleanImgBtnMap["CLEAN_WINDOW"]!!.img1
+        }else if(viewModel.cleanImgBtnMap["CLEAN_WINDOW"]?.count == 2){
+            windowImgUrl = viewModel.cleanImgBtnMap["CLEAN_WINDOW"]!!.img2
+        }else{
+            windowImgUrl = viewModel.cleanImgBtnMap["CLEAN_BED"]!!.img3
+        }
+        createAndAddGroup("CLEAN_WINDOW", windowImgUrl)
+
         (binding.root as? FrameLayout)?.addView(uiLayer)
     }
 
@@ -361,7 +406,7 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
         }
     }
 
-    private fun createAndAddGroup(type: String, imgRes1: Int, imgRes2: Int) {
+    private fun createAndAddGroup(type: String, imgRes: Int) {
 
         // 1. LinearLayout(그룹) 생성
         val buttonGroup = LinearLayout(mContext).apply {
@@ -376,29 +421,49 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
             rightMargin = 10
         }
 
-        // 왼쪽 이미지
-        buttonGroup.addView(ImageView(mContext).apply {
-            setImageResource(imgRes1)
+        cleanIconView = ImageView(mContext).apply {
+            setImageResource(imgRes)
             scaleType = ImageView.ScaleType.FIT_CENTER
             setOnClickListener {
-                Log.d("Game", "$type 왼쪽 클릭")
-
-                responseClick(type, 1)
+                responseClick(type)
             }
-        }, imgParams)
+        }
+        buttonGroup.addView(cleanIconView, imgParams)
 
-        // 오른쪽 이미지
-        buttonGroup.addView(ImageView(mContext).apply {
-            setImageResource(imgRes2)
-            scaleType = ImageView.ScaleType.FIT_CENTER
-            setOnClickListener {
-                Log.d("Game", "$type 오른쪽 클릭")
+//        val fillParams = ConstraintLayout.LayoutParams(
+//            0,
+//            16
+//        ).apply {
+//            topToTop = gaugeImgId
+//            bottomToBottom = gaugeImgId
+//            startToStart = gaugeImgId
+//            endToEnd = gaugeImgId
+//
+//            matchConstraintPercentWidth = 0.1f
+//            horizontalBias = 0.0f
+//
+//            marginStart = 7
+//        }
+//
+//        gaugeFillView = View(mContext).apply {
+//            id = View.generateViewId()
+//            // 위에서 만든 녹색 채움 xml 적용
+//            setBackgroundResource(R.drawable.bg_clean_gauge_fill)
+//        }
+//        CleanGaugeConstraintIn.addView(gaugeFillView, fillParams)
 
-                //type
-                responseClick(type, 2)
-
-            }
-        }, imgParams)
+//        // 오른쪽 이미지
+//        buttonGroup.addView(ImageView(mContext).apply {
+//            setImageResource(imgRes2)
+//            scaleType = ImageView.ScaleType.FIT_CENTER
+//            setOnClickListener {
+//                Log.d("Game", "$type 오른쪽 클릭")
+//
+//                //type
+//                responseClick(type, 2)
+//
+//            }
+//        }, imgParams)
 
         // 3. 위치 설정 (중앙 하단)
         val groupParams = ConstraintLayout.LayoutParams(
@@ -453,38 +518,22 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
     }
 
     //특정 가구 청소시 순서에 따라 다른 효과가 나타난다.
-    fun responseClick(type: String, location: Int){
+    //클릭시 아이콘 이미지 변경
+    fun responseClick(type: String){
+        if(viewModel.cleanImgBtnMap[type]!!.count <  viewModel.countCleanBtn){
 
-        when(type){
-            "CLEAN_BED" -> {
-                if(location == 1){ // 첫번째 버튼
-                    //침대 이미지 변경
-                    gameView.changeCleanFurniture("CLEAN_BED", 1)
-                }else{ // 두번째 버튼
-                    gameView.changeCleanFurniture("CLEAN_BED", 2)
-                }
-            }
-            "CLEAN_DESK" -> {
-                if(location == 1){ // 첫번째 버튼
-                    gameView.changeCleanFurniture("CLEAN_DESK", 1)
-                }else{ // 두번째 버튼
-                    gameView.changeCleanFurniture("CLEAN_DESK", 2)
-                }
-            }
-            "CLEAN_WARDROBE" -> {
-                if(location == 1){ // 첫번째 버튼
-                    gameView.changeCleanFurniture("CLEAN_WARDROBE", 1)
-                }else{ // 두번째 버튼
-                    gameView.changeCleanFurniture("CLEAN_WARDROBE", 2)
-                }
-            }
-            "CLEAN_WINDOW" -> {
-                if(location == 1){ // 첫번째 버튼
-                    gameView.changeCleanFurniture("CLEAN_WINDOW", 1)
-                }else{ // 두번째 버튼
-                    gameView.changeCleanFurniture("CLEAN_WINDOW", 2)
-                }
-            }
+            //가구 변경
+            gameView.changeCleanFurniture(type, viewModel.cleanImgBtnMap[type]!!.count)
+
+
+            //청소 버튼 아이콘 변경
+            changeCleanIcon(type)
+
+            //청소 퍼센트 게이지 변경
+            updateGaugePercent()
+
+            //가구별 청소 카운트 변경
+            viewModel.cleanImgBtnMap[type] = viewModel.cleanImgBtnMap[type]!!.copy(count = viewModel.cleanImgBtnMap[type]!!.count+1)
         }
     }
 
@@ -690,9 +739,6 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
             bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
             startToStart = ConstraintLayout.LayoutParams.PARENT_ID
             endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-
-//            horizontalBias = 0.0f
-//            matchConstraintPercentWidth = 1.0f
         }
 
         val gaugeImgId = View.generateViewId()
@@ -716,10 +762,12 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
             startToStart = gaugeImgId
             endToEnd = gaugeImgId
 
-            matchConstraintPercentWidth = 0.1f
+            matchConstraintDefaultWidth = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_PERCENT
+            matchConstraintPercentWidth = 0f
             horizontalBias = 0.0f
 
             marginStart = 7
+//            marginEnd = 7
         }
 
         gaugeFillView = View(mContext).apply {
@@ -771,7 +819,7 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
             scaleType = ImageView.ScaleType.FIT_CENTER
 
             setOnClickListener {
-                showDialog()
+                showDialogFinishTwoButton()
             }
         }, btnCloseParams)
 
@@ -781,9 +829,9 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
     }
 
 
-    private fun showDialog(){
+    private fun showDialogFinishTwoButton(){
         val dialog = context?.let {
-            CommonDialogBuilder(it, CommonDialogType.TWO_BUTTON)
+            CommonDialogBuilder(it, CommonDialogType.TWO_BUTTON_GAME)
                 .title(getString(R.string.dialog_game_title))
                 .main(getString(R.string.dialog_game_document))
                 .onConfirmListener {
@@ -798,19 +846,56 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
             showDialog(dialog)
         }
     }
+    private fun showDialogFinishOneButton(){
+        val dialog = context?.let {
+            CommonDialogBuilder(it, CommonDialogType.ONE_BUTTON_GAME)
+                .title(getString(R.string.dialog_game_title))
+                .main(getString(R.string.dialog_game_document))
+                .onConfirmListener {
+                    requireActivity().onBackPressedDispatcher.onBackPressed()
+                }
+                .build()
+        }
+        if (dialog != null) {
+            showDialog(dialog)
+        }
+    }
+
+    fun changeCleanIcon(type: String) {
+        val targetImageView = uiCleanBtnGroupMap[type]!!.getChildAt(0) as? ImageView
+        if(viewModel.cleanImgBtnMap[type]!!.count == 1) {
+            activity?.runOnUiThread {
+                targetImageView?.setImageResource(viewModel.cleanImgBtnMap[type]!!.img2)
+            }
+        }else if (viewModel.cleanImgBtnMap[type]!!.count == 2){
+            activity?.runOnUiThread {
+                targetImageView?.setImageResource(viewModel.cleanImgBtnMap[type]!!.img3)
+            }
+        }
+    }
+
+    fun updateGaugePercent() {
+        if(viewModel.countClean != viewModel.totalCountClean) {
+            viewModel.countClean = viewModel.countClean+1
+
+            val vPercent = 1f / viewModel.totalCountClean
+            val vPercentOne = vPercent * viewModel.countClean.toFloat()
+
+            val safePercent = vPercentOne.coerceIn(0f, 1f)
+
+            (mContext as? Activity)?.runOnUiThread {
+                val params = gaugeFillView?.layoutParams as? ConstraintLayout.LayoutParams
+                params?.let {
+                    it.matchConstraintPercentWidth = safePercent
+                    gaugeFillView?.layoutParams = it // 변경사항 적용
+                }
+            }
 
 
-//    fun updateGaugePercent(percent: Float) {
-//        // percent는 0.0 ~ 1.0 사이 (예: 50% -> 0.5f)
-//        // 범위를 벗어나지 않게 안전장치
-//        val safePercent = percent.coerceIn(0f, 1f)
-//
-//        (mContext as? Activity)?.runOnUiThread {
-//            val params = gaugeFillView?.layoutParams as? ConstraintLayout.LayoutParams
-//            params?.let {
-//                it.matchConstraintPercentWidth = safePercent
-//                gaugeFillView?.layoutParams = it // 변경사항 적용
-//            }
-//        }
-//    }
+            //종료 시점
+            if(viewModel.countClean == viewModel.totalCountClean){
+                viewModel._moveEvent.postValue(MoveEvent.Game(GameEvent.GAME_FINISH))
+            }
+        }
+    }
 }
