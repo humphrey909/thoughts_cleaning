@@ -3,7 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_game"
-    app:startDestination="@id/GameFragment">
+    app:startDestination="@id/SlideGameFragment">
+
+    <fragment
+            android:id="@+id/SlideGameFragment"
+            android:name="com.example.thoughts_cleaning.views.game.view.fragment.SlideGameFragment"
+            android:label="slideGame"
+            tools:layout="@layout/fragment_slide_game" >
+    </fragment>
+
 
     <fragment
         android:id="@+id/GameFragment"

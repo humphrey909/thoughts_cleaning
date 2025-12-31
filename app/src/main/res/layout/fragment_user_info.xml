@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="com.example.thoughts_cleaning.views.main.UserInfoEvent"/>
+        <variable
+                name="viewModel"
+                type="com.example.thoughts_cleaning.views.main.vm.fragment.UserInfoViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/basic_background"
+            >
+
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_vertical_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_vertical_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_horizontal_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.03" />
+
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_horizontal_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.9" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/top_area"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
+                app:layout_constraintTop_toTopOf="@+id/guide_horizontal_top"
+                app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
+                app:layout_constraintBottom_toTopOf="@+id/content_area"
+                app:layout_constraintHeight_percent="0.08"
+                >
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_back"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/btn_back"
+                    android:scaleType="centerCrop"
+                    android:stateListAnimator="@null"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:onClick="@{() -> viewModel.onClick(UserInfoEvent.BACK)}"
+                    />
+
+            <TextView
+                    android:id="@+id/top_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="내 정보"
+                    android:gravity="center"
+                    android:textSize="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_back"
+                    />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/content_area"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/bottom_area"
+                app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
+                app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
+                app:layout_constraintTop_toBottomOf="@+id/top_area"
+                android:paddingHorizontal="15dp"
+                >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/userinfo_id_area"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="20dp"
+                    android:background="@drawable/bg_userinfo_text"
+                    >
+
+                <TextView
+                        android:id="@+id/userinfo_id_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="아이디 (카카오 간편 로그인)"
+                        android:fontFamily="@font/pretendard_light"
+                        android:textSize="15dp"
+                        android:gravity="start|center"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/userinfo_id_document"
+                        android:layout_marginBottom="10dp"
+                        />
+                <TextView
+                        android:id="@+id/userinfo_id_document"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        tools:text="wlgns1858@naver.com"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:textSize="20dp"
+                        android:gravity="start|center"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/userinfo_id_title"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/userinfo_name_area"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userinfo_id_area"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="20dp"
+                    android:background="@drawable/bg_userinfo_text"
+                    android:layout_marginTop="20dp"
+                    >
+
+                <TextView
+                        android:id="@+id/userinfo_name_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="넥네임"
+                        android:fontFamily="@font/pretendard_light"
+                        android:textSize="15dp"
+                        android:gravity="start|center"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/userinfo_name_document"
+                        android:layout_marginBottom="10dp"
+                        />
+                <TextView
+                        android:id="@+id/userinfo_name_document"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        tools:text="김지훈"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:textSize="20dp"
+                        android:gravity="start|center"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/userinfo_name_title"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bottom_area"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
+                app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
+                app:layout_constraintTop_toBottomOf="@+id/content_area"
+                app:layout_constraintHeight_percent="0.15"
+                android:paddingHorizontal="15dp"
+                >
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/logout_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="계정 탈퇴"
+                    android:textSize="20dp"
+                    android:fontFamily="@font/pretendard_semibold"
+                    android:textColor="@color/black4"
+                    android:background="@drawable/btn_setting_selector"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:stateListAnimator="@null"
+                    android:onClick="@{()-> viewModel.onClick(UserInfoEvent.USER_DELETE)}"
+                    />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/title"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="0dp"-->
+        <!--            android:text="세팅 페이지"-->
+        <!--            android:gravity="center"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

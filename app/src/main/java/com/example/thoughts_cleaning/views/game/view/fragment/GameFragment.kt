@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.fragment.findNavController
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.api.model.CleanStateBtnItem
 import com.example.thoughts_cleaning.base.MasilFragment
@@ -393,6 +394,7 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
     }
 
     private fun visibleCleanBtnNew(type: GameEvent) {
+
         // UI 스레드 안전장치
         uiLayer?.post {
             // 1. 일단 모든 그룹을 다 숨김 (초기화)
@@ -400,6 +402,15 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
 
             // 2. 원하는 타입만 찾아서 보여줌
             uiCleanBtnGroupMap[type.toString()]?.visibility = View.VISIBLE
+        }
+
+        if(type == GameEvent.WINDOW){
+            //창문페이지로 이동
+            //action_window_clean_page
+            findNavController().navigate(R.id.action_window_clean_page)
+
+
+
         }
     }
 
@@ -887,7 +898,7 @@ class GameFragment : MasilFragment<FragmentGameBinding, GameFragmentViewModel>(R
                 val params = gaugeFillView?.layoutParams as? ConstraintLayout.LayoutParams
                 params?.let {
                     it.matchConstraintPercentWidth = safePercent
-                    gaugeFillView?.layoutParams = it // 변경사항 적용
+                    gaugeFillView?.layoutParams = it
                 }
             }
 

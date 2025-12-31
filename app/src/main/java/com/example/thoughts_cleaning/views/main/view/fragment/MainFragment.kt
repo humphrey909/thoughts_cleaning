@@ -235,12 +235,6 @@ class MainFragment : MasilFragment<FragmentMainBinding, MainFragmentViewModel>(R
     // ViewModel의 이벤트에 따라 실제 화면 전환(Intent)을 처리하는 함수
     private fun handleNavigationEvent() {
         viewModel.currentMainFlow.observe(viewLifecycleOwner) { flow ->
-
-//            Log.d("currentMainFlow", "ENTER_GAME: ENTER_GAME")
-//            Log.d("currentMainFlow", "ENTER_GAME: $flow")
-
-
-
             when (flow) {
                 MainFlow.COMMON -> { /* ... */ }
                 MainFlow.ENTER_GAME -> {
@@ -251,22 +245,9 @@ class MainFragment : MasilFragment<FragmentMainBinding, MainFragmentViewModel>(R
                 }
                 MainFlow.SETTING -> {
                     findNavController().navigate(R.id.setting_fragment)
-
                     viewModel._currentMainFlow.postValue(MainFlow.COMMON)
                 }
-
-                // findNavController().navigate(R.id.action_write_thought)
             }
-//            viewModel.MainFlow
-
-//            binding.nameView.text = it
-
-//            if(it == viewModel.MainFlow){
-//
-//            }else{
-//
-//            }
-//
         }
 
 

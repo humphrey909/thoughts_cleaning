@@ -2,6 +2,8 @@ package com.example.thoughts_cleaning.util
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.BlurMaskFilter
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -12,6 +14,9 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
+import android.util.Log
+import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.views.game.WindowCleanEvent
 
 
 class DrawingView (context: Context, attrs: AttributeSet) : View(context, attrs) {
@@ -32,8 +37,32 @@ class DrawingView (context: Context, attrs: AttributeSet) : View(context, attrs)
     private var mY = 0f
     private val TOUCH_TOLERANCE = 4f // 터치 움직임 허용 오차
 
+    private var isTouching: Boolean = false
+
+    private var touchImage: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.clean_window_tool2) // 이미지 리소스
+    private var touchX: Float = 0.0F
+    private var touchY: Float = 0.0F
+
+    private val offsetX = touchImage.width / 2f
+    private val offsetY = touchImage.height / 2f
+
     init {
         setupDrawing()
+    }
+
+    // 2. 이물질 느낌을 낼 페인트 설정
+    private val dirtPaint = Paint().apply {
+        color = Color.argb(100, 90, 60, 30) // 반투명한 짙은 갈색 (Alpha 100/255)
+        isAntiAlias = true
+        isDither = true // 색상 단계를 부드럽게
+        style = Paint.Style.STROKE // 선으로 그리기
+        strokeJoin = Paint.Join.ROUND // 모서리 둥글게
+        strokeCap = Paint.Cap.ROUND // 선 끝부분 둥글게
+        strokeWidth = 80f // 브러시 두께 (원하는 대로 조절)
+
+        // (선택사항) 가장자리를 뿌옇게 번지게 하여 더 리얼한 먼지 느낌 내기
+        // Blur 스타일: NORMAL, SOLID, OUTER, INNER
+        maskFilter = BlurMaskFilter(20f, BlurMaskFilter.Blur.NORMAL)
     }
 
     private fun setupDrawing() {
@@ -92,6 +121,11 @@ class DrawingView (context: Context, attrs: AttributeSet) : View(context, attrs)
 
         // 2. 현재 터치 중인 경로를 내부 캔버스 비트맵에 그립니다. (실시간 지우기)
         drawCanvas.drawPath(erasePath, erasePaint)
+
+        // 터치 중일 때만 이미지를 그림
+        if (isTouching) {
+            canvas.drawBitmap(touchImage, touchX - offsetX, touchY - offsetY - 100f, null)
+        }
     }
 
     // 터치 이벤트 처리 시작
@@ -124,25 +158,49 @@ class DrawingView (context: Context, attrs: AttributeSet) : View(context, attrs)
 
     // 모든 터치 이벤트 처리
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val x = event.x
-        val y = event.y
+        touchX = event.x
+        touchY = event.y
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                touchStart(x, y)
+                isTouching = true
+
+                touchStart(touchX, touchY)
                 // View를 다시 그려 onDraw 호출 (실시간 지우개 모양 표시)
                 invalidate()
             }
             MotionEvent.ACTION_MOVE -> {
-                touchMove(x, y)
+                touchMove(touchX, touchY)
                 invalidate()
             }
             MotionEvent.ACTION_UP -> {
+                isTouching = false
+
                 touchUp()
                 invalidate()
             }
             else -> return false
         }
         return true
+    }
+
+    fun setTouchImage(type:WindowCleanEvent, resourceId: Int){
+        Log.d("currentMainFlow", "ENTER_GAME3: ${resourceId}")
+
+
+        when(type){
+            WindowCleanEvent.COMMON -> TODO()
+            WindowCleanEvent.NEXT_PAGE -> TODO()
+            WindowCleanEvent.QUIT_PAGE -> TODO()
+            WindowCleanEvent.WASHER -> TODO()
+
+            WindowCleanEvent.SOLUTION -> {
+
+            }
+        }
+
+        touchImage = BitmapFactory.decodeResource(resources, resourceId)
+
+        invalidate()
     }
 }

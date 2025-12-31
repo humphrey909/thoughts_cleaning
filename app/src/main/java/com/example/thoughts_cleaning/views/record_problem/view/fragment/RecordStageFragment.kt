@@ -220,12 +220,35 @@ class RecordStageFragment : MasilFragment<FragmentRecordStateBinding, RecordStag
     }
 
     private fun enterGame(){
-        val intent = Intent(requireActivity(), GameActivity::class.java).apply {
-            putExtra("THOUGHT_IDX", viewModel.thoughtSaveIdx.value)
-        }
+//        val intent = Intent(requireActivity(), GameActivity::class.java).apply {
+//            putExtra("THOUGHT_IDX", viewModel.thoughtSaveIdx.value)
+//        }
 
+        val intent = Intent(requireActivity(), GameActivity::class.java).apply {
+            // 1. IDX (Int)
+            putExtra("THOUGHT_IDX", viewModel.thoughtSaveResponseData!!.idx)
+
+            // 2. Content Thought (String)
+            // viewModel에 해당 변수가 있다고 가정한 코드입니다. (실제 변수명으로 교체하세요)
+            putExtra("THOUGHT_CONTENT", viewModel.thoughtSaveResponseData!!.contentThought)
+
+            // 3. Name (String)
+            putExtra("KIND_NAME", viewModel.thoughtSaveResponseData!!.name)
+
+            // 4. Detail Text (String)
+            putExtra("KIND_DETAIL", viewModel.thoughtSaveResponseData!!.detailText)
+        }
         startActivity(intent)
         requireActivity().finish()
     }
+
+//    private fun enterGameExam(){
+//        val intent = Intent(requireActivity(), GameActivity::class.java).apply {
+//            putExtra("THOUGHT_DETAIL", viewModel.fixDustDetail.value)
+//        }
+//
+//        startActivity(intent)
+//        requireActivity().finish()
+//    }
 
 }

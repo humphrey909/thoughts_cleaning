@@ -13,6 +13,7 @@ import com.example.thoughts_cleaning.api.response.ThoughtSaveResponseData
 import com.example.thoughts_cleaning.api.response.TokenDto
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 
@@ -71,6 +72,16 @@ interface ServerNetworkApi {
     @POST("/api/users/logout")
     fun logout(
     ): Call<ResBase>
+
+    /**
+     * Created by Humphrey on
+     * accessToken 데이터 만료 여부 체크
+     * api/users/refresh
+     */
+    @DELETE("/api/users/withdraw")
+    fun withdraw(
+    ): Call<ResBase>
+
 
 
     /**

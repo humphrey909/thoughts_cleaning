@@ -2,43 +2,27 @@ package com.example.thoughts_cleaning.views.main.view.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.findNavController
 import com.example.thoughts_cleaning.R
-import com.example.thoughts_cleaning.api.request.SocialKakaoLoginRequestData
 import com.example.thoughts_cleaning.base.MasilFragment
 import com.example.thoughts_cleaning.base.MoveEvent
-import com.example.thoughts_cleaning.base.MoveEvent.Setting
-import com.example.thoughts_cleaning.common.extension.call
 import com.example.thoughts_cleaning.common.vm.viewModelFactory
-import com.example.thoughts_cleaning.databinding.FragmentMainBinding
 import com.example.thoughts_cleaning.databinding.FragmentMySettingBinding
+import com.example.thoughts_cleaning.databinding.FragmentUserInfoBinding
 import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogBuilder
 import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogType
 import com.example.thoughts_cleaning.views.main.SettingEvent
-import com.example.thoughts_cleaning.views.main.view.activity.container.MainActivity
-import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel
-import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel.MainFlow
+import com.example.thoughts_cleaning.views.main.UserInfoEvent
 import com.example.thoughts_cleaning.views.main.vm.fragment.MySettingViewModel
-import com.example.thoughts_cleaning.views.start.LoginEvent
+import com.example.thoughts_cleaning.views.main.vm.fragment.UserInfoViewModel
 import com.example.thoughts_cleaning.views.start.view.activity.container.StartActivity
-import kotlinx.coroutines.launch
 
+class UserInfoFragment :  MasilFragment<FragmentUserInfoBinding, UserInfoViewModel>(R.layout.fragment_user_info) {
 
-class MySettingFragment :  MasilFragment<FragmentMySettingBinding, MySettingViewModel>(R.layout.fragment_my_setting) {
-
-    override val viewModel by viewModelFactory { MySettingViewModel() }
-
-//    // 1. View Binding 객체 선언 (null 허용)
-//    private var _binding: FragmentMySettingBinding? = null
-//
-//    // 2. 뷰가 살아있는 동안에만 접근할 수 있는 Non-null Binding 객체
-//    private val binding get() = _binding!!
+    override val viewModel by viewModelFactory { UserInfoViewModel() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +33,7 @@ class MySettingFragment :  MasilFragment<FragmentMySettingBinding, MySettingView
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMySettingBinding.inflate(inflater, container, false)
+        _binding = FragmentUserInfoBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -62,29 +46,20 @@ class MySettingFragment :  MasilFragment<FragmentMySettingBinding, MySettingView
 
         handleNavigationEvent()
     }
-
     private fun handleNavigationEvent() {
-
         viewModel.moveEvent.observe(this.viewLifecycleOwner) {
-            if (it is MoveEvent.Setting) {
+            if (it is MoveEvent.UserInfo) {
                 when (it.moveType) {
-                    SettingEvent.COMMON -> {
+                    UserInfoEvent.COMMON -> {
                     }
-                    SettingEvent.USER_INFO -> {
-                    }
-                    SettingEvent.LOGOUT -> {
+                    UserInfoEvent.USER_DELETE -> {
                         showDialogFinishTwoButton()
                     }
-                    SettingEvent.GO_LOGIN -> {
-                        enterLogin()
-                    }
-                    SettingEvent.BACK -> {
+                    UserInfoEvent.BACK -> {
                         requireActivity().onBackPressedDispatcher.onBackPressed()
                     }
-
-                    SettingEvent.USERINFO -> {
-                        findNavController().navigate(R.id.user_info_fragment)
-                        viewModel._moveEvent.postValue(Setting(SettingEvent.COMMON))
+                    UserInfoEvent.GO_LOGIN -> {
+                        enterLogin()
                     }
                 }
             }
@@ -97,14 +72,13 @@ class MySettingFragment :  MasilFragment<FragmentMySettingBinding, MySettingView
         startActivity(intent)
         requireActivity().finish()
     }
-
     private fun showDialogFinishTwoButton(){
         val dialog = context?.let {
             CommonDialogBuilder(it, CommonDialogType.TWO_BUTTON_GAME)
                 .title(getString(R.string.dialog_main_title))
-                .main(getString(R.string.dialog_logout_document))
+                .main(getString(R.string.dialog_user_delete_document))
                 .onConfirmListener {
-                    viewModel.logout(SettingEvent.GO_LOGIN)
+                    viewModel.withdraw(UserInfoEvent.GO_LOGIN)
                 }
                 .onCancelListener{
 

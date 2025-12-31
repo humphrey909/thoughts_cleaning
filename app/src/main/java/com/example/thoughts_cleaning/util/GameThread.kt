@@ -675,11 +675,13 @@ class GameThread(
             }
         }
 
-// 3. 반복문이 끝난 후, 기록된 결과에 따라 딱 한 번만 행동합니다.
+        // 3. 반복문이 끝난 후, 기록된 결과에 따라 딱 한 번만 행동합니다.
         if (collidedItemType != null) {
             // 부딪힌 녀석이 있음 -> 버튼 켜기
             Log.d("Joystick", "Item Detected! in Type: $collidedItemType")
             gameView.startWorkCleanBtn(collidedItemType)
+
+            //창문일 경우
         } else {
             Log.d("Joystick", "Item Detected! out Type: $collidedItemType")
 

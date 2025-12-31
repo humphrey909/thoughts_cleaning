@@ -15,10 +15,6 @@ import kotlinx.coroutines.launch
 
 class MySettingViewModel: MasilViewModel() {
 
-
-
-
-
     fun onClick(event: SettingEvent) {
         when (event) {
             SettingEvent.COMMON -> {
@@ -32,6 +28,10 @@ class MySettingViewModel: MasilViewModel() {
             }
             SettingEvent.GO_LOGIN -> TODO()
             SettingEvent.BACK -> {
+                _moveEvent.postValue(Setting(event))
+            }
+
+            SettingEvent.USERINFO -> {
                 _moveEvent.postValue(Setting(event))
             }
         }

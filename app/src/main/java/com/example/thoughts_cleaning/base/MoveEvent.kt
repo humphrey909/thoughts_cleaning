@@ -1,7 +1,10 @@
 package com.example.thoughts_cleaning.base
 
 import com.example.thoughts_cleaning.views.game.GameEvent
+import com.example.thoughts_cleaning.views.game.WindowCleanEvent
+import com.example.thoughts_cleaning.views.game.vm.fragment.WindowViewModel
 import com.example.thoughts_cleaning.views.main.SettingEvent
+import com.example.thoughts_cleaning.views.main.UserInfoEvent
 import com.example.thoughts_cleaning.views.start.LoginEvent
 
 /**
@@ -65,8 +68,10 @@ sealed class MoveEvent {
 //    data class UserBasicInfo(val moveType: UserBasicInfoEvent) : MoveEvent()
 //
     data class Setting(val moveType: SettingEvent) : MoveEvent()
+    data class UserInfo(val moveType: UserInfoEvent) : MoveEvent()
 
     data class Game(val moveType: GameEvent) : MoveEvent()
+    data class WindowClean(val moveType: WindowCleanEvent) : MoveEvent()
 
 
 

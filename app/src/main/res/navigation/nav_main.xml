@@ -14,12 +14,25 @@
                 android:id="@+id/setting_fragment"
                 app:destination="@id/MySettingFragment" />
 
+
+
     </fragment>
 
     <fragment
         android:id="@+id/MySettingFragment"
         android:name="com.example.thoughts_cleaning.views.main.view.fragment.MySettingFragment"
         android:label="Setting"
-        tools:layout="@layout/fragment_my_setting" />
+        tools:layout="@layout/fragment_my_setting" >
+
+        <action
+                android:id="@+id/user_info_fragment"
+                app:destination="@id/UserInfoFragment" />
+    </fragment>
+
+    <fragment
+            android:id="@+id/UserInfoFragment"
+            android:name="com.example.thoughts_cleaning.views.main.view.fragment.UserInfoFragment"
+            android:label="UserInfo"
+            tools:layout="@layout/fragment_user_info" />
 
 </navigation>

@@ -16,5 +16,14 @@ import java.io.Serializable
  */
 data class ThoughtSaveResponseData(
     @SerializedName("idx")
-    val idx: Int
+    val idx: Int,
+
+    @SerializedName("content_thought")
+    val contentThought: String,
+
+    @SerializedName("name")
+    val name: String,
+
+    @SerializedName("detail_text")
+    val detailText: String
     ): ResBase()

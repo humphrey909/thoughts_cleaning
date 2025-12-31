@@ -44,8 +44,6 @@
     <string name="dialog_kind_dust_document">자신이 느낀 감정을 선택해주세요.</string>
 
 
-
-
     <!-- 생각 작성 ui 적용 -->
     <string name="dialog_record_stage_document">겪고있는 생각에 대해서 작성해주세요. </string>
     <string name="dialog_game_start_document">게임을 시작할까요?</string>
@@ -60,7 +58,7 @@
     <string name="dialog_game_document">이제 행동해 봅시다!</string>
 
     <string name="dialog_logout_document">로그아웃 하시겠어요?</string>
-
+    <string name="dialog_user_delete_document">계정을 탈퇴하시겠어요?</string>
 
 
     <!-- Error -->

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.api.model.DustKindItem
 import com.example.thoughts_cleaning.api.request.ThoughtSaveRequestData
+import com.example.thoughts_cleaning.api.response.ThoughtSaveResponseData
 import com.example.thoughts_cleaning.common.extension.call
 import com.example.thoughts_cleaning.common.vm.MasilViewModel
 import kotlinx.coroutines.launch
@@ -32,6 +33,9 @@ class RecordStageFragmentViewModel(mContext: Context): MasilViewModel() {
     val _thoughtSaveIdx: MutableLiveData<Int> = MutableLiveData(0)
     val thoughtSaveIdx: LiveData<Int> = _thoughtSaveIdx
 
+    //ThoughtSaveResponseData
+    var thoughtSaveResponseData: ThoughtSaveResponseData? = null
+
     fun onClicked(type:RecordStageFlow){
         _backBtnStateText.postValue(false)
     }
@@ -51,6 +55,9 @@ class RecordStageFragmentViewModel(mContext: Context): MasilViewModel() {
 
         response.call() {
             onSuccess = {
+                Log.d("saveThought", it.toString())
+                thoughtSaveResponseData = it
+
                 _thoughtSaveIdx.postValue(it.idx)
             }
         }

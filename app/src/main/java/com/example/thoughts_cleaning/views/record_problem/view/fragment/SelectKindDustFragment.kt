@@ -106,10 +106,6 @@ class SelectKindDustFragment : MasilFragment<FragmentSelectKindDustBinding, Sele
                 .main(getString(R.string.dialog_kind_dust_document))
                 .onConfirmListener {
 
-//                    //배터리 최적화 권한 허용 요청 알림 띄움
-//                    val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
-//                    intent.setData(Uri.parse("package:${context?.packageName}"))
-//                    startActivityForResult(intent, REQUEST_BATTERY_OPTIMIZATION_PERMISSION);
                 }
                 .build()
         }

@@ -54,7 +54,7 @@
                 app:layout_constraintTop_toTopOf="@+id/guide_horizontal_top"
                 app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
                 app:layout_constraintBottom_toTopOf="@+id/content_area"
-                app:layout_constraintHeight_percent="0.1"
+                app:layout_constraintHeight_percent="0.08"
                 >
 
             <androidx.appcompat.widget.AppCompatButton
@@ -91,6 +91,7 @@
                     app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
                     app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
                     app:layout_constraintTop_toBottomOf="@+id/top_area"
+                    android:paddingStart="25dp"
                     >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -108,7 +109,7 @@
                             android:id="@+id/userinfo_menu_title"
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
-                            android:text="회원 정보"
+                            android:text="내 정보"
                             android:fontFamily="@font/pretendard_light"
                             android:textSize="20sp"
                             android:gravity="start|center"
@@ -122,10 +123,11 @@
                             android:id="@+id/userinfo_men_img"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:background="@drawable/ic_arrow"
+                            android:background="@drawable/ic_arrow2"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
+                            android:onClick="@{()-> viewModel.onClick(SettingEvent.USERINFO)}"
                             />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -159,7 +161,7 @@
                             android:id="@+id/conditions_menu_img"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:background="@drawable/ic_arrow"
+                            android:background="@drawable/ic_arrow2"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -195,7 +197,7 @@
                             android:id="@+id/customer_support_menu_img"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:background="@drawable/ic_arrow"
+                            android:background="@drawable/ic_arrow2"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -213,11 +215,11 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guide_vertical_left"
+            app:layout_constraintEnd_toEndOf="@+id/guide_vertical_right"
             app:layout_constraintTop_toBottomOf="@+id/content_area"
             app:layout_constraintHeight_percent="0.15"
-            android:padding="20dp"
+            android:paddingHorizontal="15dp"
             >
         <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/logout_btn"
