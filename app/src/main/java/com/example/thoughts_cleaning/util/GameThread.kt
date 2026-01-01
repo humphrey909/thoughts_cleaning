@@ -310,9 +310,6 @@ class GameThread(
         var timeMillis: Long
         var waitTime: Long
 
-
-///
-//
         //백그라운드 적용
         initializeBackground(screenWidth,screenHeight)
 

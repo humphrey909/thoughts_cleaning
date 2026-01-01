@@ -51,7 +51,7 @@ class RecordStageFragmentViewModel(mContext: Context): MasilViewModel() {
 
     fun saveThought() = viewModelScope.launch() {
 
-        val response = api.thoughtsSave(ThoughtSaveRequestData(kindThoughtIdx, fixDustDetail.value))
+        val response = api.thoughtsSave(ThoughtSaveRequestData( fixDustDetail.value))
 
         response.call() {
             onSuccess = {

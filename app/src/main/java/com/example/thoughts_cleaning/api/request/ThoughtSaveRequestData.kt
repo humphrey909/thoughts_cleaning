@@ -14,8 +14,8 @@ import java.io.Serializable
  * Created by humphrey on 2024/05/30.
  */
 data class ThoughtSaveRequestData(
-    @SerializedName("kind_thought_idx")
-    val kindThoughtIdx: Int?,
+//    @SerializedName("kind_thought_idx")
+//    val kindThoughtIdx: Int?,
 
     @SerializedName("content_thought")
     val contentThought: String?

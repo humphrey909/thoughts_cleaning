@@ -233,10 +233,10 @@ class RecordStageFragment : MasilFragment<FragmentRecordStateBinding, RecordStag
             putExtra("THOUGHT_CONTENT", viewModel.thoughtSaveResponseData!!.contentThought)
 
             // 3. Name (String)
-            putExtra("KIND_NAME", viewModel.thoughtSaveResponseData!!.name)
-
-            // 4. Detail Text (String)
-            putExtra("KIND_DETAIL", viewModel.thoughtSaveResponseData!!.detailText)
+//            putExtra("KIND_NAME", viewModel.thoughtSaveResponseData!!.name)
+//
+//            // 4. Detail Text (String)
+//            putExtra("KIND_DETAIL", viewModel.thoughtSaveResponseData!!.detailText)
         }
         startActivity(intent)
         requireActivity().finish()

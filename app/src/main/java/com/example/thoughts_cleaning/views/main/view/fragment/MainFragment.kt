@@ -2,6 +2,7 @@ package com.example.thoughts_cleaning.views.main.view.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +15,13 @@ import com.example.thoughts_cleaning.common.vm.viewModelFactory
 import com.example.thoughts_cleaning.databinding.FragmentLoginBinding
 import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel
 import com.example.thoughts_cleaning.databinding.FragmentMainBinding
+import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogBuilder
+import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogType
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
 import com.example.thoughts_cleaning.views.game.vm.activity.container.GameActivityViewModel
 import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel.MainFlow
 import com.example.thoughts_cleaning.views.record_problem.view.activity.container.RecordProblemActivity
+import com.example.thoughts_cleaning.views.record_problem.vm.fragment.RecordStageFragmentViewModel.RecordStageFlow
 import com.example.thoughts_cleaning.views.record_problem.vm.fragment.SelectKindDustViewModel.TypeFlow
 import com.example.thoughts_cleaning.views.start.vm.fragment.LoginViewModel
 
@@ -26,29 +30,6 @@ import com.example.thoughts_cleaning.views.start.vm.fragment.LoginViewModel
 class MainFragment : MasilFragment<FragmentMainBinding, MainFragmentViewModel>(R.layout.fragment_main) {
 
     override val viewModel by viewModelFactory { MainFragmentViewModel() }
-
-
-//    private val viewModel: MainFragmentViewModel by viewModels()
-
-//    private lateinit var joystickView: JoystickView
-//    private var isStop = false
-//
-//    private var screenWidth = 0
-//    private var screenHeight = 0
-//
-//    private var MOVE_FACTOR = 0.5f
-//
-//    private var prevAngle = 0
-//    private lateinit var prevImageResource: LiveData<Int>
-//
-//    private lateinit var gameView: GameView
-//    private val joystickSimulator = JoystickState()
-
-    // 1. View Binding 객체 선언 (null 허용)
-//    private var _binding: FragmentMainBinding? = null
-//
-//    // 2. 뷰가 살아있는 동안에만 접근할 수 있는 Non-null Binding 객체
-//    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,112 +52,17 @@ class MainFragment : MasilFragment<FragmentMainBinding, MainFragmentViewModel>(R
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-
-
         viewModel._currentMainFlow.postValue(MainFlow.COMMON)
         viewModel._dustFairyMessageText.postValue(getString(R.string.ex_main_title))
-        //ex_main_title
-
 
         handleNavigationEvent()
-
-
-//        initNavigation()
-
-//        val navHostFragment = childFragmentManager
-//            .findFragmentById(R.id.)
-//        val navHostFragment = binding.mainContentNavHost
-//
-//
-//        if (navHostFragment is NavHostFragment) {
-//            // 3. 찾은 객체가 NavHostFragment 타입인 것이 확인되면 처리
-//            val navController = navHostFragment.navController
-//
-//            // Binding 객체를 사용하여 BottomNavigationView에 접근
-//            binding.bottomNavInFragment.setupWithNavController(navController)
-//
-//        } else {
-//            // 디버깅을 위한 로그 출력 (객체를 찾지 못했거나 타입이 틀린 경우)
-////            Log.e("MainFragment", "NavHostFragment를 찾지 못했거나 타입이 올바르지 않습니다. ID 확인 필수!")
-//        }
-
-
-
-
-//        val navView: BottomNavigationView = binding.bottomNavInFragment
-////        val mainFragmentContentNav: FragmentContainerView = binding.mainContentNavHost
-//
-////        val navView: BottomNavigationView = view.findViewById(R.id.bottom_nav_in_fragment)
-//
-//        // **자식 Fragment Manager 사용**
-//        val navHostFragment = childFragmentManager
-//            .findFragmentById(R.id.main_content_nav_host) as NavHostFragment
-//        val navController = navHostFragment.navController
-//
-//        // BottomNavigationView와 NavController를 연결
-////        navView.setupWithNavController(navController)
-//
-//        binding.bottomNavInFragment.setupWithNavController(navController)
-
-//        // 1. Context 가져오기 (Fragment에서는 requireContext()를 사용)
-//        val context = requireContext()
-//
-//        // 2. 동적으로 FrameLayout 생성
-//        val containerLayout = FrameLayout(context)
-//
-//        // 3. GameView 인스턴스 생성
-//        // Fragment를 리스너로 사용하려면 'this'를 인수로 전달합니다.
-//        // joystickSimulator는 미리 초기화되어 있어야 합니다.
-//        gameView = GameView(
-//            context, /* GameViewListener: */
-//            requireActivity() as MainActivity, this, joystickSimulator
-//        )
-//
-//        // 4. 레이아웃 파라미터 정의 (MATCH_PARENT)
-//        val params = FrameLayout.LayoutParams(
-//            FrameLayout.LayoutParams.MATCH_PARENT,
-//            FrameLayout.LayoutParams.MATCH_PARENT
-//        )
-//
-//        // 5. containerLayout(FrameLayout)에 gameView 추가
-////        containerLayout.addView(gameView, params)
-//
-//        (binding.root as? ViewGroup)?.addView(gameView, params)
-//
-//
-//
-//        // 1. 조이스틱 인스턴스 생성 및 레이아웃 설정
-//        // Activity Context(this) 대신 Fragment Context(requireContext())를 사용합니다.
-//        val joystickView = JoystickView(context, null).apply {
-//            layoutParams = FrameLayout.LayoutParams(300, 300).apply {
-//                // dpToPx 함수는 아래에 정의되어 있습니다.
-//                gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
-//                setMargins(50, 50, 50, 50)
-//            }
-//        }
-//
-//        // 2. 컨테이너 레이아웃에 조이스틱 뷰 추가
-//        // Activity의 containerLayout 대신 binding.root (Fragment의 루트 뷰)를 사용합니다.
-//        // 주의: binding.root는 ViewGroup 타입이므로 addView()를 사용할 수 있습니다.
-//        (binding.root as? FrameLayout)?.addView(joystickView)
-////        binding.root.addView(joystickView)
-//
-//        // 3. 조이스틱 움직임 감지 리스너 설정
-//        joystickView.setOnMoveListener(
-//            object : JoystickView.OnMoveListener {
-//                override fun onMove(angle: Float, strength: Float) {
-//                    // (기존 로직 유지)
-//                    joystickSimulator.update(angle, strength)
-//                }
-//            },
-//            // JoystickView.DEFAULT_UPDATE_INTERVAL는 상수라고 가정
-//            JoystickView.Companion.DEFAULT_UPDATE_INTERVAL
-//        )
-
     }
 
     override fun onResume() {
         super.onResume()
+
+        viewModel.fixDustDetail.value = ""
+        viewModel.getListThought()
     }
 
     override fun onDestroyView() {
@@ -238,11 +124,16 @@ class MainFragment : MasilFragment<FragmentMainBinding, MainFragmentViewModel>(R
             when (flow) {
                 MainFlow.COMMON -> { /* ... */ }
                 MainFlow.ENTER_GAME -> {
-                    enter_game()
+                    if(viewModel.fixDustDetail.value?.length == 0){
+                        showCheckDataDialog()
+                    }else{
+                        showStartGameDialog()
+//                        nextPageBtn()
+                    }
                 }
-                MainFlow.RECORD_PROBLEM -> {
-                    enter_game()
-                }
+//                MainFlow.RECORD_PROBLEM -> {
+//                    enter_game()
+//                }
                 MainFlow.SETTING -> {
                     findNavController().navigate(R.id.setting_fragment)
                     viewModel._currentMainFlow.postValue(MainFlow.COMMON)
@@ -250,17 +141,58 @@ class MainFragment : MasilFragment<FragmentMainBinding, MainFragmentViewModel>(R
             }
         }
 
+        viewModel.thoughtSaveIdx.observe(viewLifecycleOwner) { idx ->
+            if(idx != 0){
+                enterGame()
+                viewModel._currentMainFlow.postValue(MainFlow.COMMON)
+            }
+        }
 
+//        viewModel.getListThought()
+    }
 
+    private fun showCheckDataDialog(){
+        val dialog = context?.let {
+            CommonDialogBuilder(it, CommonDialogType.ONE_BUTTON)
+                .title(getString(R.string.dialog_main_title))
+                .main(getString(R.string.dialog_record_stage_document))
+                .onConfirmListener {
+
+                }
+                .build()
+        }
+        if (dialog != null) {
+            showDialog(dialog)
+        }
     }
 
 
-    fun enter_game(){
-//        Log.d("ScreenSize", "화면 높이: ENTER_GAME")
+    //게임 시작 알림
+    private fun showStartGameDialog(){
+        val dialog = context?.let {
+            CommonDialogBuilder(it, CommonDialogType.TWO_BUTTON)
+                .title(getString(R.string.dialog_main_title))
+                .main(getString(R.string.dialog_game_start_document))
+                .onConfirmListener {
+                    viewModel.saveThought()
+                }
+                .build()
+        }
+        if (dialog != null) {
+            showDialog(dialog)
+        }
+    }
 
-        val intent = Intent(requireActivity(), RecordProblemActivity::class.java)
+    fun enterGame(){
+        Log.d("ScreenSize", "화면 높이: ENTER_GAME")
+        //thoughtListResponseData
+//        viewModel.thoughtListResponseData!!.kindThoughtList.size
 
-        // 2. Activity 시작
+        val intent = Intent(requireActivity(), GameActivity::class.java)
+//        val intent = Intent(requireActivity(), GameActivity::class.java).apply {
+////            putExtra("THOUGHT_CONTENT", viewModel.thoughtSaveResponseData!!.contentThought)
+//            putExtra("THOUGHT_LIST", viewModel.thoughtListResponseData)
+//        }
         startActivity(intent)
 
         viewModel._currentMainFlow.postValue(MainFlow.COMMON)

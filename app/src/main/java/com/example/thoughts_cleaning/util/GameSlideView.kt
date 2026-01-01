@@ -14,6 +14,7 @@ import android.view.MotionEvent
 import android.view.View
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.api.model.SlideGameBall
+import com.example.thoughts_cleaning.api.response.ResThoughtOfUserListDto
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -75,15 +76,15 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
     private var entranceCleanBitmap: Bitmap? = null
 
     private val ballTextPaint = Paint().apply {
-        color = Color.WHITE // 글자색 (흰색)
+        color = Color.BLACK // 글자색 (흰색)
         textSize = 45f      // 글자 크기
         textAlign = Paint.Align.CENTER // 좌우 중앙 정렬
         typeface = Typeface.DEFAULT_BOLD // 굵은 글씨
         isAntiAlias = true
     }
 
-//    private var ballLabel = ""
-    private val targetLabels = listOf("A")
+    private var targetLabels: List<String> = emptyList()
+//    private val targetLabels = listOf("A")
     private var targetLabel = ""
 
     // 스트라이커 (내가 조종하는 하얀 공) 페인트
@@ -114,8 +115,19 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
 
     }
 
-    fun setBallData(content: String, kindName: String, kindDetail: String) {
-        this.targetLabel = kindName
+    fun setBallData(content: String) {
+        this.targetLabel = content
+
+        if (width > 0 && height > 0) {
+            initBalls(width, height)
+            invalidate()
+        }
+    }
+
+    fun setBallList(contentList: ResThoughtOfUserListDto) {
+        if (contentList == null) return
+
+        targetLabels = contentList.thoughtsList.map { it.contentThought }
 
         if (width > 0 && height > 0) {
             initBalls(width, height)
@@ -142,7 +154,7 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
             balls.add(SlideGameBall(
                 x = bx, y = by,
                 color = colors[i % colors.size],
-                text = targetLabel, // 여기서 저장된 글자를 사용
+                text = targetLabels.get(i), // 여기서 저장된 글자를 사용
                 startX = bx,
                 startY = by
             ))
@@ -222,8 +234,6 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
                 ballPaint.alpha = 255 // 평소엔 불투명
             }
 
-//            canvas.drawCircle(ball.x, ball.y, ballRadius, ballPaint)
-
             if (ballBitmap != null) {
                 aspectRatioCharacter = ballBitmap.width.toFloat() / ballBitmap.height.toFloat()
                 val diameter = ballRadius * 2
@@ -244,9 +254,6 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
             val textY = ball.y - ((ballTextPaint.descent() + ballTextPaint.ascent()) / 2)
             canvas.drawText(ball.text, ball.x, textY, ballTextPaint)
 
-//            if (ball.isReturning || abs(ball.vx) > 0.01f || abs(ball.vy) > 0.01f) {
-//                isAnyBallMoving = true
-//            }
             if (ball.isReturning || ball.isGoal || abs(ball.vx) > 0.01f || abs(ball.vy) > 0.01f) {
                 isAnyBallMoving = true
             }

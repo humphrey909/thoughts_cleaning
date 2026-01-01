@@ -19,11 +19,5 @@ data class ThoughtSaveResponseData(
     val idx: Int,
 
     @SerializedName("content_thought")
-    val contentThought: String,
-
-    @SerializedName("name")
-    val name: String,
-
-    @SerializedName("detail_text")
-    val detailText: String
+    val contentThought: String
     ): ResBase()

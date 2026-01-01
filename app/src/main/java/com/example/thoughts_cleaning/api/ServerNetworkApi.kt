@@ -9,6 +9,7 @@ import com.example.thoughts_cleaning.api.request.ThoughtSaveRequestData
 import com.example.thoughts_cleaning.api.response.CheckTokenDto
 import com.example.thoughts_cleaning.api.response.ResKindThoughtListDto
 import com.example.thoughts_cleaning.api.response.ResMasilSocialLogin
+import com.example.thoughts_cleaning.api.response.ResThoughtOfUserListDto
 import com.example.thoughts_cleaning.api.response.ThoughtSaveResponseData
 import com.example.thoughts_cleaning.api.response.TokenDto
 import retrofit2.Call
@@ -96,13 +97,21 @@ interface ServerNetworkApi {
 
     /**
      * Created by Humphrey on
-     * 생각 종료 조회
+     * 생각 종류 조회
      * api/thoughts/save
      */
     @GET("/api/kind-thought/list")
     fun thoughtsKindList(
     ): Call<ResKindThoughtListDto>
 
+    /**
+     * Created by Humphrey on
+     * 생각 종료 조회
+     * api/thoughts/save
+     */
+    @GET("/api/thoughts/list")
+    fun thoughtsOfUserList(
+    ): Call<ResThoughtOfUserListDto>
 
     /**
      * Created by Humphrey on
