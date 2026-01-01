@@ -23,9 +23,6 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(context, attrs), GestureDetector.OnGestureListener {
-
-
-
     // 1. 그래픽 도구
     private val goalPaint = Paint().apply { color = Color.DKGRAY; style = Paint.Style.FILL; isAntiAlias = true }
     private val goalTextPaint = Paint().apply { color = Color.WHITE; textSize = 60f; textAlign = Paint.Align.CENTER }
@@ -110,10 +107,12 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
     init {
         // 그림자 효과 및 부드러운 그라데이션을 위해 소프트웨어 렌더링 사용
         setLayerType(LAYER_TYPE_SOFTWARE, null)
-
-
-
     }
+
+    interface OnGameEndListener {
+        fun onGameOver(successText: String)
+    }
+    var gameEndListener: OnGameEndListener? = null
 
     fun setBallData(content: String) {
         this.targetLabel = content
@@ -223,6 +222,8 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
 
         // 2. 공 그리기
         for (ball in balls) {
+            if (ball.isGoal) continue
+
             ballPaint.color = ball.color
 
             // [수정] 투명도 설정 로직 변경
@@ -254,7 +255,12 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
             val textY = ball.y - ((ballTextPaint.descent() + ballTextPaint.ascent()) / 2)
             canvas.drawText(ball.text, ball.x, textY, ballTextPaint)
 
-            if (ball.isReturning || ball.isGoal || abs(ball.vx) > 0.01f || abs(ball.vy) > 0.01f) {
+//            if (ball.isReturning || ball.isGoal || abs(ball.vx) > 0.01f || abs(ball.vy) > 0.01f) {
+//                isAnyBallMoving = true
+//            }
+
+            // 움직임 감지 (골인된 공은 이미 continue 되었으므로 체크 안 함)
+            if (ball.isReturning || abs(ball.vx) > 0.01f || abs(ball.vy) > 0.01f) {
                 isAnyBallMoving = true
             }
         }
@@ -272,6 +278,8 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
 
     private fun updatePhysics() {
         for (ball in balls) {
+
+            if (ball.isGoal) continue
 
             // ----------------------------------------------------------------
             // 1. [복귀 모드] 원래 자리로 미끄러져 내려가는 로직
@@ -318,31 +326,31 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
             // ----------------------------------------------------------------
             // 2. [골인 모드 - 신규 추가] 빨려 들어감 + 3초 대기
             // ----------------------------------------------------------------
-            if (ball.isGoal) {
-                // A. 빨려 들어가는 연출 (Suction Effect)
-                // 골대의 정중앙 좌표
-                val targetX = goalRect.centerX()
-                val targetY = goalRect.centerY()
-
-                // 현재 위치에서 중앙으로 조금씩 이동 (Lerp: 10%씩 접근)
-                ball.x += (targetX - ball.x) * 0.1f
-                ball.y += (targetY - ball.y) * 0.1f
-
-                // 물리 속도는 0으로 제거 (물리 엔진 간섭 방지)
-                ball.vx = 0f
-                ball.vy = 0f
-
-                // B. 3초 타이머 체크
-                // 현재시간 - 골인시간 > 3000ms (3초)
-                if (System.currentTimeMillis() - ball.goalTime > 3000) {
-                    ball.isGoal = false      // 골인 상태 해제
-                    ball.isReturning = true  // 복귀 모드 시작!
-                    ball.goalTime = 0L       // 시간 초기화
-                }
-
-                // [중요] 골인 상태에서는 아래의 벽 충돌 로직을 실행하지 않음
-                continue
-            }
+//            if (ball.isGoal) {
+//                // A. 빨려 들어가는 연출 (Suction Effect)
+//                // 골대의 정중앙 좌표
+//                val targetX = goalRect.centerX()
+//                val targetY = goalRect.centerY()
+//
+//                // 현재 위치에서 중앙으로 조금씩 이동 (Lerp: 10%씩 접근)
+//                ball.x += (targetX - ball.x) * 0.1f
+//                ball.y += (targetY - ball.y) * 0.1f
+//
+//                // 물리 속도는 0으로 제거 (물리 엔진 간섭 방지)
+//                ball.vx = 0f
+//                ball.vy = 0f
+//
+//                // B. 3초 타이머 체크
+//                // 현재시간 - 골인시간 > 3000ms (3초)
+//                if (System.currentTimeMillis() - ball.goalTime > 3000) {
+//                    ball.isGoal = false      // 골인 상태 해제
+//                    ball.isReturning = true  // 복귀 모드 시작!
+//                    ball.goalTime = 0L       // 시간 초기화
+//                }
+//
+//                // [중요] 골인 상태에서는 아래의 벽 충돌 로직을 실행하지 않음
+//                continue
+//            }
 
 
             // ----------------------------------------------------------------
@@ -378,21 +386,46 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
             // 상단 영역 (골대 근처) 체크
             if (ball.y - ballRadius < goalRect.bottom) {
 
-                // 골대 안에 들어왔는지?
+//                // 골대 안에 들어왔는지?
+//                if (ball.x > goalRect.left && ball.x < goalRect.right &&
+//                    ball.y > goalRect.top) { // 상단 벽보다 아래에 있을 때
+//
+//                    // 아직 골인이 아니고, 위로 올라가는 중이라면 -> 골인 판정!
+//                    if (!ball.isGoal && ball.vy < 0) {
+//                        ball.isGoal = true
+//
+//                        // [추가] 현재 시간을 기록 (타이머 시작)
+//                        ball.goalTime = System.currentTimeMillis()
+//
+//                        // 리스너 호출 (점수 획득 등)
+////                        goalListener?.onGoal(ball.text)
+//                    }
+//                }
+                // 골대 영역 안에 들어왔는지 확인
                 if (ball.x > goalRect.left && ball.x < goalRect.right &&
-                    ball.y > goalRect.top) { // 상단 벽보다 아래에 있을 때
+                    ball.y > goalRect.top) {
 
-                    // 아직 골인이 아니고, 위로 올라가는 중이라면 -> 골인 판정!
+                    // 위로 올라가는 중이라면 골인 판정
                     if (!ball.isGoal && ball.vy < 0) {
+                        // 1. 현재 공 골인 처리 (상태 변경 및 정지)
                         ball.isGoal = true
+                        ball.vx = 0f
+                        ball.vy = 0f
 
-                        // [추가] 현재 시간을 기록 (타이머 시작)
-                        ball.goalTime = System.currentTimeMillis()
+                        // 2. [핵심 수정] 모든 공이 골인했는지 검사
+                        // "balls 리스트의 모든(all) 아이템이 isGoal == true 인가?"
+                        val isAllCleared = balls.all { it.isGoal }
 
-                        // 리스너 호출 (점수 획득 등)
-//                        goalListener?.onGoal(ball.text)
+                        // 3. 전부 다 통과했을 때만 액티비티에 알림
+                        if (isAllCleared) {
+                            // 마지막 공이 들어갔을 때 실행됨
+                            // 텍스트는 "모두 해결 완료" 등으로 보내거나, 마지막 공의 텍스트(ball.text)를 보낼 수 있음
+                            gameEndListener?.onGameOver("모든 고민이 사라졌습니다!")
+                        }
                     }
                 }
+
+
                 // 골대 밖(벽)에 맞았을 때
                 else if (ball.y - ballRadius < 0) {
                     ball.y = ballRadius
