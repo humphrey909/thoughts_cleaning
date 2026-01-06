@@ -29,6 +29,7 @@ class MainFragmentViewModel: MasilViewModel() {
 
 
     //내 생각들 리스트
+//    var thoughtListResponseData: ResThoughtOfUserListDto? = null
     var thoughtListResponseData: ResThoughtOfUserListDto? = null
 
     val _thoughtListSize: MutableLiveData<String> = MutableLiveData("")
@@ -59,13 +60,13 @@ class MainFragmentViewModel: MasilViewModel() {
 
     fun getListThought() = viewModelScope.launch() {
 
-        val response = api.thoughtsOfUserList()
+        val response = api.thoughtsOfUserListCount()
 
         response.call() {
             onSuccess = {
                 Log.d("getListThought", it.toString())
-                thoughtListResponseData = it
-                _thoughtListSize.postValue(it.thoughtsList.size.toString())
+//                thoughtListResponseData = it
+                _thoughtListSize.postValue(it.thoughtsCount.toString())
             }
         }
     }

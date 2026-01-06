@@ -9,11 +9,13 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.api.model.SlideGameBall
+import com.example.thoughts_cleaning.api.response.ResThoughtOfUserListCustomDto
 import com.example.thoughts_cleaning.api.response.ResThoughtOfUserListDto
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -66,8 +68,13 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
 
     var isAnyBallMoving = false // 움직이는 공이 하나라도 있는지 체크
 
-    private val ballBitmap: Bitmap =
+    private val ballSmallBitmap: Bitmap =
         BitmapFactory.decodeResource(context.resources, R.drawable.img_dust)
+    private val ballMediumBitmap: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.img_dust_medium)
+    private val ballLargeBitmap: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.img_dust_large)
+
     private lateinit var ballRect:RectF
 
     private var entranceCleanBitmap: Bitmap? = null
@@ -80,6 +87,7 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
         isAntiAlias = true
     }
 
+    var contentList: ResThoughtOfUserListCustomDto? = null
     private var targetLabels: List<String> = emptyList()
 //    private val targetLabels = listOf("A")
     private var targetLabel = ""
@@ -123,10 +131,12 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
         }
     }
 
-    fun setBallList(contentList: ResThoughtOfUserListDto) {
+    fun setBallList(contentList: ResThoughtOfUserListCustomDto) {
         if (contentList == null) return
 
-        targetLabels = contentList.thoughtsList.map { it.contentThought }
+//        targetLabels = contentList.thoughtsList.map { it.contentThought }
+
+        this.contentList = contentList
 
         if (width > 0 && height > 0) {
             initBalls(width, height)
@@ -137,26 +147,82 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
     private fun initBalls(w: Int, h: Int) {
         balls.clear()
 
+        var totalCount = 0
+        for (data in this.contentList!!.thoughtsListCustom) {
+            totalCount += data.count
+        }
+
         // 저장된 targetLabels를 사용해서 공 생성
-        val count = targetLabels.size
+        val count = totalCount
         if (count == 0) return
 
         val startY = h * 0.8f
         val spacing = w.toFloat() / (count + 1)
 
-        val colors = listOf(Color.RED, Color.BLUE, Color.GREEN, Color.MAGENTA, Color.CYAN)
+//        val colors = listOf(Color.RED, Color.BLUE, Color.GREEN, Color.MAGENTA, Color.CYAN)
 
-        for (i in 0 until count) {
-            val bx = spacing * (i + 1)
-            val by = startY
+//        Log.d("PreferenceManager", "balls list")
+//        Log.d("PreferenceManager", "balls list : ${this.contentList}")
+//        Log.d("PreferenceManager", "balls list : ${this.contentList!!.thoughtsListCustom}")
 
-            balls.add(SlideGameBall(
-                x = bx, y = by,
-                color = colors[i % colors.size],
-                text = targetLabels.get(i), // 여기서 저장된 글자를 사용
-                startX = bx,
-                startY = by
-            ))
+        var ballIdx = 0
+        for (data in this.contentList!!.thoughtsListCustom) {
+//            val bx = spacing * (idx + 1)
+//            val by = startY
+
+            if(data.sizeType == "SMALL"){
+                for (idx in 0 .. data.count - 1) {
+                    val bx = spacing * (ballIdx + 1)
+                    val by = startY
+
+                    balls.add(SlideGameBall(
+                        x = bx, y = by,
+                        color = Color.RED,
+                        sizeType = data.sizeType,
+                        text = "", // 여기서 저장된 글자를 사용
+                        startX = bx,
+                        startY = by,
+                        friction = 0.98f
+                    ))
+                    ballIdx++
+                }
+            }else if(data.sizeType == "MEDIUM"){
+
+//                Log.d("PreferenceManager", "balls count")
+//                Log.d("PreferenceManager", "balls count : ${data.count}")
+
+                for (idx in 0 .. data.count - 1) {
+                    val bx = spacing * (ballIdx + 1)
+                    val by = startY
+
+                    balls.add(SlideGameBall(
+                        x = bx, y = by,
+                        color = Color.RED,
+                        sizeType = data.sizeType,
+                        text = "", // 여기서 저장된 글자를 사용
+                        startX = bx,
+                        startY = by,
+                        friction = 0.92f
+                    ))
+                    ballIdx++
+                }
+            }else if(data.sizeType == "LARGE"){
+                for (idx in 0 .. data.count - 1) {
+                    val bx = spacing * (ballIdx + 1)
+                    val by = startY
+
+                    balls.add(SlideGameBall(
+                        x = bx, y = by,
+                        color = Color.RED,
+                        sizeType = data.sizeType,
+                        text = "", // 여기서 저장된 글자를 사용
+                        startX = bx,
+                        startY = by,
+                        friction = 0.88f
+                    ))
+                    ballIdx++
+                }
+            }
         }
     }
 
@@ -227,16 +293,35 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
             ballPaint.color = ball.color
 
             // [수정] 투명도 설정 로직 변경
-            if (ball.isGoal) {
-                ballPaint.alpha = 150 // 골인되면 약간 투명
-            } else if (ball.isReturning) {
-                ballPaint.alpha = 100 // [추가] 복귀 중일 때는 더 투명하게 (유령처럼)
-            } else {
-                ballPaint.alpha = 255 // 평소엔 불투명
-            }
+//            if (ball.isGoal) {
+//                ballPaint.alpha = 150 // 골인되면 약간 투명
+//            } else if (ball.isReturning) {
+//                ballPaint.alpha = 100 // [추가] 복귀 중일 때는 더 투명하게 (유령처럼)
+//            } else {
+//                ballPaint.alpha = 255 // 평소엔 불투명
+//            }
 
-            if (ballBitmap != null) {
-                aspectRatioCharacter = ballBitmap.width.toFloat() / ballBitmap.height.toFloat()
+
+
+
+            if (ballSmallBitmap != null) {
+
+
+                var ballCommonBitmap: Bitmap? = null
+                if(ball.sizeType == "SMALL"){
+                    ballCommonBitmap = ballSmallBitmap
+//                    aspectRatioCharacter = ballSmallBitmap.width.toFloat() / ballSmallBitmap.height.toFloat()
+                }else if(ball.sizeType == "MEDIUM"){
+                    ballCommonBitmap = ballMediumBitmap
+//                    aspectRatioCharacter = ballMediumBitmap.width.toFloat() / ballMediumBitmap.height.toFloat()
+                }else if(ball.sizeType == "LARGE"){
+                    ballCommonBitmap = ballLargeBitmap
+//                    aspectRatioCharacter = ballLargeBitmap.width.toFloat() / ballLargeBitmap.height.toFloat()
+                }
+
+
+                aspectRatioCharacter = ballCommonBitmap!!.width.toFloat() / ballCommonBitmap!!.height.toFloat()
+
                 val diameter = ballRadius * 2
                 newWidthCharacter = diameter
                 newHeightCharacter = newWidthCharacter / aspectRatioCharacter
@@ -248,12 +333,12 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
                 val bottom = top + newHeightCharacter
 
                 ballRect = RectF(left, top, right, bottom)
-                canvas.drawBitmap(ballBitmap, null, ballRect, null)
+                canvas.drawBitmap(ballCommonBitmap, null, ballRect, null)
             }
 
             // 글자의 높이 중심을 구해서 공의 중심(y)에 맞춤
-            val textY = ball.y - ((ballTextPaint.descent() + ballTextPaint.ascent()) / 2)
-            canvas.drawText(ball.text, ball.x, textY, ballTextPaint)
+//            val textY = ball.y - ((ballTextPaint.descent() + ballTextPaint.ascent()) / 2)
+//            canvas.drawText(ball.text, ball.x, textY, ballTextPaint)
 
 //            if (ball.isReturning || ball.isGoal || abs(ball.vx) > 0.01f || abs(ball.vy) > 0.01f) {
 //                isAnyBallMoving = true
@@ -362,8 +447,8 @@ class GameSlideView(context: Context, attrs: AttributeSet? = null) : View(contex
             ball.y += ball.vy
 
             // 마찰력
-            ball.vx *= friction
-            ball.vy *= friction
+            ball.vx *= ball.friction
+            ball.vy *= ball.friction
 
             // 벽 튕기기 (좌우)
             if (ball.x - ballRadius < 0) {

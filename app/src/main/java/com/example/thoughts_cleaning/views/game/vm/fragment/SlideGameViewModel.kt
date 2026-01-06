@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.thoughts_cleaning.api.response.ResThoughtOfUserListCustomDto
 import com.example.thoughts_cleaning.api.response.ResThoughtOfUserListDto
 import com.example.thoughts_cleaning.common.extension.call
 import com.example.thoughts_cleaning.common.vm.MasilViewModel
@@ -14,13 +15,13 @@ class SlideGameViewModel: MasilViewModel() {
 
     //내 생각들 리스트
 //    var thoughtListResponseData: ResThoughtOfUserListDto? = null
-    val _thoughtListResponseData: MutableLiveData<ResThoughtOfUserListDto> = MutableLiveData(null)
-    val thoughtListResponseData: LiveData<ResThoughtOfUserListDto> = _thoughtListResponseData
+    val _thoughtListResponseData: MutableLiveData<ResThoughtOfUserListCustomDto> = MutableLiveData(null)
+    val thoughtListResponseData: LiveData<ResThoughtOfUserListCustomDto> = _thoughtListResponseData
 
 
     fun getListThought() = viewModelScope.launch() {
 
-        val response = api.thoughtsOfUserList()
+        val response = api.thoughtsOfUserListCustom()
 
         response.call() {
             onSuccess = {

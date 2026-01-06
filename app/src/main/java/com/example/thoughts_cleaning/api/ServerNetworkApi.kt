@@ -9,6 +9,8 @@ import com.example.thoughts_cleaning.api.request.ThoughtSaveRequestData
 import com.example.thoughts_cleaning.api.response.CheckTokenDto
 import com.example.thoughts_cleaning.api.response.ResKindThoughtListDto
 import com.example.thoughts_cleaning.api.response.ResMasilSocialLogin
+import com.example.thoughts_cleaning.api.response.ResThoughtOfUserCountDto
+import com.example.thoughts_cleaning.api.response.ResThoughtOfUserListCustomDto
 import com.example.thoughts_cleaning.api.response.ResThoughtOfUserListDto
 import com.example.thoughts_cleaning.api.response.ThoughtSaveResponseData
 import com.example.thoughts_cleaning.api.response.TokenDto
@@ -106,12 +108,21 @@ interface ServerNetworkApi {
 
     /**
      * Created by Humphrey on
-     * 생각 종료 조회
-     * api/thoughts/save
+     * 생각 종료 조회 횟수
+     * api/thoughts/list_count
      */
-    @GET("/api/thoughts/list")
-    fun thoughtsOfUserList(
-    ): Call<ResThoughtOfUserListDto>
+    @GET("/api/thoughts/list_count")
+    fun thoughtsOfUserListCount(
+    ): Call<ResThoughtOfUserCountDto>
+
+    /**
+     * Created by Humphrey on
+     * 생각 종료 조회 리스트 custom
+     * api/thoughts/list_custom
+     */
+    @GET("/api/thoughts/list_custom")
+    fun thoughtsOfUserListCustom(
+    ): Call<ResThoughtOfUserListCustomDto>
 
     /**
      * Created by Humphrey on
