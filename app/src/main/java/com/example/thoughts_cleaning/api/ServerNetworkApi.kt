@@ -122,7 +122,7 @@ interface ServerNetworkApi {
      */
     @GET("/api/thoughts/list_custom")
     fun thoughtsOfUserListCustom(
-    ): Call<ResThoughtOfUserListCustomDto>
+    ): Call<ResThoughtOfUserListDto>
 
     /**
      * Created by Humphrey on

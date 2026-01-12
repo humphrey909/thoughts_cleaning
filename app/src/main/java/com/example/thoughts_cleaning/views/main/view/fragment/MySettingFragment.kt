@@ -1,6 +1,7 @@
 package com.example.thoughts_cleaning.views.main.view.fragment
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -85,6 +86,24 @@ class MySettingFragment :  MasilFragment<FragmentMySettingBinding, MySettingView
                     SettingEvent.USERINFO -> {
                         findNavController().navigate(R.id.user_info_fragment)
                         viewModel._moveEvent.postValue(Setting(SettingEvent.COMMON))
+                    }
+
+                    SettingEvent.TERMS_AND_POLICIES -> {
+                        findNavController().navigate(R.id.terms_and_policies_fragment)
+                        viewModel._moveEvent.postValue(Setting(SettingEvent.COMMON))
+                    }
+
+                    SettingEvent.EMAIL_QNA -> {
+                        // 버튼 클릭 리스너 등에서 사용
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = Uri.parse("mailto:humphrey1858@gmail.com") // 받는 사람
+                            putExtra(Intent.EXTRA_SUBJECT, "생각청소 문의사항") // 제목
+                            putExtra(Intent.EXTRA_TEXT, "내용을 입력해주세요.") // 본문
+                        }
+                        startActivity(intent)
+
+//                        findNavController().navigate(R.id.email_qna_fragment)
+//                        viewModel._moveEvent.postValue(Setting(SettingEvent.COMMON))
                     }
                 }
             }

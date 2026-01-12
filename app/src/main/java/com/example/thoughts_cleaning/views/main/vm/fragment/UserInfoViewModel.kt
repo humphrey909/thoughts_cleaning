@@ -1,5 +1,7 @@
 package com.example.thoughts_cleaning.views.main.vm.fragment
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.thoughts_cleaning.api.Prefs
 import com.example.thoughts_cleaning.base.MoveEvent
@@ -12,6 +14,12 @@ import com.example.thoughts_cleaning.views.main.UserInfoEvent
 import kotlinx.coroutines.launch
 
 class UserInfoViewModel: MasilViewModel() {
+
+    val _email: MutableLiveData<String> = MutableLiveData("")
+    val email: LiveData<String> = _email
+
+    val _name: MutableLiveData<String> = MutableLiveData("")
+    val name: LiveData<String> = _name
 
     fun onClick(event: UserInfoEvent) {
         when (event) {

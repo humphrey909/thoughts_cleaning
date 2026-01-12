@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.api.Prefs
 import com.example.thoughts_cleaning.base.MasilFragment
 import com.example.thoughts_cleaning.base.MoveEvent
 import com.example.thoughts_cleaning.common.vm.viewModelFactory
@@ -64,6 +65,10 @@ class UserInfoFragment :  MasilFragment<FragmentUserInfoBinding, UserInfoViewMod
                 }
             }
         }
+
+
+        viewModel._name.postValue(Prefs.name)
+        viewModel._email.postValue(Prefs.email)
     }
 
     //login 페이지로 이동

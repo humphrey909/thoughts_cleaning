@@ -27,6 +27,14 @@
         <action
                 android:id="@+id/user_info_fragment"
                 app:destination="@id/UserInfoFragment" />
+
+        <action
+                android:id="@+id/terms_and_policies_fragment"
+                app:destination="@id/TermsAndPoliciesFragment" />
+
+        <action
+                android:id="@+id/email_qna_fragment"
+                app:destination="@id/EmailQnaFragment" />
     </fragment>
 
     <fragment
@@ -35,4 +43,16 @@
             android:label="UserInfo"
             tools:layout="@layout/fragment_user_info" />
 
+    <fragment
+            android:id="@+id/TermsAndPoliciesFragment"
+            android:name="com.example.thoughts_cleaning.views.main.view.fragment.TermsAndPoliciesFragment"
+            android:label="TermsAndPolicies"
+            tools:layout="@layout/fragment_terms_and_policies" />
+
+
+    <fragment
+            android:id="@+id/EmailQnaFragment"
+            android:name="com.example.thoughts_cleaning.views.main.view.fragment.EmailQnaFragment"
+            android:label="EmailQnaFragment"
+            tools:layout="@layout/fragment_email_qna" />
 </navigation>

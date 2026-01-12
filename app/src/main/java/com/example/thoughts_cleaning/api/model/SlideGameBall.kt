@@ -10,11 +10,15 @@ data class SlideGameBall (
     val sizeType: String,
     val text: String,
 
+    var radius: Float,
+
     // [추가] 원래 위치 기억 & 복귀 모드 플래그
     var startX: Float = 0f,
     var startY: Float = 0f,
     var isReturning: Boolean = false,
     var goalTime: Long = 0L,
     var friction: Float = 0.95f,
-    var elasticity: Float = 0.8f
+    var elasticity: Float = 0.8f,
+
+    var mass: Float = 1.0f
 )

@@ -105,6 +105,14 @@ class SlideGameFragment : MasilFragment<FragmentSlideGameBinding, SlideGameViewM
                     showDialogFinishOneButton()
                 }
             }
+
+            override fun onGameFail(remainCount: Int) {
+                // UI 관련 작업이므로 runOnUiThread 권장 (보통은 메인스레드에서 호출되지만 안전하게)
+                activity?.runOnUiThread {
+//                    showGameOverPopup(successText)
+                    showDialogFinishOneButton()
+                }
+            }
         }
     }
 

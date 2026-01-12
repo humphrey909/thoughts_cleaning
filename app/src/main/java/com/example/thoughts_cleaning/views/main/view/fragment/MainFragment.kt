@@ -6,24 +6,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.thoughts_cleaning.R
 import com.example.thoughts_cleaning.base.MasilFragment
 import com.example.thoughts_cleaning.common.vm.viewModelFactory
-import com.example.thoughts_cleaning.databinding.FragmentLoginBinding
 import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel
 import com.example.thoughts_cleaning.databinding.FragmentMainBinding
 import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogBuilder
 import com.example.thoughts_cleaning.util.dialog.recent.CommonDialogType
 import com.example.thoughts_cleaning.views.game.view.activity.container.GameActivity
-import com.example.thoughts_cleaning.views.game.vm.activity.container.GameActivityViewModel
 import com.example.thoughts_cleaning.views.main.vm.fragment.MainFragmentViewModel.MainFlow
-import com.example.thoughts_cleaning.views.record_problem.view.activity.container.RecordProblemActivity
-import com.example.thoughts_cleaning.views.record_problem.vm.fragment.RecordStageFragmentViewModel.RecordStageFlow
-import com.example.thoughts_cleaning.views.record_problem.vm.fragment.SelectKindDustViewModel.TypeFlow
-import com.example.thoughts_cleaning.views.start.vm.fragment.LoginViewModel
 
 //import com.example.thoughts_cleaning.views.game.vm.fragment.GameViewModel.MainFlow
 
@@ -63,6 +55,8 @@ class MainFragment : MasilFragment<FragmentMainBinding, MainFragmentViewModel>(R
 
         viewModel.fixDustDetail.value = ""
         viewModel.getListThought()
+
+        viewModel._thoughtSaveIdx.postValue(0)
     }
 
     override fun onDestroyView() {
@@ -122,7 +116,7 @@ class MainFragment : MasilFragment<FragmentMainBinding, MainFragmentViewModel>(R
     private fun handleNavigationEvent() {
         viewModel.currentMainFlow.observe(viewLifecycleOwner) { flow ->
             when (flow) {
-                MainFlow.COMMON -> { /* ... */ }
+                MainFlow.COMMON -> { }
                 MainFlow.ENTER_GAME -> {
                     if(viewModel.fixDustDetail.value?.length == 0){
                         showCheckDataDialog()
@@ -169,18 +163,20 @@ class MainFragment : MasilFragment<FragmentMainBinding, MainFragmentViewModel>(R
 
     //게임 시작 알림
     private fun showStartGameDialog(){
-        val dialog = context?.let {
-            CommonDialogBuilder(it, CommonDialogType.TWO_BUTTON)
-                .title(getString(R.string.dialog_main_title))
-                .main(getString(R.string.dialog_game_start_document))
-                .onConfirmListener {
-                    viewModel.saveThought()
-                }
-                .build()
-        }
-        if (dialog != null) {
-            showDialog(dialog)
-        }
+        viewModel.saveThought()
+
+//        val dialog = context?.let {
+//            CommonDialogBuilder(it, CommonDialogType.TWO_BUTTON)
+//                .title(getString(R.string.dialog_main_title))
+//                .main(getString(R.string.dialog_game_start_document))
+//                .onConfirmListener {
+//                    viewModel.saveThought()
+//                }
+//                .build()
+//        }
+//        if (dialog != null) {
+//            showDialog(dialog)
+//        }
     }
 
     fun enterGame(){

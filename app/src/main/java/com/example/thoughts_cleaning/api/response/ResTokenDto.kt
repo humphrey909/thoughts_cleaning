@@ -9,6 +9,12 @@ data class TokenDto(
     @SerializedName("idx")
     val idx: Int,
 
+    @SerializedName("name")
+    val name: String,
+
+    @SerializedName("email")
+    val email: String,
+
     @SerializedName("access_token")
     val accessToken: String, // 기존 session_key의 역할
 

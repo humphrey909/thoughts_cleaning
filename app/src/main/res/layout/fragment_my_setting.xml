@@ -107,16 +107,17 @@
 
                     <TextView
                             android:id="@+id/userinfo_menu_title"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:text="내 정보"
                             android:fontFamily="@font/pretendard_light"
-                            android:textSize="20sp"
-                            android:gravity="start|center"
+                            android:textSize="20dp"
+                            android:gravity="center_vertical"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/userinfo_men_img"
                             />
 
                     <ImageView
@@ -132,42 +133,44 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/conditions_menu_area"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/userinfo_menu_area"
-                        app:layout_constraintBottom_toTopOf="@+id/customer_support_menu_area"
-                        app:layout_constraintHeight_percent="0.1"
-                        >
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                        android:id="@+id/conditions_menu_area"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="0dp"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toBottomOf="@+id/userinfo_menu_area"-->
+<!--                        app:layout_constraintBottom_toTopOf="@+id/customer_support_menu_area"-->
+<!--                        app:layout_constraintHeight_percent="0.1"-->
+<!--                        >-->
 
-                    <TextView
-                            android:id="@+id/conditions_menu_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:text="약관 및 정책"
-                            android:fontFamily="@font/pretendard_light"
-                            android:textSize="20sp"
-                            android:gravity="start|center"
-                            android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            />
+<!--                    <TextView-->
+<!--                            android:id="@+id/conditions_menu_title"-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="0dp"-->
+<!--                            android:text="약관 및 정책"-->
+<!--                            android:fontFamily="@font/pretendard_light"-->
+<!--                            android:textSize="20dp"-->
+<!--                            android:gravity="center_vertical"-->
+<!--                            android:textStyle="bold"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintTop_toTopOf="parent"-->
+<!--                            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                            app:layout_constraintEnd_toStartOf="@id/conditions_menu_img"-->
+<!--                            />-->
 
-                    <ImageView
-                            android:id="@+id/conditions_menu_img"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:background="@drawable/ic_arrow2"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            />
+<!--                    <ImageView-->
+<!--                            android:id="@+id/conditions_menu_img"-->
+<!--                            android:layout_width="50dp"-->
+<!--                            android:layout_height="50dp"-->
+<!--                            android:background="@drawable/ic_arrow2"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintTop_toTopOf="parent"-->
+<!--                            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                            android:onClick="@{()-> viewModel.onClick(SettingEvent.TERMS_AND_POLICIES)}"-->
+<!--                            />-->
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/customer_support_menu_area"
@@ -175,22 +178,23 @@
                         android:layout_height="0dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/conditions_menu_area"
+                        app:layout_constraintTop_toBottomOf="@+id/userinfo_menu_area"
                         app:layout_constraintHeight_percent="0.1"
                         >
 
                     <TextView
                             android:id="@+id/customer_support_menu_title"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:text="고객 센터"
                             android:fontFamily="@font/pretendard_light"
-                            android:textSize="20sp"
-                            android:gravity="start|center"
+                            android:textSize="20dp"
+                            android:gravity="center_vertical"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/customer_support_menu_img"
                             />
 
                     <ImageView
@@ -201,6 +205,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
+                            android:onClick="@{()-> viewModel.onClick(SettingEvent.EMAIL_QNA)}"
                             />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

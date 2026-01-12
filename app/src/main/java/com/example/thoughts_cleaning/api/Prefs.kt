@@ -95,16 +95,24 @@ object Prefs {
     var accessTokenExpiresIn by PreferenceDelegate<Long?>("access_token_expires_in", 0L)
 
     var userId by PreferenceDelegate<Int?>("user_id", 0)
+    var name by PreferenceDelegate<String?>("name", "")
+    var email by PreferenceDelegate<String?>("email", "")
+    var restBallCount by PreferenceDelegate<Int?>("rest_ball_count", 0)
 
 
 
     fun initUserInfo(tokenDto: TokenDto) {
         userId = tokenDto.idx
+        name = tokenDto.name
+        email = tokenDto.email
         accessToken = tokenDto.accessToken
         refreshToken = tokenDto.refreshToken
         accessTokenExpiresIn = tokenDto.accessTokenExpiresIn
     }
 
+    fun editRestBallCount(count: Int) {
+        restBallCount = count
+    }
 
     //초기화
     fun initUserInfo(){

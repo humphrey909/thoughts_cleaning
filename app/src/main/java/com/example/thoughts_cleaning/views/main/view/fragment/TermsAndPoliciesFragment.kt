@@ -5,56 +5,79 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.thoughts_cleaning.R
+import com.example.thoughts_cleaning.base.MasilFragment
+import com.example.thoughts_cleaning.base.MoveEvent
+import com.example.thoughts_cleaning.base.MoveEvent.Setting
+import com.example.thoughts_cleaning.common.vm.viewModelFactory
+import com.example.thoughts_cleaning.databinding.FragmentMySettingBinding
+import com.example.thoughts_cleaning.databinding.FragmentTermsAndPoliciesBinding
+import com.example.thoughts_cleaning.views.main.SettingEvent
+import com.example.thoughts_cleaning.views.main.TermsAndPoliciesEvent
+import com.example.thoughts_cleaning.views.main.vm.fragment.MySettingViewModel
+import com.example.thoughts_cleaning.views.main.vm.fragment.TermsAndPoliciesViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class TermsAndPoliciesFragment :  MasilFragment<FragmentTermsAndPoliciesBinding, TermsAndPoliciesViewModel>(R.layout.fragment_terms_and_policies) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [TermsAndPoliciesFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class TermsAndPoliciesFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    override val viewModel by viewModelFactory { TermsAndPoliciesViewModel() }
+
+//    // 1. View Binding 객체 선언 (null 허용)
+//    private var _binding: FragmentMySettingBinding? = null
+//
+//    // 2. 뷰가 살아있는 동안에만 접근할 수 있는 Non-null Binding 객체
+//    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_terms_and_policies, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        handleNavigationEvent()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TermsAndPoliciesFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TermsAndPoliciesFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun handleNavigationEvent() {
+        viewModel.moveEvent.observe(this.viewLifecycleOwner) {
+            if (it is MoveEvent.TermsAndPolicies) {
+                when (it.moveType) {
+//                    TermsAndPoliciesEvent.COMMON -> {
+//                    }
+//                    TermsAndPoliciesEvent.USER_INFO -> {
+//                    }
+//                    TermsAndPoliciesEvent.LOGOUT -> {
+//                        showDialogFinishTwoButton()
+//                    }
+//                    SettingEvent.GO_LOGIN -> {
+//                        enterLogin()
+//                    }
+//                    SettingEvent.BACK -> {
+//                        requireActivity().onBackPressedDispatcher.onBackPressed()
+//                    }
+//
+//                    SettingEvent.USERINFO -> {
+//                        findNavController().navigate(R.id.user_info_fragment)
+//                        viewModel._moveEvent.postValue(Setting(SettingEvent.COMMON))
+//                    }
+//
+//                    SettingEvent.TERMS_AND_POLICIES -> {
+//                        findNavController().navigate(R.id.terms_and_policies_fragment)
+//                        viewModel._moveEvent.postValue(Setting(SettingEvent.COMMON))
+//                    }
+                    TermsAndPoliciesEvent.COMMON -> TODO()
+                    TermsAndPoliciesEvent.BACK -> {
+                        requireActivity().onBackPressedDispatcher.onBackPressed()
+                    }
+                    TermsAndPoliciesEvent.TERMS_OF_SERVICE -> TODO()
+                    TermsAndPoliciesEvent.PRIVACY_POLICY -> TODO()
+                    TermsAndPoliciesEvent.CONTACT_US -> TODO()
                 }
             }
+        }
     }
 }

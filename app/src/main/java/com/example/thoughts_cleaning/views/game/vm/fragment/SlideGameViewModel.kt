@@ -15,8 +15,12 @@ class SlideGameViewModel: MasilViewModel() {
 
     //내 생각들 리스트
 //    var thoughtListResponseData: ResThoughtOfUserListDto? = null
-    val _thoughtListResponseData: MutableLiveData<ResThoughtOfUserListCustomDto> = MutableLiveData(null)
-    val thoughtListResponseData: LiveData<ResThoughtOfUserListCustomDto> = _thoughtListResponseData
+
+
+    //ResThoughtOfUserListCustomDto
+
+    val _thoughtListResponseData: MutableLiveData<ResThoughtOfUserListDto> = MutableLiveData(null)
+    val thoughtListResponseData: LiveData<ResThoughtOfUserListDto> = _thoughtListResponseData
 
 
     fun getListThought() = viewModelScope.launch() {

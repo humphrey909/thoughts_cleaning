@@ -16,25 +16,30 @@ import kotlinx.coroutines.launch
 class MySettingViewModel: MasilViewModel() {
 
     fun onClick(event: SettingEvent) {
-        when (event) {
-            SettingEvent.COMMON -> {
-                _moveEvent.postValue(Setting(event))
-            }
-            SettingEvent.USER_INFO -> {
-                _moveEvent.postValue(Setting(event))
-            }
-            SettingEvent.LOGOUT -> {
-                _moveEvent.postValue(Setting(event))
-            }
-            SettingEvent.GO_LOGIN -> TODO()
-            SettingEvent.BACK -> {
-                _moveEvent.postValue(Setting(event))
-            }
-
-            SettingEvent.USERINFO -> {
-                _moveEvent.postValue(Setting(event))
-            }
-        }
+        _moveEvent.postValue(Setting(event))
+//        when (event) {
+//            SettingEvent.COMMON -> {
+//                _moveEvent.postValue(Setting(event))
+//            }
+//            SettingEvent.USER_INFO -> {
+//                _moveEvent.postValue(Setting(event))
+//            }
+//            SettingEvent.LOGOUT -> {
+//                _moveEvent.postValue(Setting(event))
+//            }
+//            SettingEvent.GO_LOGIN -> TODO()
+//            SettingEvent.BACK -> {
+//                _moveEvent.postValue(Setting(event))
+//            }
+//
+//            SettingEvent.USERINFO -> {
+//                _moveEvent.postValue(Setting(event))
+//            }
+//
+//            SettingEvent.TERMS_AND_POLICIES -> {
+//                _moveEvent.postValue(Setting(event))
+//            }
+//        }
     }
 
     fun logout(event: SettingEvent) = viewModelScope.launch() {
